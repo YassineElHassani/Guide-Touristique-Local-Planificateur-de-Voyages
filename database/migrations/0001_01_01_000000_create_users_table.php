@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,13 +17,13 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->date('birthday');
-            $table->enum('gender', ['male', 'female']);
-            $table->integer('phone');
+            $table->string('gender');
+            $table->string('phone');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'user', 'editor']);
-            $table->enum('status', ['active', 'inactive', 'banned']);
+            $table->string('role'); // 'admin', 'guide', 'client'
+            $table->string('status')->default('inactive'); // 'active', 'inactive', 'suspended'
             $table->rememberToken();
             $table->timestamps();
         });
