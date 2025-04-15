@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // use App\Models\Auth;
+use App\Http\Middleware\AuthMiddleware;
 use App\Models\User;
 use App\Models\companys;
 use Illuminate\Http\Request;
@@ -23,6 +24,18 @@ class AuthController extends Controller
 
     public function register() {
         return view('auth.signup');
+    }
+
+    public function adminDashboard() {
+        return view('admin.dashboard');
+    }
+
+    public function guideDashboard() {
+        return view('guide.dashboard');
+    }
+
+    public function clientDashboard() {
+        return view('client.home');
     }
 
     public function signup(Request $request) {
@@ -68,7 +81,7 @@ class AuthController extends Controller
         $messageCredentials = $request->only('email', 'password');
         
         if(Auth::attempt($messageCredentials)) {
-            return redirect()->intended(route('view'));
+            return redirect()->intended()->with("Success", "You have logged in successfully!");
         }
 
         return redirect(route('login'))->with("Error", "Email or Password is invalid!");

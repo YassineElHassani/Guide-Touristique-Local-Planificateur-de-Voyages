@@ -1,277 +1,1891 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('template')
+@section('title', 'Home Page')
 
-        <title>Laravel</title>
+@section('content')
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+    <main id="main">
 
-        <!-- Styles / Scripts -->
-        @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @else
-            <style>
-                /*! tailwindcss v4.0.7 | MIT License | https://tailwindcss.com */@layer theme{:root,:host{--font-sans:'Instrument Sans',ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";--font-serif:ui-serif,Georgia,Cambria,"Times New Roman",Times,serif;--font-mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;--color-red-50:oklch(.971 .013 17.38);--color-red-100:oklch(.936 .032 17.717);--color-red-200:oklch(.885 .062 18.334);--color-red-300:oklch(.808 .114 19.571);--color-red-400:oklch(.704 .191 22.216);--color-red-500:oklch(.637 .237 25.331);--color-red-600:oklch(.577 .245 27.325);--color-red-700:oklch(.505 .213 27.518);--color-red-800:oklch(.444 .177 26.899);--color-red-900:oklch(.396 .141 25.723);--color-red-950:oklch(.258 .092 26.042);--color-orange-50:oklch(.98 .016 73.684);--color-orange-100:oklch(.954 .038 75.164);--color-orange-200:oklch(.901 .076 70.697);--color-orange-300:oklch(.837 .128 66.29);--color-orange-400:oklch(.75 .183 55.934);--color-orange-500:oklch(.705 .213 47.604);--color-orange-600:oklch(.646 .222 41.116);--color-orange-700:oklch(.553 .195 38.402);--color-orange-800:oklch(.47 .157 37.304);--color-orange-900:oklch(.408 .123 38.172);--color-orange-950:oklch(.266 .079 36.259);--color-amber-50:oklch(.987 .022 95.277);--color-amber-100:oklch(.962 .059 95.617);--color-amber-200:oklch(.924 .12 95.746);--color-amber-300:oklch(.879 .169 91.605);--color-amber-400:oklch(.828 .189 84.429);--color-amber-500:oklch(.769 .188 70.08);--color-amber-600:oklch(.666 .179 58.318);--color-amber-700:oklch(.555 .163 48.998);--color-amber-800:oklch(.473 .137 46.201);--color-amber-900:oklch(.414 .112 45.904);--color-amber-950:oklch(.279 .077 45.635);--color-yellow-50:oklch(.987 .026 102.212);--color-yellow-100:oklch(.973 .071 103.193);--color-yellow-200:oklch(.945 .129 101.54);--color-yellow-300:oklch(.905 .182 98.111);--color-yellow-400:oklch(.852 .199 91.936);--color-yellow-500:oklch(.795 .184 86.047);--color-yellow-600:oklch(.681 .162 75.834);--color-yellow-700:oklch(.554 .135 66.442);--color-yellow-800:oklch(.476 .114 61.907);--color-yellow-900:oklch(.421 .095 57.708);--color-yellow-950:oklch(.286 .066 53.813);--color-lime-50:oklch(.986 .031 120.757);--color-lime-100:oklch(.967 .067 122.328);--color-lime-200:oklch(.938 .127 124.321);--color-lime-300:oklch(.897 .196 126.665);--color-lime-400:oklch(.841 .238 128.85);--color-lime-500:oklch(.768 .233 130.85);--color-lime-600:oklch(.648 .2 131.684);--color-lime-700:oklch(.532 .157 131.589);--color-lime-800:oklch(.453 .124 130.933);--color-lime-900:oklch(.405 .101 131.063);--color-lime-950:oklch(.274 .072 132.109);--color-green-50:oklch(.982 .018 155.826);--color-green-100:oklch(.962 .044 156.743);--color-green-200:oklch(.925 .084 155.995);--color-green-300:oklch(.871 .15 154.449);--color-green-400:oklch(.792 .209 151.711);--color-green-500:oklch(.723 .219 149.579);--color-green-600:oklch(.627 .194 149.214);--color-green-700:oklch(.527 .154 150.069);--color-green-800:oklch(.448 .119 151.328);--color-green-900:oklch(.393 .095 152.535);--color-green-950:oklch(.266 .065 152.934);--color-emerald-50:oklch(.979 .021 166.113);--color-emerald-100:oklch(.95 .052 163.051);--color-emerald-200:oklch(.905 .093 164.15);--color-emerald-300:oklch(.845 .143 164.978);--color-emerald-400:oklch(.765 .177 163.223);--color-emerald-500:oklch(.696 .17 162.48);--color-emerald-600:oklch(.596 .145 163.225);--color-emerald-700:oklch(.508 .118 165.612);--color-emerald-800:oklch(.432 .095 166.913);--color-emerald-900:oklch(.378 .077 168.94);--color-emerald-950:oklch(.262 .051 172.552);--color-teal-50:oklch(.984 .014 180.72);--color-teal-100:oklch(.953 .051 180.801);--color-teal-200:oklch(.91 .096 180.426);--color-teal-300:oklch(.855 .138 181.071);--color-teal-400:oklch(.777 .152 181.912);--color-teal-500:oklch(.704 .14 182.503);--color-teal-600:oklch(.6 .118 184.704);--color-teal-700:oklch(.511 .096 186.391);--color-teal-800:oklch(.437 .078 188.216);--color-teal-900:oklch(.386 .063 188.416);--color-teal-950:oklch(.277 .046 192.524);--color-cyan-50:oklch(.984 .019 200.873);--color-cyan-100:oklch(.956 .045 203.388);--color-cyan-200:oklch(.917 .08 205.041);--color-cyan-300:oklch(.865 .127 207.078);--color-cyan-400:oklch(.789 .154 211.53);--color-cyan-500:oklch(.715 .143 215.221);--color-cyan-600:oklch(.609 .126 221.723);--color-cyan-700:oklch(.52 .105 223.128);--color-cyan-800:oklch(.45 .085 224.283);--color-cyan-900:oklch(.398 .07 227.392);--color-cyan-950:oklch(.302 .056 229.695);--color-sky-50:oklch(.977 .013 236.62);--color-sky-100:oklch(.951 .026 236.824);--color-sky-200:oklch(.901 .058 230.902);--color-sky-300:oklch(.828 .111 230.318);--color-sky-400:oklch(.746 .16 232.661);--color-sky-500:oklch(.685 .169 237.323);--color-sky-600:oklch(.588 .158 241.966);--color-sky-700:oklch(.5 .134 242.749);--color-sky-800:oklch(.443 .11 240.79);--color-sky-900:oklch(.391 .09 240.876);--color-sky-950:oklch(.293 .066 243.157);--color-blue-50:oklch(.97 .014 254.604);--color-blue-100:oklch(.932 .032 255.585);--color-blue-200:oklch(.882 .059 254.128);--color-blue-300:oklch(.809 .105 251.813);--color-blue-400:oklch(.707 .165 254.624);--color-blue-500:oklch(.623 .214 259.815);--color-blue-600:oklch(.546 .245 262.881);--color-blue-700:oklch(.488 .243 264.376);--color-blue-800:oklch(.424 .199 265.638);--color-blue-900:oklch(.379 .146 265.522);--color-blue-950:oklch(.282 .091 267.935);--color-indigo-50:oklch(.962 .018 272.314);--color-indigo-100:oklch(.93 .034 272.788);--color-indigo-200:oklch(.87 .065 274.039);--color-indigo-300:oklch(.785 .115 274.713);--color-indigo-400:oklch(.673 .182 276.935);--color-indigo-500:oklch(.585 .233 277.117);--color-indigo-600:oklch(.511 .262 276.966);--color-indigo-700:oklch(.457 .24 277.023);--color-indigo-800:oklch(.398 .195 277.366);--color-indigo-900:oklch(.359 .144 278.697);--color-indigo-950:oklch(.257 .09 281.288);--color-violet-50:oklch(.969 .016 293.756);--color-violet-100:oklch(.943 .029 294.588);--color-violet-200:oklch(.894 .057 293.283);--color-violet-300:oklch(.811 .111 293.571);--color-violet-400:oklch(.702 .183 293.541);--color-violet-500:oklch(.606 .25 292.717);--color-violet-600:oklch(.541 .281 293.009);--color-violet-700:oklch(.491 .27 292.581);--color-violet-800:oklch(.432 .232 292.759);--color-violet-900:oklch(.38 .189 293.745);--color-violet-950:oklch(.283 .141 291.089);--color-purple-50:oklch(.977 .014 308.299);--color-purple-100:oklch(.946 .033 307.174);--color-purple-200:oklch(.902 .063 306.703);--color-purple-300:oklch(.827 .119 306.383);--color-purple-400:oklch(.714 .203 305.504);--color-purple-500:oklch(.627 .265 303.9);--color-purple-600:oklch(.558 .288 302.321);--color-purple-700:oklch(.496 .265 301.924);--color-purple-800:oklch(.438 .218 303.724);--color-purple-900:oklch(.381 .176 304.987);--color-purple-950:oklch(.291 .149 302.717);--color-fuchsia-50:oklch(.977 .017 320.058);--color-fuchsia-100:oklch(.952 .037 318.852);--color-fuchsia-200:oklch(.903 .076 319.62);--color-fuchsia-300:oklch(.833 .145 321.434);--color-fuchsia-400:oklch(.74 .238 322.16);--color-fuchsia-500:oklch(.667 .295 322.15);--color-fuchsia-600:oklch(.591 .293 322.896);--color-fuchsia-700:oklch(.518 .253 323.949);--color-fuchsia-800:oklch(.452 .211 324.591);--color-fuchsia-900:oklch(.401 .17 325.612);--color-fuchsia-950:oklch(.293 .136 325.661);--color-pink-50:oklch(.971 .014 343.198);--color-pink-100:oklch(.948 .028 342.258);--color-pink-200:oklch(.899 .061 343.231);--color-pink-300:oklch(.823 .12 346.018);--color-pink-400:oklch(.718 .202 349.761);--color-pink-500:oklch(.656 .241 354.308);--color-pink-600:oklch(.592 .249 .584);--color-pink-700:oklch(.525 .223 3.958);--color-pink-800:oklch(.459 .187 3.815);--color-pink-900:oklch(.408 .153 2.432);--color-pink-950:oklch(.284 .109 3.907);--color-rose-50:oklch(.969 .015 12.422);--color-rose-100:oklch(.941 .03 12.58);--color-rose-200:oklch(.892 .058 10.001);--color-rose-300:oklch(.81 .117 11.638);--color-rose-400:oklch(.712 .194 13.428);--color-rose-500:oklch(.645 .246 16.439);--color-rose-600:oklch(.586 .253 17.585);--color-rose-700:oklch(.514 .222 16.935);--color-rose-800:oklch(.455 .188 13.697);--color-rose-900:oklch(.41 .159 10.272);--color-rose-950:oklch(.271 .105 12.094);--color-slate-50:oklch(.984 .003 247.858);--color-slate-100:oklch(.968 .007 247.896);--color-slate-200:oklch(.929 .013 255.508);--color-slate-300:oklch(.869 .022 252.894);--color-slate-400:oklch(.704 .04 256.788);--color-slate-500:oklch(.554 .046 257.417);--color-slate-600:oklch(.446 .043 257.281);--color-slate-700:oklch(.372 .044 257.287);--color-slate-800:oklch(.279 .041 260.031);--color-slate-900:oklch(.208 .042 265.755);--color-slate-950:oklch(.129 .042 264.695);--color-gray-50:oklch(.985 .002 247.839);--color-gray-100:oklch(.967 .003 264.542);--color-gray-200:oklch(.928 .006 264.531);--color-gray-300:oklch(.872 .01 258.338);--color-gray-400:oklch(.707 .022 261.325);--color-gray-500:oklch(.551 .027 264.364);--color-gray-600:oklch(.446 .03 256.802);--color-gray-700:oklch(.373 .034 259.733);--color-gray-800:oklch(.278 .033 256.848);--color-gray-900:oklch(.21 .034 264.665);--color-gray-950:oklch(.13 .028 261.692);--color-zinc-50:oklch(.985 0 0);--color-zinc-100:oklch(.967 .001 286.375);--color-zinc-200:oklch(.92 .004 286.32);--color-zinc-300:oklch(.871 .006 286.286);--color-zinc-400:oklch(.705 .015 286.067);--color-zinc-500:oklch(.552 .016 285.938);--color-zinc-600:oklch(.442 .017 285.786);--color-zinc-700:oklch(.37 .013 285.805);--color-zinc-800:oklch(.274 .006 286.033);--color-zinc-900:oklch(.21 .006 285.885);--color-zinc-950:oklch(.141 .005 285.823);--color-neutral-50:oklch(.985 0 0);--color-neutral-100:oklch(.97 0 0);--color-neutral-200:oklch(.922 0 0);--color-neutral-300:oklch(.87 0 0);--color-neutral-400:oklch(.708 0 0);--color-neutral-500:oklch(.556 0 0);--color-neutral-600:oklch(.439 0 0);--color-neutral-700:oklch(.371 0 0);--color-neutral-800:oklch(.269 0 0);--color-neutral-900:oklch(.205 0 0);--color-neutral-950:oklch(.145 0 0);--color-stone-50:oklch(.985 .001 106.423);--color-stone-100:oklch(.97 .001 106.424);--color-stone-200:oklch(.923 .003 48.717);--color-stone-300:oklch(.869 .005 56.366);--color-stone-400:oklch(.709 .01 56.259);--color-stone-500:oklch(.553 .013 58.071);--color-stone-600:oklch(.444 .011 73.639);--color-stone-700:oklch(.374 .01 67.558);--color-stone-800:oklch(.268 .007 34.298);--color-stone-900:oklch(.216 .006 56.043);--color-stone-950:oklch(.147 .004 49.25);--color-black:#000;--color-white:#fff;--spacing:.25rem;--breakpoint-sm:40rem;--breakpoint-md:48rem;--breakpoint-lg:64rem;--breakpoint-xl:80rem;--breakpoint-2xl:96rem;--container-3xs:16rem;--container-2xs:18rem;--container-xs:20rem;--container-sm:24rem;--container-md:28rem;--container-lg:32rem;--container-xl:36rem;--container-2xl:42rem;--container-3xl:48rem;--container-4xl:56rem;--container-5xl:64rem;--container-6xl:72rem;--container-7xl:80rem;--text-xs:.75rem;--text-xs--line-height:calc(1/.75);--text-sm:.875rem;--text-sm--line-height:calc(1.25/.875);--text-base:1rem;--text-base--line-height: 1.5 ;--text-lg:1.125rem;--text-lg--line-height:calc(1.75/1.125);--text-xl:1.25rem;--text-xl--line-height:calc(1.75/1.25);--text-2xl:1.5rem;--text-2xl--line-height:calc(2/1.5);--text-3xl:1.875rem;--text-3xl--line-height: 1.2 ;--text-4xl:2.25rem;--text-4xl--line-height:calc(2.5/2.25);--text-5xl:3rem;--text-5xl--line-height:1;--text-6xl:3.75rem;--text-6xl--line-height:1;--text-7xl:4.5rem;--text-7xl--line-height:1;--text-8xl:6rem;--text-8xl--line-height:1;--text-9xl:8rem;--text-9xl--line-height:1;--font-weight-thin:100;--font-weight-extralight:200;--font-weight-light:300;--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--font-weight-extrabold:800;--font-weight-black:900;--tracking-tighter:-.05em;--tracking-tight:-.025em;--tracking-normal:0em;--tracking-wide:.025em;--tracking-wider:.05em;--tracking-widest:.1em;--leading-tight:1.25;--leading-snug:1.375;--leading-normal:1.5;--leading-relaxed:1.625;--leading-loose:2;--radius-xs:.125rem;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--radius-2xl:1rem;--radius-3xl:1.5rem;--radius-4xl:2rem;--shadow-2xs:0 1px #0000000d;--shadow-xs:0 1px 2px 0 #0000000d;--shadow-sm:0 1px 3px 0 #0000001a,0 1px 2px -1px #0000001a;--shadow-md:0 4px 6px -1px #0000001a,0 2px 4px -2px #0000001a;--shadow-lg:0 10px 15px -3px #0000001a,0 4px 6px -4px #0000001a;--shadow-xl:0 20px 25px -5px #0000001a,0 8px 10px -6px #0000001a;--shadow-2xl:0 25px 50px -12px #00000040;--inset-shadow-2xs:inset 0 1px #0000000d;--inset-shadow-xs:inset 0 1px 1px #0000000d;--inset-shadow-sm:inset 0 2px 4px #0000000d;--drop-shadow-xs:0 1px 1px #0000000d;--drop-shadow-sm:0 1px 2px #00000026;--drop-shadow-md:0 3px 3px #0000001f;--drop-shadow-lg:0 4px 4px #00000026;--drop-shadow-xl:0 9px 7px #0000001a;--drop-shadow-2xl:0 25px 25px #00000026;--ease-in:cubic-bezier(.4,0,1,1);--ease-out:cubic-bezier(0,0,.2,1);--ease-in-out:cubic-bezier(.4,0,.2,1);--animate-spin:spin 1s linear infinite;--animate-ping:ping 1s cubic-bezier(0,0,.2,1)infinite;--animate-pulse:pulse 2s cubic-bezier(.4,0,.6,1)infinite;--animate-bounce:bounce 1s infinite;--blur-xs:4px;--blur-sm:8px;--blur-md:12px;--blur-lg:16px;--blur-xl:24px;--blur-2xl:40px;--blur-3xl:64px;--perspective-dramatic:100px;--perspective-near:300px;--perspective-normal:500px;--perspective-midrange:800px;--perspective-distant:1200px;--aspect-video:16/9;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4,0,.2,1);--default-font-family:var(--font-sans);--default-font-feature-settings:var(--font-sans--font-feature-settings);--default-font-variation-settings:var(--font-sans--font-variation-settings);--default-mono-font-family:var(--font-mono);--default-mono-font-feature-settings:var(--font-mono--font-feature-settings);--default-mono-font-variation-settings:var(--font-mono--font-variation-settings)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}body{line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1;color:color-mix(in oklab,currentColor 50%,transparent)}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){-webkit-appearance:button;-moz-appearance:button;appearance:button}::file-selector-button{-webkit-appearance:button;-moz-appearance:button;appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.absolute{position:absolute}.relative{position:relative}.static{position:static}.inset-0{inset:calc(var(--spacing)*0)}.-mt-\[4\.9rem\]{margin-top:-4.9rem}.-mb-px{margin-bottom:-1px}.mb-1{margin-bottom:calc(var(--spacing)*1)}.mb-2{margin-bottom:calc(var(--spacing)*2)}.mb-4{margin-bottom:calc(var(--spacing)*4)}.mb-6{margin-bottom:calc(var(--spacing)*6)}.-ml-8{margin-left:calc(var(--spacing)*-8)}.flex{display:flex}.hidden{display:none}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.aspect-\[335\/376\]{aspect-ratio:335/376}.h-1{height:calc(var(--spacing)*1)}.h-1\.5{height:calc(var(--spacing)*1.5)}.h-2{height:calc(var(--spacing)*2)}.h-2\.5{height:calc(var(--spacing)*2.5)}.h-3{height:calc(var(--spacing)*3)}.h-3\.5{height:calc(var(--spacing)*3.5)}.h-14{height:calc(var(--spacing)*14)}.h-14\.5{height:calc(var(--spacing)*14.5)}.min-h-screen{min-height:100vh}.w-1{width:calc(var(--spacing)*1)}.w-1\.5{width:calc(var(--spacing)*1.5)}.w-2{width:calc(var(--spacing)*2)}.w-2\.5{width:calc(var(--spacing)*2.5)}.w-3{width:calc(var(--spacing)*3)}.w-3\.5{width:calc(var(--spacing)*3.5)}.w-\[448px\]{width:448px}.w-full{width:100%}.max-w-\[335px\]{max-width:335px}.max-w-none{max-width:none}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-y-0{--tw-translate-y:calc(var(--spacing)*0);translate:var(--tw-translate-x)var(--tw-translate-y)}.transform{transform:var(--tw-rotate-x)var(--tw-rotate-y)var(--tw-rotate-z)var(--tw-skew-x)var(--tw-skew-y)}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.items-center{align-items:center}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-3{gap:calc(var(--spacing)*3)}.gap-4{gap:calc(var(--spacing)*4)}:where(.space-x-1>:not(:last-child)){--tw-space-x-reverse:0;margin-inline-start:calc(calc(var(--spacing)*1)*var(--tw-space-x-reverse));margin-inline-end:calc(calc(var(--spacing)*1)*calc(1 - var(--tw-space-x-reverse)))}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:3.40282e38px}.rounded-sm{border-radius:var(--radius-sm)}.rounded-t-lg{border-top-left-radius:var(--radius-lg);border-top-right-radius:var(--radius-lg)}.rounded-br-lg{border-bottom-right-radius:var(--radius-lg)}.rounded-bl-lg{border-bottom-left-radius:var(--radius-lg)}.border{border-style:var(--tw-border-style);border-width:1px}.border-\[\#19140035\]{border-color:#19140035}.border-\[\#e3e3e0\]{border-color:#e3e3e0}.border-black{border-color:var(--color-black)}.border-transparent{border-color:#0000}.bg-\[\#1b1b18\]{background-color:#1b1b18}.bg-\[\#FDFDFC\]{background-color:#fdfdfc}.bg-\[\#dbdbd7\]{background-color:#dbdbd7}.bg-\[\#fff2f2\]{background-color:#fff2f2}.bg-white{background-color:var(--color-white)}.p-6{padding:calc(var(--spacing)*6)}.px-5{padding-inline:calc(var(--spacing)*5)}.py-1{padding-block:calc(var(--spacing)*1)}.py-1\.5{padding-block:calc(var(--spacing)*1.5)}.py-2{padding-block:calc(var(--spacing)*2)}.pb-12{padding-bottom:calc(var(--spacing)*12)}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-\[13px\]{font-size:13px}.leading-\[20px\]{--tw-leading:20px;line-height:20px}.leading-normal{--tw-leading:var(--leading-normal);line-height:var(--leading-normal)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.text-\[\#1b1b18\]{color:#1b1b18}.text-\[\#706f6c\]{color:#706f6c}.text-\[\#F53003\],.text-\[\#f53003\]{color:#f53003}.text-white{color:var(--color-white)}.underline{text-decoration-line:underline}.underline-offset-4{text-underline-offset:4px}.opacity-100{opacity:1}.shadow-\[0px_0px_1px_0px_rgba\(0\,0\,0\,0\.03\)\,0px_1px_2px_0px_rgba\(0\,0\,0\,0\.06\)\]{--tw-shadow:0px 0px 1px 0px var(--tw-shadow-color,#00000008),0px 1px 2px 0px var(--tw-shadow-color,#0000000f);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.shadow-\[inset_0px_0px_0px_1px_rgba\(26\,26\,0\,0\.16\)\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#1a1a0029);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.\!filter{filter:var(--tw-blur,)var(--tw-brightness,)var(--tw-contrast,)var(--tw-grayscale,)var(--tw-hue-rotate,)var(--tw-invert,)var(--tw-saturate,)var(--tw-sepia,)var(--tw-drop-shadow,)!important}.filter{filter:var(--tw-blur,)var(--tw-brightness,)var(--tw-contrast,)var(--tw-grayscale,)var(--tw-hue-rotate,)var(--tw-invert,)var(--tw-saturate,)var(--tw-sepia,)var(--tw-drop-shadow,)}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-opacity{transition-property:opacity;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.delay-300{transition-delay:.3s}.duration-750{--tw-duration:.75s;transition-duration:.75s}.not-has-\[nav\]\:hidden:not(:has(:is(nav))){display:none}.before\:absolute:before{content:var(--tw-content);position:absolute}.before\:top-0:before{content:var(--tw-content);top:calc(var(--spacing)*0)}.before\:top-1\/2:before{content:var(--tw-content);top:50%}.before\:bottom-0:before{content:var(--tw-content);bottom:calc(var(--spacing)*0)}.before\:bottom-1\/2:before{content:var(--tw-content);bottom:50%}.before\:left-\[0\.4rem\]:before{content:var(--tw-content);left:.4rem}.before\:border-l:before{content:var(--tw-content);border-left-style:var(--tw-border-style);border-left-width:1px}.before\:border-\[\#e3e3e0\]:before{content:var(--tw-content);border-color:#e3e3e0}@media (hover:hover){.hover\:border-\[\#1915014a\]:hover{border-color:#1915014a}.hover\:border-\[\#19140035\]:hover{border-color:#19140035}.hover\:border-black:hover{border-color:var(--color-black)}.hover\:bg-black:hover{background-color:var(--color-black)}}@media (width>=64rem){.lg\:-mt-\[6\.6rem\]{margin-top:-6.6rem}.lg\:mb-0{margin-bottom:calc(var(--spacing)*0)}.lg\:mb-6{margin-bottom:calc(var(--spacing)*6)}.lg\:-ml-px{margin-left:-1px}.lg\:ml-0{margin-left:calc(var(--spacing)*0)}.lg\:block{display:block}.lg\:aspect-auto{aspect-ratio:auto}.lg\:w-\[438px\]{width:438px}.lg\:max-w-4xl{max-width:var(--container-4xl)}.lg\:grow{flex-grow:1}.lg\:flex-row{flex-direction:row}.lg\:justify-center{justify-content:center}.lg\:rounded-t-none{border-top-left-radius:0;border-top-right-radius:0}.lg\:rounded-tl-lg{border-top-left-radius:var(--radius-lg)}.lg\:rounded-r-lg{border-top-right-radius:var(--radius-lg);border-bottom-right-radius:var(--radius-lg)}.lg\:rounded-br-none{border-bottom-right-radius:0}.lg\:p-8{padding:calc(var(--spacing)*8)}.lg\:p-20{padding:calc(var(--spacing)*20)}}@media (prefers-color-scheme:dark){.dark\:block{display:block}.dark\:hidden{display:none}.dark\:border-\[\#3E3E3A\]{border-color:#3e3e3a}.dark\:border-\[\#eeeeec\]{border-color:#eeeeec}.dark\:bg-\[\#0a0a0a\]{background-color:#0a0a0a}.dark\:bg-\[\#1D0002\]{background-color:#1d0002}.dark\:bg-\[\#3E3E3A\]{background-color:#3e3e3a}.dark\:bg-\[\#161615\]{background-color:#161615}.dark\:bg-\[\#eeeeec\]{background-color:#eeeeec}.dark\:text-\[\#1C1C1A\]{color:#1c1c1a}.dark\:text-\[\#A1A09A\]{color:#a1a09a}.dark\:text-\[\#EDEDEC\]{color:#ededec}.dark\:text-\[\#F61500\]{color:#f61500}.dark\:text-\[\#FF4433\]{color:#f43}.dark\:shadow-\[inset_0px_0px_0px_1px_\#fffaed2d\]{--tw-shadow:inset 0px 0px 0px 1px var(--tw-shadow-color,#fffaed2d);box-shadow:var(--tw-inset-shadow),var(--tw-inset-ring-shadow),var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}.dark\:before\:border-\[\#3E3E3A\]:before{content:var(--tw-content);border-color:#3e3e3a}@media (hover:hover){.dark\:hover\:border-\[\#3E3E3A\]:hover{border-color:#3e3e3a}.dark\:hover\:border-\[\#62605b\]:hover{border-color:#62605b}.dark\:hover\:border-white:hover{border-color:var(--color-white)}.dark\:hover\:bg-white:hover{background-color:var(--color-white)}}}@starting-style{.starting\:translate-y-4{--tw-translate-y:calc(var(--spacing)*4);translate:var(--tw-translate-x)var(--tw-translate-y)}}@starting-style{.starting\:translate-y-6{--tw-translate-y:calc(var(--spacing)*6);translate:var(--tw-translate-x)var(--tw-translate-y)}}@starting-style{.starting\:opacity-0{opacity:0}}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes ping{75%,to{opacity:0;transform:scale(2)}}@keyframes pulse{50%{opacity:.5}}@keyframes bounce{0%,to{animation-timing-function:cubic-bezier(.8,0,1,1);transform:translateY(-25%)}50%{animation-timing-function:cubic-bezier(0,0,.2,1);transform:none}}@property --tw-translate-x{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-y{syntax:"*";inherits:false;initial-value:0}@property --tw-translate-z{syntax:"*";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:"*";inherits:false;initial-value:rotateX(0)}@property --tw-rotate-y{syntax:"*";inherits:false;initial-value:rotateY(0)}@property --tw-rotate-z{syntax:"*";inherits:false;initial-value:rotateZ(0)}@property --tw-skew-x{syntax:"*";inherits:false;initial-value:skewX(0)}@property --tw-skew-y{syntax:"*";inherits:false;initial-value:skewY(0)}@property --tw-space-x-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-duration{syntax:"*";inherits:false}@property --tw-content{syntax:"*";inherits:false;initial-value:""}
-            </style>
-        @endif
-    </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-        <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
-                            Dashboard
-                        </a>
-                    @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        >
-                            Log in
-                        </a>
-
-                        @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </nav>
-            @endif
-        </header>
-        <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
-            <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
-                <div class="text-[13px] leading-[20px] flex-1 p-6 pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">
-                    <h1 class="mb-1 font-medium">Let's get started</h1>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">Laravel has an incredibly rich ecosystem. <br>We suggest starting with the following.</p>
-                    <ul class="flex flex-col mb-4 lg:mb-6">
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
+        <!-- Widget Slider -->
+        <section class="slider-home4 relative">
+            <div class="tf-container">
+                <div class="row ">
+                    <div class="col-10 col-xl-7">
+                        <div class="home4-content z-index3">
+                            <span class="sub-title font-yes text-second fs-28-46 wow fadeInUp animated">Explore
+                                the world</span>
+                            <h1 class="title-slide text-white mb-40 wow fadeInUp animated">Adventure
+                                <span class="animationtext clip text-main">
+                                    <span class="cd-words-wrapper">
+                                        <span class="item-text is-visible">Tour</span>
+                                        <span class="item-text is-hidden">Tour</span>
+                                    </span>
                                 </span>
-                            </span>
-                            <span>
-                                Read the
-                                <a href="https://laravel.com/docs" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                                    <span>Documentation</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
+                                Camping start With Us
+                            </h1>
+                            <div class="btn-group">
+                                <a href="{{ route('login')}}" class="btn-main wow fadeInUp animated">
+                                    <p class="btn-main-text">Let,s get started</p>
+                                    <p class="iconer">
+                                        <i class="icon-arrow-right"></i>
+                                    </p>
                                 </a>
-                            </span>
-                        </li>
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-1/2 before:top-0 before:left-[0.4rem] before:absolute">
-                            <span class="relative py-1 bg-white dark:bg-[#161615]">
-                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
-                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
-                                </span>
-                            </span>
-                            <span>
-                                Watch video tutorials at
-                                <a href="https://laracasts.com" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ml-1">
-                                    <span>Laracasts</span>
-                                    <svg
-                                        width="10"
-                                        height="11"
-                                        viewBox="0 0 10 11"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="w-2.5 h-2.5"
-                                    >
-                                        <path
-                                            d="M7.70833 6.95834V2.79167H3.54167M2.5 8L7.5 3.00001"
-                                            stroke="currentColor"
-                                            stroke-linecap="square"
-                                        />
-                                    </svg>
-                                </a>
-                            </span>
-                        </li>
-                    </ul>
-                    <ul class="flex gap-3 text-sm leading-normal">
-                        <li>
-                            <a href="https://cloud.laravel.com" target="_blank" class="inline-block dark:bg-[#eeeeec] dark:border-[#eeeeec] dark:text-[#1C1C1A] dark:hover:bg-white dark:hover:border-white hover:bg-black hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal">
-                                Deploy now
+                                <a href="#" class="btn-w-wa text-main wow fadeInUp animated">Beautiful Places
+                                    Arround the World.</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-2 col-xl-5 relative">
+                        <div class="video-wrap">
+                            <a href="https://www.youtube.com/watch?v=n9LgeoJE4EI"
+                                class="widget-icon-video widget-videos flex-five z-index3">
+                                <i class="icon-Polygon-4"></i>
                             </a>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
-                    {{-- Laravel Logo --}}
-                    <svg class="w-full text-[#F53003] dark:text-[#F61500] transition-all translate-y-0 opacity-100 max-w-none duration-750 starting:opacity-0 starting:translate-y-6" viewBox="0 0 438 104" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.2036 -3H0V102.197H49.5189V86.7187H17.2036V-3Z" fill="currentColor" />
-                        <path d="M110.256 41.6337C108.061 38.1275 104.945 35.3731 100.905 33.3681C96.8667 31.3647 92.8016 30.3618 88.7131 30.3618C83.4247 30.3618 78.5885 31.3389 74.201 33.2923C69.8111 35.2456 66.0474 37.928 62.9059 41.3333C59.7643 44.7401 57.3198 48.6726 55.5754 53.1293C53.8287 57.589 52.9572 62.274 52.9572 67.1813C52.9572 72.1925 53.8287 76.8995 55.5754 81.3069C57.3191 85.7173 59.7636 89.6241 62.9059 93.0293C66.0474 96.4361 69.8119 99.1155 74.201 101.069C78.5885 103.022 83.4247 103.999 88.7131 103.999C92.8016 103.999 96.8667 102.997 100.905 100.994C104.945 98.9911 108.061 96.2359 110.256 92.7282V102.195H126.563V32.1642H110.256V41.6337ZM108.76 75.7472C107.762 78.4531 106.366 80.8078 104.572 82.8112C102.776 84.8161 100.606 86.4183 98.0637 87.6206C95.5202 88.823 92.7004 89.4238 89.6103 89.4238C86.5178 89.4238 83.7252 88.823 81.2324 87.6206C78.7388 86.4183 76.5949 84.8161 74.7998 82.8112C73.004 80.8078 71.6319 78.4531 70.6856 75.7472C69.7356 73.0421 69.2644 70.1868 69.2644 67.1821C69.2644 64.1758 69.7356 61.3205 70.6856 58.6154C71.6319 55.9102 73.004 53.5571 74.7998 51.5522C76.5949 49.5495 78.738 47.9451 81.2324 46.7427C83.7252 45.5404 86.5178 44.9396 89.6103 44.9396C92.7012 44.9396 95.5202 45.5404 98.0637 46.7427C100.606 47.9451 102.776 49.5487 104.572 51.5522C106.367 53.5571 107.762 55.9102 108.76 58.6154C109.756 61.3205 110.256 64.1758 110.256 67.1821C110.256 70.1868 109.756 73.0421 108.76 75.7472Z" fill="currentColor" />
-                        <path d="M242.805 41.6337C240.611 38.1275 237.494 35.3731 233.455 33.3681C229.416 31.3647 225.351 30.3618 221.262 30.3618C215.974 30.3618 211.138 31.3389 206.75 33.2923C202.36 35.2456 198.597 37.928 195.455 41.3333C192.314 44.7401 189.869 48.6726 188.125 53.1293C186.378 57.589 185.507 62.274 185.507 67.1813C185.507 72.1925 186.378 76.8995 188.125 81.3069C189.868 85.7173 192.313 89.6241 195.455 93.0293C198.597 96.4361 202.361 99.1155 206.75 101.069C211.138 103.022 215.974 103.999 221.262 103.999C225.351 103.999 229.416 102.997 233.455 100.994C237.494 98.9911 240.611 96.2359 242.805 92.7282V102.195H259.112V32.1642H242.805V41.6337ZM241.31 75.7472C240.312 78.4531 238.916 80.8078 237.122 82.8112C235.326 84.8161 233.156 86.4183 230.614 87.6206C228.07 88.823 225.251 89.4238 222.16 89.4238C219.068 89.4238 216.275 88.823 213.782 87.6206C211.289 86.4183 209.145 84.8161 207.35 82.8112C205.554 80.8078 204.182 78.4531 203.236 75.7472C202.286 73.0421 201.814 70.1868 201.814 67.1821C201.814 64.1758 202.286 61.3205 203.236 58.6154C204.182 55.9102 205.554 53.5571 207.35 51.5522C209.145 49.5495 211.288 47.9451 213.782 46.7427C216.275 45.5404 219.068 44.9396 222.16 44.9396C225.251 44.9396 228.07 45.5404 230.614 46.7427C233.156 47.9451 235.326 49.5487 237.122 51.5522C238.917 53.5571 240.312 55.9102 241.31 58.6154C242.306 61.3205 242.806 64.1758 242.806 67.1821C242.805 70.1868 242.305 73.0421 241.31 75.7472Z" fill="currentColor" />
-                        <path d="M438 -3H421.694V102.197H438V-3Z" fill="currentColor" />
-                        <path d="M139.43 102.197H155.735V48.2834H183.712V32.1665H139.43V102.197Z" fill="currentColor" />
-                        <path d="M324.49 32.1665L303.995 85.794L283.498 32.1665H266.983L293.748 102.197H314.242L341.006 32.1665H324.49Z" fill="currentColor" />
-                        <path d="M376.571 30.3656C356.603 30.3656 340.797 46.8497 340.797 67.1828C340.797 89.6597 356.094 104 378.661 104C391.29 104 399.354 99.1488 409.206 88.5848L398.189 80.0226C398.183 80.031 389.874 90.9895 377.468 90.9895C363.048 90.9895 356.977 79.3111 356.977 73.269H411.075C413.917 50.1328 398.775 30.3656 376.571 30.3656ZM357.02 61.0967C357.145 59.7487 359.023 43.3761 376.442 43.3761C393.861 43.3761 395.978 59.7464 396.099 61.0967H357.02Z" fill="currentColor" />
-                    </svg>
-
-                    {{-- Light Mode 12 SVG --}}
-                    <svg class="w-[448px] max-w-none relative -mt-[4.9rem] -ml-8 lg:ml-0 lg:-mt-[6.6rem] dark:hidden" viewBox="0 0 440 376" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M188.263 355.73L188.595 355.73C195.441 348.845 205.766 339.761 219.569 328.477C232.93 317.193 242.978 308.205 249.714 301.511C256.34 294.626 260.867 287.358 263.296 279.708C265.725 272.058 264.565 264.121 259.816 255.896C254.516 246.716 247.062 239.352 237.454 233.805C227.957 228.067 217.908 225.198 207.307 225.198C196.927 225.197 190.136 227.97 186.934 233.516C183.621 238.872 184.726 246.331 190.247 255.894L125.647 255.891C116.371 239.825 112.395 225.481 113.72 212.858C115.265 200.235 121.559 190.481 132.602 183.596C143.754 176.52 158.607 172.982 177.159 172.983C196.594 172.984 215.863 176.523 234.968 183.6C253.961 190.486 271.299 200.241 286.98 212.864C302.661 225.488 315.14 239.833 324.416 255.899C333.03 270.817 336.841 283.918 335.847 295.203C335.075 306.487 331.376 316.336 324.75 324.751C318.346 333.167 308.408 343.494 294.936 355.734L377.094 355.737L405.917 405.656L217.087 405.649L188.263 355.73Z" fill="black" />
-                            <path d="M9.11884 226.339L-13.7396 226.338L-42.7286 176.132L43.0733 176.135L175.595 405.649L112.651 405.647L9.11884 226.339Z" fill="black" />
-                            <path d="M188.263 355.73L188.595 355.73C195.441 348.845 205.766 339.761 219.569 328.477C232.93 317.193 242.978 308.205 249.714 301.511C256.34 294.626 260.867 287.358 263.296 279.708C265.725 272.058 264.565 264.121 259.816 255.896C254.516 246.716 247.062 239.352 237.454 233.805C227.957 228.067 217.908 225.198 207.307 225.198C196.927 225.197 190.136 227.97 186.934 233.516C183.621 238.872 184.726 246.331 190.247 255.894L125.647 255.891C116.371 239.825 112.395 225.481 113.72 212.858C115.265 200.235 121.559 190.481 132.602 183.596C143.754 176.52 158.607 172.982 177.159 172.983C196.594 172.984 215.863 176.523 234.968 183.6C253.961 190.486 271.299 200.241 286.98 212.864C302.661 225.488 315.14 239.833 324.416 255.899C333.03 270.817 336.841 283.918 335.847 295.203C335.075 306.487 331.376 316.336 324.75 324.751C318.346 333.167 308.408 343.494 294.936 355.734L377.094 355.737L405.917 405.656L217.087 405.649L188.263 355.73Z" stroke="#1B1B18" stroke-width="1" />
-                            <path d="M9.11884 226.339L-13.7396 226.338L-42.7286 176.132L43.0733 176.135L175.595 405.649L112.651 405.647L9.11884 226.339Z" stroke="#1B1B18" stroke-width="1" />
-                            <path d="M204.592 327.449L204.923 327.449C211.769 320.564 222.094 311.479 235.897 300.196C249.258 288.912 259.306 279.923 266.042 273.23C272.668 266.345 277.195 259.077 279.624 251.427C282.053 243.777 280.893 235.839 276.145 227.615C270.844 218.435 263.39 211.071 253.782 205.524C244.285 199.786 234.236 196.917 223.635 196.916C213.255 196.916 206.464 199.689 203.262 205.235C199.949 210.59 201.054 218.049 206.575 227.612L141.975 227.61C132.699 211.544 128.723 197.2 130.048 184.577C131.593 171.954 137.887 162.2 148.93 155.315C160.083 148.239 174.935 144.701 193.487 144.702C212.922 144.703 232.192 148.242 251.296 155.319C270.289 162.205 287.627 171.96 303.308 184.583C318.989 197.207 331.468 211.552 340.745 227.618C349.358 242.536 353.169 255.637 352.175 266.921C351.403 278.205 347.704 288.055 341.078 296.47C334.674 304.885 324.736 315.213 311.264 327.453L393.422 327.456L422.246 377.375L233.415 377.368L204.592 327.449Z" fill="#F8B803" />
-                            <path d="M25.447 198.058L2.58852 198.057L-26.4005 147.851L59.4015 147.854L191.923 377.368L128.979 377.365L25.447 198.058Z" fill="#F8B803" />
-                            <path d="M204.592 327.449L204.923 327.449C211.769 320.564 222.094 311.479 235.897 300.196C249.258 288.912 259.306 279.923 266.042 273.23C272.668 266.345 277.195 259.077 279.624 251.427C282.053 243.777 280.893 235.839 276.145 227.615C270.844 218.435 263.39 211.071 253.782 205.524C244.285 199.786 234.236 196.917 223.635 196.916C213.255 196.916 206.464 199.689 203.262 205.235C199.949 210.59 201.054 218.049 206.575 227.612L141.975 227.61C132.699 211.544 128.723 197.2 130.048 184.577C131.593 171.954 137.887 162.2 148.93 155.315C160.083 148.239 174.935 144.701 193.487 144.702C212.922 144.703 232.192 148.242 251.296 155.319C270.289 162.205 287.627 171.96 303.308 184.583C318.989 197.207 331.468 211.552 340.745 227.618C349.358 242.536 353.169 255.637 352.175 266.921C351.403 278.205 347.704 288.055 341.078 296.47C334.674 304.885 324.736 315.213 311.264 327.453L393.422 327.456L422.246 377.375L233.415 377.368L204.592 327.449Z" stroke="#1B1B18" stroke-width="1" />
-                            <path d="M25.447 198.058L2.58852 198.057L-26.4005 147.851L59.4015 147.854L191.923 377.368L128.979 377.365L25.447 198.058Z" stroke="#1B1B18" stroke-width="1" />
-                        </g>
-                        <g style="mix-blend-mode: hard-light" class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M217.342 305.363L217.673 305.363C224.519 298.478 234.844 289.393 248.647 278.11C262.008 266.826 272.056 257.837 278.792 251.144C285.418 244.259 289.945 236.991 292.374 229.341C294.803 221.691 293.643 213.753 288.895 205.529C283.594 196.349 276.14 188.985 266.532 183.438C257.035 177.7 246.986 174.831 236.385 174.83C226.005 174.83 219.214 177.603 216.012 183.149C212.699 188.504 213.804 195.963 219.325 205.527L154.725 205.524C145.449 189.458 141.473 175.114 142.798 162.491C144.343 149.868 150.637 140.114 161.68 133.229C172.833 126.153 187.685 122.615 206.237 122.616C225.672 122.617 244.942 126.156 264.046 133.233C283.039 140.119 300.377 149.874 316.058 162.497C331.739 175.121 344.218 189.466 353.495 205.532C362.108 220.45 365.919 233.551 364.925 244.835C364.153 256.12 360.454 265.969 353.828 274.384C347.424 282.799 337.486 293.127 324.014 305.367L406.172 305.37L434.996 355.289L246.165 355.282L217.342 305.363Z" fill="#F0ACB8" />
-                            <path d="M38.197 175.972L15.3385 175.971L-13.6505 125.765L72.1515 125.768L204.673 355.282L141.729 355.279L38.197 175.972Z" fill="#F0ACB8" />
-                            <path d="M217.342 305.363L217.673 305.363C224.519 298.478 234.844 289.393 248.647 278.11C262.008 266.826 272.056 257.837 278.792 251.144C285.418 244.259 289.945 236.991 292.374 229.341C294.803 221.691 293.643 213.753 288.895 205.529C283.594 196.349 276.14 188.985 266.532 183.438C257.035 177.7 246.986 174.831 236.385 174.83C226.005 174.83 219.214 177.603 216.012 183.149C212.699 188.504 213.804 195.963 219.325 205.527L154.725 205.524C145.449 189.458 141.473 175.114 142.798 162.491C144.343 149.868 150.637 140.114 161.68 133.229C172.833 126.153 187.685 122.615 206.237 122.616C225.672 122.617 244.942 126.156 264.046 133.233C283.039 140.119 300.377 149.874 316.058 162.497C331.739 175.121 344.218 189.466 353.495 205.532C362.108 220.45 365.919 233.551 364.925 244.835C364.153 256.12 360.454 265.969 353.828 274.384C347.424 282.799 337.486 293.127 324.014 305.367L406.172 305.37L434.996 355.289L246.165 355.282L217.342 305.363Z" stroke="#1B1B18" stroke-width="1" />
-                            <path d="M38.197 175.972L15.3385 175.971L-13.6505 125.765L72.1515 125.768L204.673 355.282L141.729 355.279L38.197 175.972Z" stroke="#1B1B18" stroke-width="1" />
-                        </g>
-                        <g style="mix-blend-mode: plus-darker" class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M230.951 281.792L231.282 281.793C238.128 274.907 248.453 265.823 262.256 254.539C275.617 243.256 285.666 234.267 292.402 227.573C299.027 220.688 303.554 213.421 305.983 205.771C308.412 198.12 307.253 190.183 302.504 181.959C297.203 172.778 289.749 165.415 280.142 159.868C270.645 154.13 260.596 151.26 249.995 151.26C239.615 151.26 232.823 154.033 229.621 159.579C226.309 164.934 227.413 172.393 232.935 181.956L168.335 181.954C159.058 165.888 155.082 151.543 156.407 138.92C157.953 126.298 164.247 116.544 175.289 109.659C186.442 102.583 201.294 99.045 219.846 99.0457C239.281 99.0464 258.551 102.585 277.655 109.663C296.649 116.549 313.986 126.303 329.667 138.927C345.349 151.551 357.827 165.895 367.104 181.961C375.718 196.88 379.528 209.981 378.535 221.265C377.762 232.549 374.063 242.399 367.438 250.814C361.033 259.229 351.095 269.557 337.624 281.796L419.782 281.8L448.605 331.719L259.774 331.712L230.951 281.792Z" fill="#F3BEC7" />
-                            <path d="M51.8063 152.402L28.9479 152.401L-0.0411453 102.195L85.7608 102.198L218.282 331.711L155.339 331.709L51.8063 152.402Z" fill="#F3BEC7" />
-                            <path d="M230.951 281.792L231.282 281.793C238.128 274.907 248.453 265.823 262.256 254.539C275.617 243.256 285.666 234.267 292.402 227.573C299.027 220.688 303.554 213.421 305.983 205.771C308.412 198.12 307.253 190.183 302.504 181.959C297.203 172.778 289.749 165.415 280.142 159.868C270.645 154.13 260.596 151.26 249.995 151.26C239.615 151.26 232.823 154.033 229.621 159.579C226.309 164.934 227.413 172.393 232.935 181.956L168.335 181.954C159.058 165.888 155.082 151.543 156.407 138.92C157.953 126.298 164.247 116.544 175.289 109.659C186.442 102.583 201.294 99.045 219.846 99.0457C239.281 99.0464 258.551 102.585 277.655 109.663C296.649 116.549 313.986 126.303 329.667 138.927C345.349 151.551 357.827 165.895 367.104 181.961C375.718 196.88 379.528 209.981 378.535 221.265C377.762 232.549 374.063 242.399 367.438 250.814C361.033 259.229 351.095 269.557 337.624 281.796L419.782 281.8L448.605 331.719L259.774 331.712L230.951 281.792Z" stroke="#1B1B18" stroke-width="1" />
-                            <path d="M51.8063 152.402L28.9479 152.401L-0.0411453 102.195L85.7608 102.198L218.282 331.711L155.339 331.709L51.8063 152.402Z" stroke="#1B1B18" stroke-width="1" />
-                        </g>
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M188.467 355.363L188.798 355.363C195.644 348.478 205.969 339.393 219.772 328.11C233.133 316.826 243.181 307.837 249.917 301.144C253.696 297.217 256.792 293.166 259.205 288.991C261.024 285.845 262.455 282.628 263.499 279.341C265.928 271.691 264.768 263.753 260.02 255.529C254.719 246.349 247.265 238.985 237.657 233.438C228.16 227.7 218.111 224.831 207.51 224.83C197.13 224.83 190.339 227.603 187.137 233.149C183.824 238.504 184.929 245.963 190.45 255.527L125.851 255.524C116.574 239.458 112.598 225.114 113.923 212.491C114.615 206.836 116.261 201.756 118.859 197.253C122.061 191.704 126.709 187.03 132.805 183.229C143.958 176.153 158.81 172.615 177.362 172.616C196.797 172.617 216.067 176.156 235.171 183.233C254.164 190.119 271.502 199.874 287.183 212.497C302.864 225.121 315.343 239.466 324.62 255.532C333.233 270.45 337.044 283.551 336.05 294.835C335.46 303.459 333.16 311.245 329.151 318.194C327.915 320.337 326.515 322.4 324.953 324.384C318.549 332.799 308.611 343.127 295.139 355.367L377.297 355.37L406.121 405.289L217.29 405.282L188.467 355.363Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M9.32197 225.972L-13.5365 225.971L-42.5255 175.765L43.2765 175.768L175.798 405.282L112.854 405.279L9.32197 225.972Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M345.247 111.915C329.566 99.2919 312.229 89.5371 293.235 82.6512L235.167 183.228C254.161 190.114 271.498 199.869 287.179 212.492L345.247 111.915Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M382.686 154.964C373.41 138.898 360.931 124.553 345.25 111.93L287.182 212.506C302.863 225.13 315.342 239.475 324.618 255.541L382.686 154.964Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M293.243 82.6472C274.139 75.57 254.869 72.031 235.434 72.0303L177.366 172.607C196.801 172.608 216.071 176.147 235.175 183.224L293.243 82.6472Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M394.118 194.257C395.112 182.973 391.301 169.872 382.688 154.953L324.619 255.53C333.233 270.448 337.044 283.55 336.05 294.834L394.118 194.257Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M235.432 72.0311C216.88 72.0304 202.027 75.5681 190.875 82.6442L132.806 183.221C143.959 176.145 158.812 172.607 177.363 172.608L235.432 72.0311Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M265.59 124.25C276.191 124.251 286.24 127.12 295.737 132.858L237.669 233.435C228.172 227.697 218.123 224.828 207.522 224.827L265.59 124.25Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M295.719 132.859C305.326 138.406 312.78 145.77 318.081 154.95L260.013 255.527C254.712 246.347 247.258 238.983 237.651 233.436L295.719 132.859Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M387.218 217.608C391.227 210.66 393.527 202.874 394.117 194.25L336.049 294.827C335.459 303.451 333.159 311.237 329.15 318.185L387.218 217.608Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M245.211 132.577C248.413 127.03 255.204 124.257 265.584 124.258L207.516 224.835C197.136 224.834 190.345 227.607 187.143 233.154L245.211 132.577Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M318.094 154.945C322.842 163.17 324.002 171.107 321.573 178.757L263.505 279.334C265.934 271.684 264.774 263.746 260.026 255.522L318.094 154.945Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M176.925 96.6737C180.127 91.1249 184.776 86.4503 190.871 82.6499L132.803 183.227C126.708 187.027 122.059 191.702 118.857 197.25L176.925 96.6737Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M387.226 217.606C385.989 219.749 384.59 221.813 383.028 223.797L324.96 324.373C326.522 322.39 327.921 320.326 329.157 318.183L387.226 217.606Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M317.269 188.408C319.087 185.262 320.519 182.045 321.562 178.758L263.494 279.335C262.451 282.622 261.019 285.839 259.201 288.985L317.269 188.408Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M245.208 132.573C241.895 137.928 243 145.387 248.522 154.95L190.454 255.527C184.932 245.964 183.827 238.505 187.14 233.15L245.208 132.573Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M176.93 96.6719C174.331 101.175 172.686 106.255 171.993 111.91L113.925 212.487C114.618 206.831 116.263 201.752 118.862 197.249L176.93 96.6719Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M317.266 188.413C314.853 192.589 311.757 196.64 307.978 200.566L249.91 301.143C253.689 297.216 256.785 293.166 259.198 288.99L317.266 188.413Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M464.198 304.708L435.375 254.789L377.307 355.366L406.13 405.285L464.198 304.708Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M353.209 254.787C366.68 242.548 376.618 232.22 383.023 223.805L324.955 324.382C318.55 332.797 308.612 343.124 295.141 355.364L353.209 254.787Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M435.37 254.787L353.212 254.784L295.144 355.361L377.302 355.364L435.37 254.787Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M183.921 154.947L248.521 154.95L190.453 255.527L125.853 255.524L183.921 154.947Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M171.992 111.914C170.668 124.537 174.643 138.881 183.92 154.947L125.852 255.524C116.575 239.458 112.599 225.114 113.924 212.491L171.992 111.914Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M307.987 200.562C301.251 207.256 291.203 216.244 277.842 227.528L219.774 328.105C233.135 316.821 243.183 307.832 249.919 301.139L307.987 200.562Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M15.5469 75.1797L44.5359 125.386L-13.5321 225.963L-42.5212 175.756L15.5469 75.1797Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M277.836 227.536C264.033 238.82 253.708 247.904 246.862 254.789L188.794 355.366C195.64 348.481 205.965 339.397 219.768 328.113L277.836 227.536Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M275.358 304.706L464.189 304.713L406.12 405.29L217.29 405.283L275.358 304.706Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M44.5279 125.39L67.3864 125.39L9.31834 225.967L-13.5401 225.966L44.5279 125.39Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M101.341 75.1911L233.863 304.705L175.795 405.282L43.2733 175.768L101.341 75.1911ZM15.5431 75.19L-42.525 175.767L43.277 175.77L101.345 75.1932L15.5431 75.19Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M246.866 254.784L246.534 254.784L188.466 355.361L188.798 355.361L246.866 254.784Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M246.539 254.781L275.362 304.701L217.294 405.277L188.471 355.358L246.539 254.781Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M67.3906 125.391L170.923 304.698L112.855 405.275L9.32257 225.967L67.3906 125.391Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                            <path d="M170.921 304.699L233.865 304.701L175.797 405.278L112.853 405.276L170.921 304.699Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="bevel" />
-                        </g>
-                        <g style="mix-blend-mode: hard-light" class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M246.544 254.79L246.875 254.79C253.722 247.905 264.046 238.82 277.849 227.537C291.21 216.253 301.259 207.264 307.995 200.57C314.62 193.685 319.147 186.418 321.577 178.768C324.006 171.117 322.846 163.18 318.097 154.956C312.796 145.775 305.342 138.412 295.735 132.865C286.238 127.127 276.189 124.258 265.588 124.257C255.208 124.257 248.416 127.03 245.214 132.576C241.902 137.931 243.006 145.39 248.528 154.953L183.928 154.951C174.652 138.885 170.676 124.541 172 111.918C173.546 99.2946 179.84 89.5408 190.882 82.6559C202.035 75.5798 216.887 72.0421 235.439 72.0428C254.874 72.0435 274.144 75.5825 293.248 82.6598C312.242 89.5457 329.579 99.3005 345.261 111.924C360.942 124.548 373.421 138.892 382.697 154.958C391.311 169.877 395.121 182.978 394.128 194.262C393.355 205.546 389.656 215.396 383.031 223.811C376.627 232.226 366.688 242.554 353.217 254.794L435.375 254.797L464.198 304.716L275.367 304.709L246.544 254.79Z" fill="#F0ACB8" />
-                            <path d="M246.544 254.79L246.875 254.79C253.722 247.905 264.046 238.82 277.849 227.537C291.21 216.253 301.259 207.264 307.995 200.57C314.62 193.685 319.147 186.418 321.577 178.768C324.006 171.117 322.846 163.18 318.097 154.956C312.796 145.775 305.342 138.412 295.735 132.865C286.238 127.127 276.189 124.258 265.588 124.257C255.208 124.257 248.416 127.03 245.214 132.576C241.902 137.931 243.006 145.39 248.528 154.953L183.928 154.951C174.652 138.885 170.676 124.541 172 111.918C173.546 99.2946 179.84 89.5408 190.882 82.6559C202.035 75.5798 216.887 72.0421 235.439 72.0428C254.874 72.0435 274.144 75.5825 293.248 82.6598C312.242 89.5457 329.579 99.3005 345.261 111.924C360.942 124.548 373.421 138.892 382.697 154.958C391.311 169.877 395.121 182.978 394.128 194.262C393.355 205.546 389.656 215.396 383.031 223.811C376.627 232.226 366.688 242.554 353.217 254.794L435.375 254.797L464.198 304.716L275.367 304.709L246.544 254.79Z" stroke="#1B1B18" stroke-width="1" stroke-linejoin="round" />
-                        </g>
-                        <g style="mix-blend-mode: hard-light" class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M67.41 125.402L44.5515 125.401L15.5625 75.1953L101.364 75.1985L233.886 304.712L170.942 304.71L67.41 125.402Z" fill="#F0ACB8" />
-                            <path d="M67.41 125.402L44.5515 125.401L15.5625 75.1953L101.364 75.1985L233.886 304.712L170.942 304.71L67.41 125.402Z" stroke="#1B1B18" stroke-width="1" />
-                        </g>
-                    </svg>
-
-                    {{-- Dark Mode 12 SVG --}}
-                    <svg class="w-[448px] max-w-none relative -mt-[4.9rem] -ml-8 lg:ml-0 lg:-mt-[6.6rem] hidden dark:block" viewBox="0 0 440 376" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M188.263 355.73L188.595 355.73C195.441 348.845 205.766 339.761 219.569 328.477C232.93 317.193 242.978 308.205 249.714 301.511C256.34 294.626 260.867 287.358 263.296 279.708C265.725 272.058 264.565 264.121 259.816 255.896C254.516 246.716 247.062 239.352 237.454 233.805C227.957 228.067 217.908 225.198 207.307 225.198C196.927 225.197 190.136 227.97 186.934 233.516C183.621 238.872 184.726 246.331 190.247 255.894L125.647 255.891C116.371 239.825 112.395 225.481 113.72 212.858C115.265 200.235 121.559 190.481 132.602 183.596C143.754 176.52 158.607 172.982 177.159 172.983C196.594 172.984 215.863 176.523 234.968 183.6C253.961 190.486 271.299 200.241 286.98 212.864C302.661 225.488 315.14 239.833 324.416 255.899C333.03 270.817 336.841 283.918 335.847 295.203C335.075 306.487 331.376 316.336 324.75 324.751C318.346 333.167 308.408 343.494 294.936 355.734L377.094 355.737L405.917 405.656L217.087 405.649L188.263 355.73Z" fill="black"/>
-                            <path d="M9.11884 226.339L-13.7396 226.338L-42.7286 176.132L43.0733 176.135L175.595 405.649L112.651 405.647L9.11884 226.339Z" fill="black"/>
-                            <path d="M188.263 355.73L188.595 355.73C195.441 348.845 205.766 339.761 219.569 328.477C232.93 317.193 242.978 308.205 249.714 301.511C256.34 294.626 260.867 287.358 263.296 279.708C265.725 272.058 264.565 264.121 259.816 255.896C254.516 246.716 247.062 239.352 237.454 233.805C227.957 228.067 217.908 225.198 207.307 225.198C196.927 225.197 190.136 227.97 186.934 233.516C183.621 238.872 184.726 246.331 190.247 255.894L125.647 255.891C116.371 239.825 112.395 225.481 113.72 212.858C115.265 200.235 121.559 190.481 132.602 183.596C143.754 176.52 158.607 172.982 177.159 172.983C196.594 172.984 215.863 176.523 234.968 183.6C253.961 190.486 271.299 200.241 286.98 212.864C302.661 225.488 315.14 239.833 324.416 255.899C333.03 270.817 336.841 283.918 335.847 295.203C335.075 306.487 331.376 316.336 324.75 324.751C318.346 333.167 308.408 343.494 294.936 355.734L377.094 355.737L405.917 405.656L217.087 405.649L188.263 355.73Z" stroke="#FF750F" stroke-width="1"/>
-                            <path d="M9.11884 226.339L-13.7396 226.338L-42.7286 176.132L43.0733 176.135L175.595 405.649L112.651 405.647L9.11884 226.339Z" stroke="#FF750F" stroke-width="1"/>
-                            <path d="M204.592 327.449L204.923 327.449C211.769 320.564 222.094 311.479 235.897 300.196C249.258 288.912 259.306 279.923 266.042 273.23C272.668 266.345 277.195 259.077 279.624 251.427C282.053 243.777 280.893 235.839 276.145 227.615C270.844 218.435 263.39 211.071 253.782 205.524C244.285 199.786 234.236 196.917 223.635 196.916C213.255 196.916 206.464 199.689 203.262 205.235C199.949 210.59 201.054 218.049 206.575 227.612L141.975 227.61C132.699 211.544 128.723 197.2 130.048 184.577C131.593 171.954 137.887 162.2 148.93 155.315C160.083 148.239 174.935 144.701 193.487 144.702C212.922 144.703 232.192 148.242 251.296 155.319C270.289 162.205 287.627 171.96 303.308 184.583C318.989 197.207 331.468 211.552 340.745 227.618C349.358 242.536 353.169 255.637 352.175 266.921C351.403 278.205 347.704 288.055 341.078 296.47C334.674 304.885 324.736 315.213 311.264 327.453L393.422 327.456L422.246 377.375L233.415 377.368L204.592 327.449Z" fill="#391800"/>
-                            <path d="M25.447 198.058L2.58852 198.057L-26.4005 147.851L59.4015 147.854L191.923 377.368L128.979 377.365L25.447 198.058Z" fill="#391800"/>
-                            <path d="M204.592 327.449L204.923 327.449C211.769 320.564 222.094 311.479 235.897 300.196C249.258 288.912 259.306 279.923 266.042 273.23C272.668 266.345 277.195 259.077 279.624 251.427C282.053 243.777 280.893 235.839 276.145 227.615C270.844 218.435 263.39 211.071 253.782 205.524C244.285 199.786 234.236 196.917 223.635 196.916C213.255 196.916 206.464 199.689 203.262 205.235C199.949 210.59 201.054 218.049 206.575 227.612L141.975 227.61C132.699 211.544 128.723 197.2 130.048 184.577C131.593 171.954 137.887 162.2 148.93 155.315C160.083 148.239 174.935 144.701 193.487 144.702C212.922 144.703 232.192 148.242 251.296 155.319C270.289 162.205 287.627 171.96 303.308 184.583C318.989 197.207 331.468 211.552 340.745 227.618C349.358 242.536 353.169 255.637 352.175 266.921C351.403 278.205 347.704 288.055 341.078 296.47C334.674 304.885 324.736 315.213 311.264 327.453L393.422 327.456L422.246 377.375L233.415 377.368L204.592 327.449Z" stroke="#FF750F" stroke-width="1"/>
-                            <path d="M25.447 198.058L2.58852 198.057L-26.4005 147.851L59.4015 147.854L191.923 377.368L128.979 377.365L25.447 198.058Z" stroke="#FF750F" stroke-width="1"/>
-                        </g>
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4" style="mix-blend-mode:hard-light">
-                            <path d="M217.342 305.363L217.673 305.363C224.519 298.478 234.844 289.393 248.647 278.11C262.008 266.826 272.056 257.837 278.792 251.144C285.418 244.259 289.945 236.991 292.374 229.341C294.803 221.691 293.643 213.753 288.895 205.529C283.594 196.349 276.14 188.985 266.532 183.438C257.035 177.7 246.986 174.831 236.385 174.83C226.005 174.83 219.214 177.603 216.012 183.149C212.699 188.504 213.804 195.963 219.325 205.527L154.725 205.524C145.449 189.458 141.473 175.114 142.798 162.491C144.343 149.868 150.637 140.114 161.68 133.229C172.833 126.153 187.685 122.615 206.237 122.616C225.672 122.617 244.942 126.156 264.046 133.233C283.039 140.119 300.377 149.874 316.058 162.497C331.739 175.121 344.218 189.466 353.495 205.532C362.108 220.45 365.919 233.551 364.925 244.835C364.153 256.12 360.454 265.969 353.828 274.384C347.424 282.799 337.486 293.127 324.014 305.367L406.172 305.37L434.996 355.289L246.165 355.282L217.342 305.363Z" fill="#733000"/>
-                            <path d="M38.197 175.972L15.3385 175.971L-13.6505 125.765L72.1515 125.768L204.673 355.282L141.729 355.279L38.197 175.972Z" fill="#733000"/>
-                            <path d="M217.342 305.363L217.673 305.363C224.519 298.478 234.844 289.393 248.647 278.11C262.008 266.826 272.056 257.837 278.792 251.144C285.418 244.259 289.945 236.991 292.374 229.341C294.803 221.691 293.643 213.753 288.895 205.529C283.594 196.349 276.14 188.985 266.532 183.438C257.035 177.7 246.986 174.831 236.385 174.83C226.005 174.83 219.214 177.603 216.012 183.149C212.699 188.504 213.804 195.963 219.325 205.527L154.725 205.524C145.449 189.458 141.473 175.114 142.798 162.491C144.343 149.868 150.637 140.114 161.68 133.229C172.833 126.153 187.685 122.615 206.237 122.616C225.672 122.617 244.942 126.156 264.046 133.233C283.039 140.119 300.377 149.874 316.058 162.497C331.739 175.121 344.218 189.466 353.495 205.532C362.108 220.45 365.919 233.551 364.925 244.835C364.153 256.12 360.454 265.969 353.828 274.384C347.424 282.799 337.486 293.127 324.014 305.367L406.172 305.37L434.996 355.289L246.165 355.282L217.342 305.363Z" stroke="#FF750F" stroke-width="1"/>
-                            <path d="M38.197 175.972L15.3385 175.971L-13.6505 125.765L72.1515 125.768L204.673 355.282L141.729 355.279L38.197 175.972Z" stroke="#FF750F" stroke-width="1"/>
-                        </g>
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M217.342 305.363L217.673 305.363C224.519 298.478 234.844 289.393 248.647 278.11C262.008 266.826 272.056 257.837 278.792 251.144C285.418 244.259 289.945 236.991 292.374 229.341C294.803 221.691 293.643 213.753 288.895 205.529C283.594 196.349 276.14 188.985 266.532 183.438C257.035 177.7 246.986 174.831 236.385 174.83C226.005 174.83 219.214 177.603 216.012 183.149C212.699 188.504 213.804 195.963 219.325 205.527L154.726 205.524C145.449 189.458 141.473 175.114 142.798 162.491C144.343 149.868 150.637 140.114 161.68 133.229C172.833 126.153 187.685 122.615 206.237 122.616C225.672 122.617 244.942 126.156 264.046 133.233C283.039 140.119 300.377 149.874 316.058 162.497C331.739 175.121 344.218 189.466 353.495 205.532C362.108 220.45 365.919 233.551 364.925 244.835C364.153 256.12 360.454 265.969 353.828 274.384C347.424 282.799 337.486 293.127 324.014 305.367L406.172 305.37L434.996 355.289L246.165 355.282L217.342 305.363Z" stroke="#FF750F" stroke-width="1"/>
-                            <path d="M38.197 175.972L15.3385 175.971L-13.6505 125.765L72.1515 125.768L204.673 355.282L141.729 355.279L38.197 175.972Z" stroke="#FF750F" stroke-width="1"/>
-                        </g>
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4">
-                            <path d="M188.467 355.363L188.798 355.363C195.644 348.478 205.969 339.393 219.772 328.11C233.133 316.826 243.181 307.837 249.917 301.144C253.696 297.217 256.792 293.166 259.205 288.991C261.024 285.845 262.455 282.628 263.499 279.341C265.928 271.691 264.768 263.753 260.02 255.529C254.719 246.349 247.265 238.985 237.657 233.438C228.16 227.7 218.111 224.831 207.51 224.83C197.13 224.83 190.339 227.603 187.137 233.149C183.824 238.504 184.929 245.963 190.45 255.527L125.851 255.524C116.574 239.458 112.598 225.114 113.923 212.491C114.615 206.836 116.261 201.756 118.859 197.253C122.061 191.704 126.709 187.03 132.805 183.229C143.958 176.153 158.81 172.615 177.362 172.616C196.797 172.617 216.067 176.156 235.171 183.233C254.164 190.119 271.502 199.874 287.183 212.497C302.864 225.121 315.343 239.466 324.62 255.532C333.233 270.45 337.044 283.551 336.05 294.835C335.46 303.459 333.16 311.245 329.151 318.194C327.915 320.337 326.515 322.4 324.953 324.384C318.549 332.799 308.611 343.127 295.139 355.367L377.297 355.37L406.121 405.289L217.29 405.282L188.467 355.363Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M9.32197 225.972L-13.5365 225.971L-42.5255 175.765L43.2765 175.768L175.798 405.282L112.854 405.279L9.32197 225.972Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M345.247 111.915C329.566 99.2919 312.229 89.5371 293.235 82.6512L235.167 183.228C254.161 190.114 271.498 199.869 287.179 212.492L345.247 111.915Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M382.686 154.964C373.41 138.898 360.931 124.553 345.25 111.93L287.182 212.506C302.863 225.13 315.342 239.475 324.618 255.541L382.686 154.964Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M293.243 82.6472C274.139 75.57 254.869 72.031 235.434 72.0303L177.366 172.607C196.801 172.608 216.071 176.147 235.175 183.224L293.243 82.6472Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M394.118 194.257C395.112 182.973 391.301 169.872 382.688 154.953L324.619 255.53C333.233 270.448 337.044 283.55 336.05 294.834L394.118 194.257Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M235.432 72.0311C216.88 72.0304 202.027 75.5681 190.875 82.6442L132.806 183.221C143.959 176.145 158.812 172.607 177.363 172.608L235.432 72.0311Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M265.59 124.25C276.191 124.251 286.24 127.12 295.737 132.858L237.669 233.435C228.172 227.697 218.123 224.828 207.522 224.827L265.59 124.25Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M295.719 132.859C305.326 138.406 312.78 145.77 318.081 154.95L260.013 255.527C254.712 246.347 247.258 238.983 237.651 233.436L295.719 132.859Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M387.218 217.608C391.227 210.66 393.527 202.874 394.117 194.25L336.049 294.827C335.459 303.451 333.159 311.237 329.15 318.185L387.218 217.608Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M245.211 132.577C248.413 127.03 255.204 124.257 265.584 124.258L207.516 224.835C197.136 224.834 190.345 227.607 187.143 233.154L245.211 132.577Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M318.094 154.945C322.842 163.17 324.002 171.107 321.573 178.757L263.505 279.334C265.934 271.684 264.774 263.746 260.026 255.522L318.094 154.945Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M176.925 96.6737C180.127 91.1249 184.776 86.4503 190.871 82.6499L132.803 183.227C126.708 187.027 122.059 191.702 118.857 197.25L176.925 96.6737Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M387.226 217.606C385.989 219.749 384.59 221.813 383.028 223.797L324.96 324.373C326.522 322.39 327.921 320.326 329.157 318.183L387.226 217.606Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M317.269 188.408C319.087 185.262 320.519 182.045 321.562 178.758L263.494 279.335C262.451 282.622 261.019 285.839 259.201 288.985L317.269 188.408Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M245.208 132.573C241.895 137.928 243 145.387 248.522 154.95L190.454 255.527C184.932 245.964 183.827 238.505 187.14 233.15L245.208 132.573Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M176.93 96.6719C174.331 101.175 172.686 106.255 171.993 111.91L113.925 212.487C114.618 206.831 116.263 201.752 118.862 197.249L176.93 96.6719Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M317.266 188.413C314.853 192.589 311.757 196.64 307.978 200.566L249.91 301.143C253.689 297.216 256.785 293.166 259.198 288.99L317.266 188.413Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M464.198 304.708L435.375 254.789L377.307 355.366L406.13 405.285L464.198 304.708Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M353.209 254.787C366.68 242.548 376.618 232.22 383.023 223.805L324.955 324.382C318.55 332.797 308.612 343.124 295.141 355.364L353.209 254.787Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M435.37 254.787L353.212 254.784L295.144 355.361L377.302 355.364L435.37 254.787Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M183.921 154.947L248.521 154.95L190.453 255.527L125.853 255.524L183.921 154.947Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M171.992 111.914C170.668 124.537 174.643 138.881 183.92 154.947L125.852 255.524C116.575 239.458 112.599 225.114 113.924 212.491L171.992 111.914Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M307.987 200.562C301.251 207.256 291.203 216.244 277.842 227.528L219.774 328.105C233.135 316.821 243.183 307.832 249.919 301.139L307.987 200.562Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M15.5469 75.1797L44.5359 125.386L-13.5321 225.963L-42.5212 175.756L15.5469 75.1797Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M277.836 227.536C264.033 238.82 253.708 247.904 246.862 254.789L188.794 355.366C195.64 348.481 205.965 339.397 219.768 328.113L277.836 227.536Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M275.358 304.706L464.189 304.713L406.12 405.29L217.29 405.283L275.358 304.706Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M44.5279 125.39L67.3864 125.39L9.31834 225.967L-13.5401 225.966L44.5279 125.39Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M101.341 75.1911L233.863 304.705L175.795 405.282L43.2733 175.768L101.341 75.1911ZM15.5431 75.19L-42.525 175.767L43.277 175.77L101.345 75.1932L15.5431 75.19Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M246.866 254.784L246.534 254.784L188.466 355.361L188.798 355.361L246.866 254.784Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M246.539 254.781L275.362 304.701L217.294 405.277L188.471 355.358L246.539 254.781Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M67.3906 125.391L170.923 304.698L112.855 405.275L9.32257 225.967L67.3906 125.391Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                            <path d="M170.921 304.699L233.865 304.701L175.797 405.278L112.853 405.276L170.921 304.699Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="bevel"/>
-                        </g>
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4" style="mix-blend-mode:hard-light">
-                            <path d="M246.544 254.79L246.875 254.79C253.722 247.905 264.046 238.82 277.849 227.537C291.21 216.253 301.259 207.264 307.995 200.57C314.62 193.685 319.147 186.418 321.577 178.768C324.006 171.117 322.846 163.18 318.097 154.956C312.796 145.775 305.342 138.412 295.735 132.865C286.238 127.127 276.189 124.258 265.588 124.257C255.208 124.257 248.416 127.03 245.214 132.576C241.902 137.931 243.006 145.39 248.528 154.953L183.928 154.951C174.652 138.885 170.676 124.541 172 111.918C173.546 99.2946 179.84 89.5408 190.882 82.6559C202.035 75.5798 216.887 72.0421 235.439 72.0428C254.874 72.0435 274.144 75.5825 293.248 82.6598C312.242 89.5457 329.579 99.3005 345.261 111.924C360.942 124.548 373.421 138.892 382.697 154.958C391.311 169.877 395.121 182.978 394.128 194.262C393.355 205.546 389.656 215.396 383.031 223.811C376.627 232.226 366.688 242.554 353.217 254.794L435.375 254.797L464.198 304.716L275.367 304.709L246.544 254.79Z" fill="#4B0600"/>
-                            <path d="M246.544 254.79L246.875 254.79C253.722 247.905 264.046 238.82 277.849 227.537C291.21 216.253 301.259 207.264 307.995 200.57C314.62 193.685 319.147 186.418 321.577 178.768C324.006 171.117 322.846 163.18 318.097 154.956C312.796 145.775 305.342 138.412 295.735 132.865C286.238 127.127 276.189 124.258 265.588 124.257C255.208 124.257 248.416 127.03 245.214 132.576C241.902 137.931 243.006 145.39 248.528 154.953L183.928 154.951C174.652 138.885 170.676 124.541 172 111.918C173.546 99.2946 179.84 89.5408 190.882 82.6559C202.035 75.5798 216.887 72.0421 235.439 72.0428C254.874 72.0435 274.144 75.5825 293.248 82.6598C312.242 89.5457 329.579 99.3005 345.261 111.924C360.942 124.548 373.421 138.892 382.697 154.958C391.311 169.877 395.121 182.978 394.128 194.262C393.355 205.546 389.656 215.396 383.031 223.811C376.627 232.226 366.688 242.554 353.217 254.794L435.375 254.797L464.198 304.716L275.367 304.709L246.544 254.79Z" stroke="#FF750F" stroke-width="1" stroke-linejoin="round"/>
-                        </g>
-                        <g class="transition-all delay-300 translate-y-0 opacity-100 duration-750 starting:opacity-0 starting:translate-y-4" style="mix-blend-mode:hard-light">
-                            <path d="M67.41 125.402L44.5515 125.401L15.5625 75.1953L101.364 75.1985L233.886 304.712L170.942 304.71L67.41 125.402Z" fill="#4B0600"/>
-                            <path d="M67.41 125.402L44.5515 125.401L15.5625 75.1953L101.364 75.1985L233.886 304.712L170.942 304.71L67.41 125.402Z" stroke="#FF750F" stroke-width="1"/>
-                        </g>
-                    </svg>
-                    <div class="absolute inset-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"></div>
+                <div class="mask-slider">
+                    <img src="./assets/images/slide/mask-home4.png" alt="Image" class="mask-slider1">
                 </div>
-            </main>
+            </div>
+
+        </section>
+        <!-- Widget Slider -->
+
+        <!-- Widget Select Form -->
+        <div class="mt--50 z-index3 relative wow fadeInUp animated">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="search-form-widget-slider bg-white relative">
+                            <form action="/" id="search-form-slider">
+                                <div class="flex wd-search">
+                                    <div class="form-group flex">
+                                        <i class="icon-18"></i>
+                                        <div class="search-bar-group">
+                                            <label>Destination</label>
+                                            <div class="nice-select" tabindex="0">
+                                                <span class="current">Melborn ,Australia</span>
+                                                <ul class="list">
+                                                    <li data-value class="option selected">Melborn ,Australia
+                                                    </li>
+                                                    <li data-value="hanoi" class="option">HaNoi ,Vietnam</li>
+                                                    <li data-value="tolyo" class="option">Tokyo , Janpan</li>
+                                                    <li data-value="korea" class="option">Seoul , Korea</li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-group flex">
+                                        <i class="icon-hiking-1-1 "></i>
+                                        <div class="search-bar-group">
+                                            <label>Type</label>
+                                            <div class="nice-select" tabindex="0">
+                                                <span class="current">Booking Type</span>
+                                                <ul class="list">
+                                                    <li data-value class="option selected">Booking Type</li>
+                                                    <li data-value="booking" class="option">Booking Type</li>
+                                                    <li data-value="booking" class="option">Booking Type</li>
+                                                    <li data-value="booking" class="option">Booking Type</li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-group flex">
+                                        <i class=" icon-time-left "></i>
+                                        <div class="search-bar-group">
+                                            <label>Duration</label>
+                                            <div class="nice-select" tabindex="0">
+                                                <span class="current">2-4 days tour</span>
+                                                <ul class="list">
+                                                    <li data-value class="option selected">2-4 days tour</li>
+                                                    <li data-value="booking" class="option">3-6 days tour</li>
+                                                    <li data-value="booking" class="option">4-8 days tour</li>
+                                                    <li data-value="booking" class="option">5-10 days tour</li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-group flex">
+                                        <i class="icon-user"></i>
+                                        <div class="search-bar-group">
+                                            <label>Guests</label>
+                                            <input type="text" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group flex-two">
+                                        <div class="icon-icon-filter">
+                                            <i class="icon-14"></i>
+                                        </div>
+                                        <a href="#" class="btn-search"><i class="icon-Vector5"></i>Search</a>
+                                    </div>
+                                </div>
+                                <div class="wd-search-form">
+                                    <div class="input-group-grid">
+                                        <fieldset class="group-select relative ">
+                                            <label>Filter By Price</label>
+                                            <div class="widget widget-price ">
+                                                <div id="slider-range"></div>
+                                                <div class="slider-labels">
+                                                    <div>
+                                                        <input type="hidden" name="min-value" value="">
+                                                        <input type="hidden" name="max-value" value="">
+                                                    </div>
+                                                    <div class="caption flex-three">
+                                                        <p class="price-range">Price: </p>
+                                                        <div class="number-range">
+                                                            <span id="slider-range-value1"></span>
+                                                            <span id="slider-range-value2"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div><!-- /.widget_price -->
+                                        </fieldset>
+                                        <fieldset class="group-select relative input-npd ">
+                                            <div class="search-bar-group relative">
+                                                <label>0</label>
+                                                <div class="nice-select" tabindex="0">
+                                                    <span class="current">English</span>
+                                                    <ul class="list">
+                                                        <li data-value="" class="option selected focus">Language</li>
+                                                        <li data-value="language1" class="option">Japan</li>
+                                                        <li data-value="language2" class="option">Vietnames</li>
+                                                        <li data-value="language3" class="option">Korea</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset class="group-select relative input-npd ">
+                                            <div class="search-bar-group relative">
+                                                <label>Any</label>
+                                                <div class="nice-select" tabindex="0">
+                                                    <span class="current">Month</span>
+                                                    <ul class="list">
+                                                        <li data-value="" class="option selected focus">Month</li>
+                                                        <li data-value="month1" class="option">1 Month</li>
+                                                        <li data-value="month2" class="option">2 Month</li>
+                                                        <li data-value="month3" class="option">3 Month</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset class="group-select relative input-npd">
+                                            <div class="search-bar-group relative">
+                                                <label>Any</label>
+                                                <div class="nice-select" tabindex="0">
+                                                    <span class="current">Duration</span>
+                                                    <ul class="list">
+                                                        <li data-value="" class="option selected focus">Duration</li>
+                                                        <li data-value="duration1" class="option">10-15 day</li>
+                                                        <li data-value="duration2" class="option">15-30 day</li>
+                                                        <li data-value="duration3" class="option">20-30 day</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div class="group-check-box-wrap">
+                                            <div class="checkbox">
+                                                <input id="check4" type="checkbox" name="check" value="check">
+                                                <label for="check4">Accepts Credit Cards</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="check5" type="checkbox" name="check" value="check">
+                                                <label for="check5">Car Parking</label>
+                                            </div>
+                                        </div>
+                                        <div class="group-check-box-wrap">
+                                            <div class="checkbox">
+                                                <input id="check6" type="checkbox" name="check" value="check">
+                                                <label for="check6">Free Coupons</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="check7" type="checkbox" name="check" value="check">
+                                                <label for="check7">Laundry Service</label>
+                                            </div>
+                                        </div>
+                                        <div class="group-check-box-wrap">
+                                            <div class="checkbox">
+                                                <input id="check8" type="checkbox" name="check" value="check">
+                                                <label for="check8">Outdoor Seating</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="check9" type="checkbox" name="check" value="check">
+                                                <label for="check9">Reservations</label>
+                                            </div>
+                                        </div>
+                                        <div class="group-check-box-wrap">
+                                            <div class="checkbox">
+                                                <input id="check10" type="checkbox" name="check" value="check">
+                                                <label for="check10">Restaurant</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="check11" type="checkbox" name="check" value="check">
+                                                <label for="check11">Smoking Allowed</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!-- Widget Select Form -->
 
-        @if (Route::has('login'))
-            <div class="h-14.5 hidden lg:block"></div>
-        @endif
-    </body>
-</html>
+        <!-- Widget About Us -->
+        <section class="about-us-h4">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-6">
+                        <div class="image-about-h4-wrap relative">
+                            <div class="image-about-item relative about-wrap-left wow fadeInLeft animated "
+                                data-wow-delay="0.1s">
+                                <img src="./assets/images/about-us/about-h41.jpg" alt="image">
+                                <img src="./assets/images/page/shape5.1.png" alt="image" class="shape-about-h4">
+                                <span class="quote">25,000 + Customer Worldwide</span>
+
+                            </div>
+                            <div class="image-about-item relative about-wrap-right wow fadeInUp animated "
+                                data-wow-delay="0.1s">
+                                <img src="./assets/images/about-us/about-h4.jpg" alt="image">
+                                <img src="./assets/images/page/shape5.1.png" alt="image" class="shape-about-h4">
+
+                            </div>
+                            <div class="box-year center wow zoomIn animated " data-wow-delay="0.1s">
+                                <span class="number">25</span>
+                                <p>year of <br> experience</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 col-lg-6 inner-content-about">
+                        <div class="mb-30">
+                            <span class="sub-title-heading text-main font-yes fs-28-46 wow fadeInUp animated">Explore
+                                the
+                                world</span>
+                            <h2 class="title-heading mb-18 wow fadeInUp animated">Great opportunity for <span
+                                    class="text-gray font-yes">adventure</span> & travels </h2>
+                            <p class="des wow fadeInUp animated">Welcome to our Print 128 website! We are a
+                                professional and reliable
+                                printing
+                                company that offers a wide range of printing services to</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="icon-box-style6">
+                                    <div class="icon relative">
+                                        <i class="icon-Group2"></i>
+                                    </div>
+                                    <div class="content">
+                                        <h6 class="title-icon wow fadeInUp animated"><a href="#">Trusted travel
+                                                guide</a></h6>
+                                        <p class="des-icon wow fadeInUp animated">Welcome to our Print 128
+                                            wesit!
+                                            company that offers a wide r</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="icon-box-style6">
+                                    <div class="icon relative">
+                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <mask id="mask0_214_218" style="mask-type:luminance"
+                                                maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40">
+                                                <path d="M0 0H40V40H0V0Z" fill="white" />
+                                            </mask>
+                                            <g mask="url(#mask0_214_218)">
+                                                <path d="M20 23.125V38.8281H38.8281V12.2656H34.1406" stroke="currentColor"
+                                                    stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path d="M5.85938 12.2656H1.17188V38.8281H20V23.2031" stroke="currentColor"
+                                                    stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M26.9598 9.14062H34.1406V34.1406H26.5035C23.5528 34.1406 20.933 36.0287 20 38.8281"
+                                                    stroke="currentColor" stroke-width="2" stroke-miterlimit="10"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path
+                                                    d="M13.0402 9.14062H5.85938V34.1406H13.4965C16.4472 34.1406 19.067 36.0287 20 38.8281"
+                                                    stroke="currentColor" stroke-width="2" stroke-miterlimit="10"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path
+                                                    d="M19.9999 1.17188C14.6972 1.17188 11.311 6.82758 13.815 11.5017L19.9999 23.0469L26.1848 11.5017C28.6888 6.82758 25.3025 1.17188 19.9999 1.17188Z"
+                                                    stroke="currentColor" stroke-width="2" stroke-miterlimit="10"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path
+                                                    d="M22.3438 8.20312C22.3438 9.4975 21.2944 10.5469 20 10.5469C18.7056 10.5469 17.6562 9.4975 17.6562 8.20312C17.6562 6.90875 18.7056 5.85937 20 5.85937C21.2944 5.85937 22.3438 6.90875 22.3438 8.20312Z"
+                                                    stroke="currentColor" stroke-width="2" stroke-miterlimit="10"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div class="content">
+                                        <h6 class="title-icon wow fadeInUp animated"><a href="#">Pesonalized
+                                                Trips</a></h6>
+                                        <p class="des-icon wow fadeInUp animated">Welcome to our Print 128
+                                            wesit!
+                                            company that offers a wide r</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-three btn-wrap-about  mb-30 ">
+                            <a href="#" class="btn-main wow fadeInUp animated">
+                                <p class="btn-main-text">More about us</p>
+                                <p class="iconer">
+                                    <i class="icon-arrow-right"></i>
+                                </p>
+
+                            </a>
+                            <div class="profile flex-three wow fadeInUp animated">
+                                <div class="image">
+                                    <img src="./assets/images/avata/10.jpg" alt="">
+                                </div>
+                                <div class="content">
+                                    <img src="./assets/images/page/name.png" alt="">
+                                    <span class="text-main">Ceo & Founder</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-check flex-three wow fadeInUp animated">
+                            <div class="icon">
+                                <svg width="33" height="30" viewBox="0 0 33 30" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g clip-path="url(#clip0_321_31)">
+                                        <path
+                                            d="M24.3102 0.240601C26.0182 0.240601 27.5818 0.938222 28.7124 2.04479C29.819 3.17542 30.5166 4.73906 30.5166 6.44703C30.5166 7.45738 30.2761 8.39556 29.8671 9.23751C29.0733 10.8252 25.0078 13.6157 24.3102 16.6467C23.1555 13.7119 19.5471 10.8252 18.7533 9.23751C18.3203 8.39556 18.0797 7.45738 18.0797 6.44703C18.0797 3.00703 20.8702 0.240601 24.3102 0.240601Z"
+                                            fill="currentColor"></path>
+                                        <path
+                                            d="M24.3102 3.29565C26.0181 3.29565 27.3893 4.6909 27.3893 6.37481C27.3893 8.08278 26.0181 9.45397 24.3102 9.45397C22.6022 9.45397 21.231 8.08278 21.231 6.37481C21.231 4.6909 22.6022 3.29565 24.3102 3.29565Z"
+                                            fill="#FEFEFE"></path>
+                                        <path
+                                            d="M9.44363 6.78381C11.8011 6.78381 13.894 7.72199 15.4336 9.26157C16.9731 10.8012 17.9113 12.9181 17.9113 15.2515C17.9113 16.5986 17.5986 17.8976 17.0212 19.0283C15.9387 21.1933 10.4299 24.9941 9.44363 29.1077C7.87999 25.1144 2.97259 21.1933 1.89007 19.0283C1.31273 17.8976 1 16.5986 1 15.2515C1 10.5606 4.77678 6.78381 9.44363 6.78381Z"
+                                            fill="currentColor"></path>
+                                        <path
+                                            d="M9.4436 10.9695C11.777 10.9695 13.6534 12.8458 13.6534 15.1552C13.6534 17.4646 11.777 19.3409 9.4436 19.3409C7.13424 19.3409 5.25787 17.4646 5.25787 15.1552C5.25787 12.8458 7.13424 10.9695 9.4436 10.9695Z"
+                                            fill="#FEFEFE"></path>
+                                        <path
+                                            d="M11.8011 29.8293C11.6808 29.8053 11.5846 29.685 11.6086 29.5647C11.6327 29.4204 11.753 29.3482 11.8732 29.3723H11.8973H11.9454H11.9695H12.0176L12.0416 29.3963H12.0897H12.1138H12.1379H12.186L12.21 29.4204H12.2581H12.2822H12.3303C12.4506 29.4444 12.5468 29.5647 12.5468 29.685C12.5228 29.8053 12.4025 29.9015 12.2822 29.9015V29.8774H12.2341H12.186H12.1619H12.1138H12.0897L12.0416 29.8534H12.0176H11.9695H11.9454L11.8973 29.8293H11.8732H11.8251H11.8011ZM24.1177 17.1037C24.1658 16.9835 24.2861 16.9113 24.4064 16.9594C24.5267 17.0075 24.5988 17.1519 24.5507 17.2721V17.2962L24.5267 17.3202V17.3443C24.4785 17.4646 24.3583 17.5127 24.2139 17.4646C24.0937 17.4405 24.0455 17.2962 24.0937 17.1759V17.1519V17.1278H24.1177V17.1037ZM23.4923 18.3787C23.5644 18.2825 23.7088 18.2584 23.805 18.3306C23.9253 18.3787 23.9493 18.523 23.8771 18.6433V18.6674L23.8531 18.6914V18.7155H23.829V18.7395H23.805V18.7636V18.7877H23.7809V18.8117L23.7569 18.8358L23.7328 18.8598V18.8839H23.7088V18.9079L23.6847 18.932V18.956H23.6606V18.9801H23.6366V19.0042L23.6125 19.0282V19.0523C23.5163 19.1485 23.372 19.1726 23.2758 19.0763C23.1795 19.0042 23.1555 18.8598 23.2276 18.7636V18.7395H23.2517V18.7155H23.2758V18.6914L23.2998 18.6674L23.3239 18.6433V18.6193H23.3479V18.5952H23.372V18.5712V18.5471H23.396V18.523L23.4201 18.499L23.4441 18.4749V18.4509H23.4682V18.4268V18.4028H23.4923V18.3787ZM22.2654 19.6537C22.3857 19.5815 22.53 19.6296 22.6022 19.7258C22.6503 19.8461 22.6262 19.9905 22.53 20.0626H22.506H22.4819V20.0867H22.4578L22.4338 20.1107H22.4097L22.3857 20.1348H22.3616V20.1588H22.3376H22.3135V20.1829H22.2895V20.207H22.2654H22.2413V20.231H22.2173H22.1932V20.2551H22.1692H22.1451V20.2791H22.1211H22.097V20.3032C21.9767 20.3513 21.8324 20.3032 21.7843 20.1829C21.7121 20.0626 21.7602 19.9183 21.8805 19.8702H21.9046V19.8461H21.9286H21.9527L21.9767 19.8221H22.0008V19.798H22.0248H22.0489V19.7739H22.073L22.097 19.7499H22.1211L22.1451 19.7258H22.1692V19.7018H22.1932H22.2173V19.6777H22.2413L22.2654 19.6537ZM20.6055 20.3272C20.7258 20.2791 20.8461 20.3513 20.8942 20.4956C20.9183 20.6159 20.8461 20.7362 20.7258 20.7602L20.7018 20.7843H20.6777H20.6537H20.6296V20.8084H20.6055H20.5815H20.5574H20.5334V20.8324H20.5093H20.4853H20.4612H20.4372V20.8565H20.4131H20.389H20.365H20.3409V20.8805H20.3169H20.2928H20.2688C20.1485 20.9286 20.0041 20.8324 19.9801 20.7121C19.956 20.5918 20.0282 20.4716 20.1485 20.4235H20.1725H20.1966H20.2206L20.2447 20.3994H20.2688H20.2928H20.3169L20.3409 20.3753H20.365H20.389H20.4131L20.4372 20.3513H20.4612H20.4853H20.5093L20.5334 20.3272H20.5574H20.5815H20.6055ZM18.7773 21.073C18.8735 20.9767 19.0179 20.9767 19.1141 21.073C19.2103 21.1692 19.1862 21.3135 19.1141 21.4098H19.09L19.066 21.4338V21.4579H19.0419L19.0179 21.4819V21.506H18.9938V21.53H18.9697V21.5541L18.9457 21.5781V21.6022H18.9216V21.6263L18.8976 21.6503V21.6744H18.8735V21.6984V21.7225C18.8014 21.8187 18.657 21.8668 18.5608 21.8187C18.4405 21.7465 18.3924 21.6022 18.4405 21.506L18.4646 21.4819V21.4579L18.4886 21.4338V21.4098L18.5127 21.3857L18.5367 21.3616V21.3376L18.5608 21.3135L18.5848 21.2895L18.6089 21.2654V21.2414H18.633V21.2173L18.657 21.1932V21.1692H18.6811V21.1451H18.7051L18.7292 21.1211L18.7532 21.097L18.7773 21.073ZM18.4886 23.0696C18.4165 22.9493 18.4646 22.805 18.5848 22.7569C18.6811 22.6847 18.8254 22.7328 18.8976 22.8531V22.8772H18.9216V22.9012V22.9253H18.9457V22.9493L18.9697 22.9734V22.9974H18.9938V23.0215L19.0179 23.0456V23.0696H19.0419V23.0937L19.066 23.1177L19.09 23.1418L19.1141 23.1658V23.1899C19.2103 23.2861 19.2103 23.4304 19.1141 23.5267C19.0179 23.5988 18.8735 23.5988 18.7773 23.5026L18.7532 23.4786L18.7292 23.4545L18.7051 23.4304V23.4064L18.6811 23.3823L18.657 23.3583L18.633 23.3342V23.3102L18.6089 23.2861L18.5848 23.2621V23.238L18.5608 23.2139L18.5367 23.1899V23.1658L18.5127 23.1418V23.1177L18.4886 23.0937V23.0696ZM20.1485 24.1762C20.0041 24.1521 19.932 24.0318 19.956 23.9116C19.9801 23.7913 20.1004 23.6951 20.2206 23.7191H20.2447H20.2688V23.7432H20.2928H20.3169H20.3409H20.365H20.389H20.4131L20.4372 23.7672H20.4612H20.4853H20.5093H20.5334H20.5574H20.5815L20.6055 23.7913H20.6296H20.6537H20.6777C20.798 23.8153 20.8942 23.9116 20.8702 24.0559C20.8702 24.1762 20.7499 24.2724 20.6055 24.2483H20.5815H20.5574H20.5334H20.5093H20.4853V24.2243H20.4612H20.4372H20.4131H20.389H20.365H20.3409H20.3169L20.2928 24.2002H20.2688H20.2447H20.2206H20.1966H20.1725L20.1485 24.1762ZM22.0248 24.3927C21.9046 24.3686 21.8083 24.2724 21.8083 24.1281C21.8083 24.0078 21.9286 23.9116 22.0489 23.9116H22.073H22.097H22.1211H22.1451L22.1692 23.9356H22.1932H22.2173H22.2413H22.2654H22.2895H22.3135H22.3376H22.3616H22.3857H22.4097H22.4338H22.4578H22.4819H22.506L22.53 23.9597C22.6503 23.9597 22.7465 24.0559 22.7465 24.2002C22.7465 24.3205 22.6262 24.4167 22.506 24.4167H22.4819H22.4578H22.4338H22.4097H22.3857H22.3616H22.3376L22.3135 24.3927H22.2895H22.2654H22.2413H22.2173H22.1932H22.1692H22.1451H22.1211H22.097H22.073H22.0489H22.0248ZM23.9012 24.4889C23.7569 24.4889 23.6606 24.3686 23.6847 24.2483C23.6847 24.1281 23.805 24.0318 23.9253 24.0318H23.9734H24.0215L24.0937 24.0559H24.1658H24.2139H24.2861L24.3583 24.08H24.4064C24.5267 24.104 24.6229 24.2002 24.6229 24.3446C24.5988 24.4649 24.4785 24.5611 24.3583 24.537H24.3102H24.238L24.1899 24.513H24.1177H24.0455H23.9974H23.9253L23.9012 24.4889ZM25.7054 24.8016C25.5611 24.7776 25.4889 24.6332 25.537 24.513C25.5611 24.3927 25.7054 24.3205 25.8257 24.3686H25.8978L25.946 24.3927L25.9941 24.4167H26.0422L26.0903 24.4408L26.1384 24.4649H26.1865L26.2346 24.4889L26.2827 24.513C26.403 24.5611 26.4752 24.7054 26.4271 24.8257C26.379 24.946 26.2346 24.9941 26.1143 24.946L26.0662 24.9219H26.0181L25.9941 24.8979H25.946L25.8978 24.8738L25.8497 24.8497H25.8016L25.7535 24.8257L25.7054 24.8016ZM27.2931 25.5714C27.1969 25.4993 27.1728 25.3549 27.245 25.2587C27.3412 25.1384 27.4855 25.1384 27.5818 25.2106L27.6058 25.2346L27.6299 25.2587L27.678 25.2828L27.702 25.3068L27.7261 25.3309L27.7502 25.3549L27.7742 25.379L27.8223 25.403L27.8464 25.4271L27.8704 25.4752L27.8945 25.4993L27.9185 25.5233L27.9426 25.5474L27.9667 25.5714C28.0388 25.6676 28.0388 25.812 27.9426 25.8842C27.8464 25.9804 27.702 25.9804 27.6058 25.8842V25.8601L27.5818 25.836L27.5577 25.812L27.5336 25.7879L27.5096 25.7639L27.4855 25.7398H27.4615L27.4374 25.7158L27.4134 25.6917L27.3893 25.6676L27.3653 25.6436L27.3412 25.6195L27.3171 25.5955L27.2931 25.5714ZM28.0148 26.9667C28.0388 26.8464 28.135 26.7502 28.2794 26.7742C28.3997 26.7742 28.4959 26.8945 28.4718 27.0388V27.0629V27.0869L28.4478 27.1351V27.1591V27.1832V27.2072L28.4237 27.2553V27.2794L28.3997 27.3034V27.3516V27.3756L28.3756 27.3997V27.4237L28.3515 27.4718V27.4959L28.3275 27.52V27.544C28.2553 27.6643 28.111 27.7124 27.9907 27.6643C27.8945 27.5921 27.8464 27.4478 27.8945 27.3275L27.9185 27.3034V27.2794L27.9426 27.2553V27.2313V27.2072L27.9667 27.1832V27.1591V27.1351L27.9907 27.111V27.0869V27.0629V27.0388L28.0148 27.0148V26.9907V26.9667ZM27.0044 28.2176C27.1247 28.1695 27.269 28.1935 27.3171 28.3138C27.3893 28.41 27.3653 28.5544 27.245 28.6265L27.1969 28.6506L27.1488 28.6746L27.1247 28.6987L27.0766 28.7227L27.0285 28.7468L27.0044 28.7709L26.9563 28.7949L26.9082 28.819L26.8601 28.843L26.812 28.8671C26.6917 28.9152 26.5474 28.8671 26.4992 28.7468C26.4511 28.6265 26.4992 28.4822 26.6195 28.4341L26.6676 28.41L26.6917 28.386L26.7398 28.3619H26.7879L26.812 28.3379L26.8601 28.3138L26.8841 28.2897L26.9323 28.2657L26.9563 28.2416H27.0044V28.2176ZM25.3205 28.8671C25.4648 28.843 25.5851 28.9152 25.6092 29.0355C25.6332 29.1798 25.5611 29.3001 25.4408 29.3241L25.3927 29.3482H25.3446L25.2724 29.3723H25.2243L25.1521 29.3963H25.0799L25.0318 29.4204H24.9597C24.8394 29.4444 24.7191 29.3723 24.695 29.252C24.671 29.1076 24.7672 28.9874 24.8875 28.9633H24.9356L25.0078 28.9393H25.0559L25.1281 28.9152H25.1762L25.2243 28.8911H25.2964L25.3205 28.8671ZM23.5163 29.1558C23.6366 29.1317 23.7569 29.2279 23.7569 29.3723C23.7809 29.4925 23.6847 29.6128 23.5644 29.6128H23.5163H23.4682L23.4201 29.6369H23.396H23.3479H23.2998H23.2517H23.2036L23.1555 29.6609H23.1314H23.0833C22.963 29.6609 22.8427 29.5647 22.8427 29.4444C22.8187 29.3241 22.9149 29.2039 23.0352 29.1798H23.0833H23.1314H23.1795H23.2036H23.2517H23.2998L23.3479 29.1558H23.396H23.4201H23.4682H23.5163ZM21.6399 29.3001C21.7843 29.3001 21.8805 29.3963 21.9046 29.5166C21.9046 29.6609 21.8083 29.7572 21.6881 29.7812H21.6399H21.5918H21.5437H21.4956H21.4475L21.3994 29.8053H21.3513H21.3032H21.2551H21.2069C21.0867 29.8293 20.9664 29.709 20.9664 29.5888C20.9664 29.4685 21.0626 29.3482 21.1829 29.3482H21.231L21.2791 29.3241H21.3272H21.3753H21.4234H21.4716H21.5197H21.5678L21.6159 29.3001H21.6399ZM19.7876 29.4444C19.9079 29.4204 20.0282 29.5166 20.0282 29.6609C20.0282 29.7812 19.932 29.9015 19.8117 29.9015H19.7636H19.7155H19.6674H19.6193L19.5471 29.9255H19.499H19.4509H19.4027H19.3546H19.3306C19.2103 29.9255 19.09 29.8293 19.09 29.709C19.09 29.5647 19.1862 29.4685 19.3065 29.4685H19.3306L19.3787 29.4444H19.4268H19.4749H19.523H19.5711H19.6433H19.6914H19.7395H19.7876ZM17.9113 29.5166C18.0316 29.5166 18.1518 29.6128 18.1518 29.7572C18.1518 29.8774 18.0556 29.9977 17.9353 29.9977H17.9113H17.8632H17.8151H17.7669H17.7188H17.6707H17.6226H17.5504H17.5023H17.4542C17.3339 30.0218 17.2137 29.9015 17.2137 29.7812C17.2137 29.6609 17.3099 29.5406 17.4542 29.5406H17.5023H17.5504H17.5986H17.6467H17.6948H17.7429H17.791L17.8391 29.5166H17.9113ZM16.0349 29.5647C16.1793 29.5647 16.2755 29.685 16.2755 29.8053C16.2755 29.9255 16.1793 30.0458 16.059 30.0458H15.9868H15.9387H15.8906H15.8425H15.7944H15.7462H15.6981H15.65H15.6019H15.5779C15.4576 30.0458 15.3373 29.9496 15.3373 29.8053C15.3373 29.685 15.4576 29.5647 15.5779 29.5647H15.6019H15.65H15.6981H15.7462H15.7944H15.8425H15.8906H15.9387H15.9868H16.0349ZM14.1826 29.5647C14.3029 29.5647 14.3991 29.6609 14.3991 29.8053C14.3991 29.9255 14.3029 30.0218 14.1586 30.0218H14.1345H14.0864H14.0623H14.0142H13.9661H13.918H13.8699L13.8218 29.9977H13.7977H13.7496H13.7015C13.5572 29.9977 13.4609 29.8774 13.4609 29.7572C13.485 29.6369 13.5812 29.5166 13.7256 29.5406H13.7737H13.7977H13.8458H13.8939H13.9421H13.9902H14.0142H14.0623H14.1104L14.1586 29.5647H14.1826Z"
+                                            fill="#FF190B"></path>
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_321_31">
+                                            <rect width="33" height="30" fill="white"></rect>
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <span class="text-main">Checkout Beautiful Places Arround the World.</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Widget About Us -->
+
+        <!-- Widget activities -->
+        <section class="populer-activities-section bg-1">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-30 center">
+                            <span class="sub-title-heading text-main font-yes fs-28-46 wow fadeInUp animated">Populer
+                                Activities</span>
+                            <h2 class="title-heading wow fadeInUp animated">Explore Real Adventure</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 relative populer-activities-slide">
+                        <div class="swiper populer-activities overflow-hidden">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb1.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-Group"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Couple camping</a></h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb2.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-Group-1"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Trailers and rv
+                                                    spots</a></h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb3.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-bicyclist-1"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Mountain Biking</a></h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb4.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-fishing-2"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Fishing & Swimming</a>
+                                            </h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb1.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-Group"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Couple camping</a></h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb2.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-Group-1"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Trailers and rv
+                                                    spots</a></h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb3.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-bicyclist-1"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Mountain Biking</a></h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tf-widget-populer">
+                                        <div class="image relative">
+                                            <img src="./assets/images/image-box/imb4.jpg" alt="Image">
+                                            <img src="./assets/images/image-box/mask-box.png" alt="Image"
+                                                class="mask-populer">
+                                        </div>
+                                        <div class="content relative center">
+                                            <div class="icon flex-five">
+                                                <i class="icon-fishing-2"></i>
+                                            </div>
+                                            <h5 class="title-populer mb-18"><a href="#">Fishing & Swimming</a>
+                                            </h5>
+                                            <p class="des-populer">Welcome to our Print 128 website company that
+                                                offers</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- Widget activities -->
+
+        <!-- Widget Video -->
+        <section class="widget-video-style2">
+            <div class="tf-container">
+                <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="video-h4-widget relative overflow-hidden mb--14em video-wrap">
+                            <a href="https://www.youtube.com/watch?v=n9LgeoJE4EI"
+                                class="video-box widget-videos flex-five z-index3 relative">
+                                <i class="icon-Polygon-4"></i>
+                            </a>
+                            <P class="font-yes text-white center text-video z-index3 relative">Watch Video</P>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Widget Video -->
+
+        <!-- Widget feature -->
+        <section class="widget-feature3 bg-1">
+            <div class="tf-container">
+                <div class="row al-i-end mb-22">
+                    <div class="col-md-6">
+                        <span class="sub-title-heading text-main font-yes fs-28-46 wow fadeInUp animated">Populer
+                            Activities</span>
+                        <h2 class="title-heading wow fadeInUp animated">Extras features</h2>
+                    </div>
+                    <div class="col-md-6 wow fadeInUp animated">
+                        <p class="des">Welcome to our Print 128 website! We are a professional and reliable
+                            printing
+                            company that offers a wide range of printing services to</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-lg-4">
+                        <div class="image-feature3">
+                            <div class="image-feature relative">
+                                <img src="./assets/images/feature/ft1.jpg" alt="image">
+                                <span class="text font-yes text-white">Never stop Exploring</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 box-feature-wrap">
+                        <div class="row">
+                            <div class="col-md-6 mb-32 wow fadeInUp animated " data-wow-delay="0.1s">
+                                <div class="tf-icon-box icon-box-style2 flex relative">
+                                    <div class="icon">
+                                        <i class="icon-Travel_insurance"></i>
+                                    </div>
+                                    <div class="content">
+                                        <h6 class="title-icon"><a href="#">Safety first always</a></h6>
+                                        <p class="des-icon">Welcome to our Print 128 web
+                                            company that offers a wide </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-32 wow fadeInUp animated " data-wow-delay="0.2s">
+                                <div class="tf-icon-box icon-box-style2 flex relative">
+                                    <div class="icon">
+                                        <i class="icon-plane-1-1"></i>
+                                    </div>
+                                    <div class="content">
+                                        <h6 class="title-icon"><a href="#">Trusted travel guide</a></h6>
+                                        <p class="des-icon">Welcome to our Print 128 web
+                                            company that offers a wide </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-32 wow fadeInUp animated " data-wow-delay="0.3s">
+                                <div class="tf-icon-box icon-box-style2 flex relative">
+                                    <div class="icon">
+                                        <i class="icon-destination"></i>
+                                    </div>
+                                    <div class="content">
+                                        <h6 class="title-icon"><a href="#">Pesonalized Trips</a></h6>
+                                        <p class="des-icon">Welcome to our Print 128 web
+                                            company that offers a wide </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-32 wow fadeInUp animated " data-wow-delay="0.4s">
+                                <div class="tf-icon-box icon-box-style2 flex relative">
+                                    <div class="icon">
+                                        <i class="icon-climbing-1-1"></i>
+                                    </div>
+                                    <div class="content">
+                                        <h6 class="title-icon"><a href="#">Adventure &amp; Climbing</a></h6>
+                                        <p class="des-icon">Welcome to our Print 128 web
+                                            company that offers a wide </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- Widget feature -->
+
+        <!-- Widget destination -->
+        <section class="top-destination2 pd-main">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-50 center">
+                            <span class="sub-title-heading text-main font-yes fs-28-46 wow fadeInUp animated">Populer
+                                Activities</span>
+                            <h2 class="title-heading wow fadeInUp animated">Provide Top Destination</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-lg-2 wow fadeInUp animated " data-wow-delay="0.1s">
+                        <div class="tf-image-box center">
+                            <a href="single-destination.html" class="image">
+                                <img src="./assets/images/tour/tour4-1.jpg" alt="Image">
+                            </a>
+                            <h6><a href="single-destination.html">North America</a></h6>
+                            <span class="text-main">(3 Tour)</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-2 wow fadeInUp animated " data-wow-delay="0.2s">
+                        <div class="tf-image-box center pt-25">
+                            <a href="single-destination.html" class="image">
+                                <img src="./assets/images/tour/tour4-2.jpg" alt="Image">
+                            </a>
+                            <h6><a href="single-destination.html">Sweden</a></h6>
+                            <span class="text-main">(3 Tour)</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-2 wow fadeInUp animated " data-wow-delay="0.3s">
+                        <div class="tf-image-box center">
+                            <a href="single-destination.html" class="image">
+                                <img src="./assets/images/tour/tour4-3.jpg" alt="Image">
+                            </a>
+                            <h6><a href="single-destination.html">North America</a></h6>
+                            <span class="text-main">(3 Tour)</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-2 wow fadeInUp animated " data-wow-delay="0.4s">
+                        <div class="tf-image-box center pt-25">
+                            <a href="single-destination.html" class="image">
+                                <img src="./assets/images/tour/tour4-4.jpg" alt="Image">
+                            </a>
+                            <h6><a href="single-destination.html">Canada</a></h6>
+                            <span class="text-main">(3 Tour)</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-2 wow fadeInUp animated " data-wow-delay="0.5s">
+                        <div class="tf-image-box center">
+                            <a href="single-destination.html" class="image">
+                                <img src="./assets/images/tour/tour4-5.jpg" alt="Image">
+                            </a>
+                            <h6><a href="single-destination.html">North America</a></h6>
+                            <span class="text-main">(3 Tour)</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-2 wow fadeInUp animated " data-wow-delay="0.6s">
+                        <div class="tf-image-box center pt-25">
+                            <a href="single-destination.html" class="image">
+                                <img src="./assets/images/tour/tour4-6.jpg" alt="Image">
+                            </a>
+                            <h6><a href="single-destination.html">North America</a></h6>
+                            <span class="text-main">(3 Tour)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 center wow fadeInUp animated ">
+                        <p class="tour-des-top mt-53">Explore our top destinations voted by more than <span
+                                class="text-main">100,000+</span> customers around the world.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Widget destination -->
+
+        <section class="mb--93 z-index3 relative ">
+            <div class="tf-container">
+                <div class="callt-to-action flex-two">
+                    <div class="callt-to-action-content flex-three">
+                        <div class="image">
+                            <img src="./assets/images/page/ready.png" alt="Image">
+                        </div>
+                        <div class="content">
+                            <h2 class="title-call">Ready to adventure and enjoy natural</h2>
+                            <p class="des">Lorem ipsum dolor sit amet, consectetur notted adipisicin</p>
+                        </div>
+                    </div>
+                    <img src="./assets/images/page/vector4.png" alt="" class="shape-ab">
+                    <div class="callt-to-action-button">
+                        <a href="{{ route('login')}}" class="get-call">Let,s get started</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Widget impressino -->
+        <section class="impressino relative overflow-hidden">
+            <img src="./assets/images/page/mask-counter.png" alt="image" class="mask-impression">
+            <div class="tf-container">
+                <div class="row z-index3 relative">
+                    <div class="col-md-6">
+                        <div class="impressino-counter">
+                            <div class="counter-item center tf-countto">
+                                <span>Satsified Clients</span>
+                                <div class="number-counter plus" data-to="250" data-speed="2000"
+                                    data-waypoint-active="yes">250</div>
+                            </div>
+                            <div class="counter-item center tf-countto">
+                                <span>Total Rent cars</span>
+                                <div class="number-counter number" data-to="1538" data-speed="2000"
+                                    data-waypoint-active="yes">1538</div>
+                            </div>
+                            <div class="counter-item center tf-countto">
+                                <span>Years of build</span>
+                                <div class="number-counter number plus" data-to="28" data-speed="2000"
+                                    data-waypoint-active="yes">28</div>
+                            </div>
+                            <div class="counter-item center tf-countto">
+                                <span>Total Tourist</span>
+                                <div class="number-counter number kare" data-to="386" data-speed="2000"
+                                    data-waypoint-active="yes">386</div>
+                            </div>
+                            <div class="icon-fly">
+                                <i class="icon-Vector-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mt-impressino">
+                            <span class="sub-title-heading text-main font-yes fs-28-46 wow fadeInUp animated">Populer
+                                Activities</span>
+                            <h2 class="title-heading text-white wow fadeInUp animated">Company Impression</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Widget impressino -->
+
+        <!-- Widget Top this Week -->
+        <section class="top-this-week pd-main">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-37 center">
+                            <span class="sub-title-heading text-main font-yes fs-28-46 wow fadeInUp animated">Featured
+                                Tour</span>
+                            <h2 class="title-heading wow fadeInUp animated">Our top this week</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 relative top-this-week-slide">
+                        <div class="swiper populer-activities overflow-hidden">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="tour-listing box-sd">
+                                        <a href="tour-single.html" class="tour-listing-image">
+                                            <div class="badge-top flex-two">
+                                                <span class="feature">Featured</span>
+                                                <div class="badge-media flex-five">
+                                                    <span class="media"><i class="icon-Group-1000002909"></i>5</span>
+                                                    <span class="media"><i class="icon-Group-1000002910"></i>2</span>
+                                                </div>
+                                            </div>
+                                            <img src="./assets/images/travel-list/1.jpg" alt="Image Listing">
+
+                                        </a>
+                                        <div class="tour-listing-content">
+                                            <span class="map"><i class="icon-Vector4"></i>United States
+                                                USA</span>
+                                            <h3 class="title-tour-list"><a href="tour-single.html">6 nights From
+                                                    Moscow</a>
+                                            </h3>
+                                            <div class="review">
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <span>(1 Review)</span>
+                                            </div>
+                                            <div class="icon-box flex-three">
+                                                <div class="icons flex-three">
+                                                    <i class="icon-time-left"></i>
+                                                    <span>5 days</span>
+                                                </div>
+                                                <div class="icons flex-three">
+                                                    <svg width="21" height="16" viewBox="0 0 21 16"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M4.34766 4.79761C4.34766 2.94013 5.85346 1.43433 7.71094 1.43433C9.56841 1.43433 11.0742 2.94013 11.0742 4.79761C11.0742 6.65508 9.56841 8.16089 7.71094 8.16089C5.85346 8.16089 4.34766 6.65508 4.34766 4.79761Z"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9.5977 15.1797H2.46098C1.34827 15.1797 0.558268 14.0954 0.898984 13.0362C1.80408 10.222 4.57804 8.18566 7.69301 8.18566C9.17897 8.18566 10.5566 8.64906 11.6895 9.43922"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M17.1035 15.1797V9.02734" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M20.1797 12.1035H14.0273" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <span>12 Person</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-two">
+                                                <div class="price-box flex-three">
+                                                    <p>From <span class="price-sale">$169.00</span></p>
+                                                    <span class="price">$199.00</span>
+                                                </div>
+                                                <div class="icon-bookmark">
+                                                    <i class="icon-Vector-151"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tour-listing box-sd">
+                                        <a href="tour-single.html" class="tour-listing-image">
+                                            <div class="badge-top flex-two">
+                                                <span class="feature">Featured</span>
+                                                <div class="badge-media flex-five">
+                                                    <span class="media"><i class="icon-Group-1000002909"></i>5</span>
+                                                    <span class="media"><i class="icon-Group-1000002910"></i>2</span>
+                                                </div>
+                                            </div>
+                                            <img src="./assets/images/travel-list/2.jpg" alt="Image Listing">
+
+                                        </a>
+                                        <div class="tour-listing-content">
+                                            <span class="map"><i class="icon-Vector4"></i>United States
+                                                USA</span>
+                                            <h3 class="title-tour-list"><a href="tour-single.html">6 nights From
+                                                    Moscow</a>
+                                            </h3>
+                                            <div class="review">
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <span>(1 Review)</span>
+                                            </div>
+                                            <div class="icon-box flex-three">
+                                                <div class="icons flex-three">
+                                                    <i class="icon-time-left"></i>
+                                                    <span>5 days</span>
+                                                </div>
+                                                <div class="icons flex-three">
+                                                    <svg width="21" height="16" viewBox="0 0 21 16"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M4.34766 4.79761C4.34766 2.94013 5.85346 1.43433 7.71094 1.43433C9.56841 1.43433 11.0742 2.94013 11.0742 4.79761C11.0742 6.65508 9.56841 8.16089 7.71094 8.16089C5.85346 8.16089 4.34766 6.65508 4.34766 4.79761Z"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9.5977 15.1797H2.46098C1.34827 15.1797 0.558268 14.0954 0.898984 13.0362C1.80408 10.222 4.57804 8.18566 7.69301 8.18566C9.17897 8.18566 10.5566 8.64906 11.6895 9.43922"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M17.1035 15.1797V9.02734" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M20.1797 12.1035H14.0273" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <span>12 Person</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-two">
+                                                <div class="price-box flex-three">
+                                                    <p>From <span class="price-sale">$169.00</span></p>
+                                                    <span class="price">$199.00</span>
+                                                </div>
+                                                <div class="icon-bookmark">
+                                                    <i class="icon-Vector-151"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tour-listing box-sd">
+                                        <a href="tour-single.html" class="tour-listing-image">
+                                            <div class="badge-top flex-two">
+                                                <span class="feature">Featured</span>
+                                                <div class="badge-media flex-five">
+                                                    <span class="media"><i class="icon-Group-1000002909"></i>5</span>
+                                                    <span class="media"><i class="icon-Group-1000002910"></i>2</span>
+                                                </div>
+                                            </div>
+                                            <img src="./assets/images/travel-list/3.jpg" alt="Image Listing">
+
+                                        </a>
+                                        <div class="tour-listing-content">
+                                            <span class="map"><i class="icon-Vector4"></i>United States
+                                                USA</span>
+                                            <h3 class="title-tour-list"><a href="tour-single.html">6 nights From
+                                                    Moscow</a>
+                                            </h3>
+                                            <div class="review">
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <span>(1 Review)</span>
+                                            </div>
+                                            <div class="icon-box flex-three">
+                                                <div class="icons flex-three">
+                                                    <i class="icon-time-left"></i>
+                                                    <span>5 days</span>
+                                                </div>
+                                                <div class="icons flex-three">
+                                                    <svg width="21" height="16" viewBox="0 0 21 16"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M4.34766 4.79761C4.34766 2.94013 5.85346 1.43433 7.71094 1.43433C9.56841 1.43433 11.0742 2.94013 11.0742 4.79761C11.0742 6.65508 9.56841 8.16089 7.71094 8.16089C5.85346 8.16089 4.34766 6.65508 4.34766 4.79761Z"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9.5977 15.1797H2.46098C1.34827 15.1797 0.558268 14.0954 0.898984 13.0362C1.80408 10.222 4.57804 8.18566 7.69301 8.18566C9.17897 8.18566 10.5566 8.64906 11.6895 9.43922"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M17.1035 15.1797V9.02734" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M20.1797 12.1035H14.0273" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <span>12 Person</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-two">
+                                                <div class="price-box flex-three">
+                                                    <p>From <span class="price-sale">$169.00</span></p>
+                                                    <span class="price">$199.00</span>
+                                                </div>
+                                                <div class="icon-bookmark">
+                                                    <i class="icon-Vector-151"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tour-listing box-sd">
+                                        <a href="tour-single.html" class="tour-listing-image">
+                                            <div class="badge-top flex-two">
+                                                <span class="feature">Featured</span>
+                                                <div class="badge-media flex-five">
+                                                    <span class="media"><i class="icon-Group-1000002909"></i>5</span>
+                                                    <span class="media"><i class="icon-Group-1000002910"></i>2</span>
+                                                </div>
+                                            </div>
+                                            <img src="./assets/images/travel-list/4.jpg" alt="Image Listing">
+
+                                        </a>
+                                        <div class="tour-listing-content">
+                                            <span class="map"><i class="icon-Vector4"></i>United States
+                                                USA</span>
+                                            <h3 class="title-tour-list"><a href="tour-single.html">6 nights From
+                                                    Moscow</a>
+                                            </h3>
+                                            <div class="review">
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <span>(1 Review)</span>
+                                            </div>
+                                            <div class="icon-box flex-three">
+                                                <div class="icons flex-three">
+                                                    <i class="icon-time-left"></i>
+                                                    <span>5 days</span>
+                                                </div>
+                                                <div class="icons flex-three">
+                                                    <svg width="21" height="16" viewBox="0 0 21 16"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M4.34766 4.79761C4.34766 2.94013 5.85346 1.43433 7.71094 1.43433C9.56841 1.43433 11.0742 2.94013 11.0742 4.79761C11.0742 6.65508 9.56841 8.16089 7.71094 8.16089C5.85346 8.16089 4.34766 6.65508 4.34766 4.79761Z"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9.5977 15.1797H2.46098C1.34827 15.1797 0.558268 14.0954 0.898984 13.0362C1.80408 10.222 4.57804 8.18566 7.69301 8.18566C9.17897 8.18566 10.5566 8.64906 11.6895 9.43922"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M17.1035 15.1797V9.02734" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M20.1797 12.1035H14.0273" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <span>12 Person</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-two">
+                                                <div class="price-box flex-three">
+                                                    <p>From <span class="price-sale">$169.00</span></p>
+                                                    <span class="price">$199.00</span>
+                                                </div>
+                                                <div class="icon-bookmark">
+                                                    <i class="icon-Vector-151"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="tour-listing box-sd">
+                                        <a href="tour-single.html" class="tour-listing-image">
+                                            <div class="badge-top flex-two">
+                                                <span class="feature">Featured</span>
+                                                <div class="badge-media flex-five">
+                                                    <span class="media"><i class="icon-Group-1000002909"></i>5</span>
+                                                    <span class="media"><i class="icon-Group-1000002910"></i>2</span>
+                                                </div>
+                                            </div>
+                                            <img src="./assets/images/travel-list/1.jpg" alt="Image Listing">
+
+                                        </a>
+                                        <div class="tour-listing-content">
+                                            <span class="map"><i class="icon-Vector4"></i>United States
+                                                USA</span>
+                                            <h3 class="title-tour-list"><a href="tour-single.html">6 nights From
+                                                    Moscow</a>
+                                            </h3>
+                                            <div class="review">
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <i class="icon-Star"></i>
+                                                <span>(1 Review)</span>
+                                            </div>
+                                            <div class="icon-box flex-three">
+                                                <div class="icons flex-three">
+                                                    <i class="icon-time-left"></i>
+                                                    <span>5 days</span>
+                                                </div>
+                                                <div class="icons flex-three">
+                                                    <svg width="21" height="16" viewBox="0 0 21 16"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M4.34766 4.79761C4.34766 2.94013 5.85346 1.43433 7.71094 1.43433C9.56841 1.43433 11.0742 2.94013 11.0742 4.79761C11.0742 6.65508 9.56841 8.16089 7.71094 8.16089C5.85346 8.16089 4.34766 6.65508 4.34766 4.79761Z"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9.5977 15.1797H2.46098C1.34827 15.1797 0.558268 14.0954 0.898984 13.0362C1.80408 10.222 4.57804 8.18566 7.69301 8.18566C9.17897 8.18566 10.5566 8.64906 11.6895 9.43922"
+                                                            stroke="#4DA528" stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M17.1035 15.1797V9.02734" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path d="M20.1797 12.1035H14.0273" stroke="#4DA528"
+                                                            stroke-width="1.7" stroke-miterlimit="10"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <span>12 Person</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-two">
+                                                <div class="price-box flex-three">
+                                                    <p>From <span class="price-sale">$169.00</span></p>
+                                                    <span class="price">$199.00</span>
+                                                </div>
+                                                <div class="icon-bookmark">
+                                                    <i class="icon-Vector-151"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Widget Top this Week -->
+
+        <!-- Widget why chose us -->
+        <section class="widget-feature2">
+            <div class="tf-container full">
+                <div class="row">
+                    <div class="col-md-5 relative">
+                        <div class="image-feature2 relative">
+                            <img src="./assets/images/page/travelling2.jpg" alt="">
+                        </div>
+                        <div class="exploring flex-five center">
+                            <span class="font-yes text-white ">Never stop
+                                Exploring</span>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="content-feature2">
+                            <div class="mb-60">
+                                <span class="sub-title-heading text-main font-yes fs-28-46 wow fadeInUp animated">Explore
+                                    the
+                                    world</span>
+                                <h2 class="title-heading mb-18 wow fadeInUp animated">Why you Choose us for
+                                    <span class="text-gray font-yes">adventure</span> & travelling
+                                </h2>
+                                <p class="des wow fadeInUp animated">Welcome to our Print 128 website! We are a
+                                    professional and
+                                    reliable printing
+                                    company that offers a wide range of printing services to</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="cheackmark flex mb-70">
+                                        <div class="icon flex-five">
+                                            <i class="icon-plane-1"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="mb-15 wow fadeInUp animated"><a href="#">Safety first
+                                                    always</a></h5>
+                                            <p class="des wow fadeInUp animated">Welcome to our Print 128 web
+                                                company that offers a wide </p>
+                                        </div>
+                                    </div>
+                                    <div class="cheackmark flex">
+                                        <div class="icon flex-five">
+                                            <i class="icon-hiking-1-1"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="mb-15 wow fadeInUp animated"><a href="#">Adventure &
+                                                    Climbing</a></h5>
+                                            <p class="des wow fadeInUp animated">Welcome to our Print 128 web
+                                                company that offers a wide </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="cheackmark flex mb-70">
+                                        <div class="icon flex-five">
+                                            <i class="icon-price-tag-1"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="mb-15 wow fadeInUp animated"><a href="#">Low price &
+                                                    friendly</a></h5>
+                                            <p class="des wow fadeInUp animated">Welcome to our Print 128 web
+                                                company that offers a wide </p>
+                                        </div>
+                                    </div>
+                                    <div class="cheackmark flex">
+                                        <div class="icon flex-five">
+                                            <i class="icon-guide-1-1"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="mb-15 wow fadeInUp animated"><a href="#">Trusted travel
+                                                    guide</a></h5>
+                                            <p class="des wow fadeInUp animated">Welcome to our Print 128 web
+                                                company that offers a wide </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- Widget why chose us -->
+
+        <!-- Widget places -->
+        <section class="pd-main">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12 mb-30">
+                        <div class="center m0-auto w-text-heading">
+                            <span class="sub-title-heading text-main font-yes fs-28-46 mb-15 wow fadeInUp animated">Populer
+                                Activities</span>
+                            <h2 class="title-heading wow fadeInUp animated">Amazing tour places around the <span
+                                    class="text-gray font-yes">world</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-3 wow fadeInUp animated " data-wow-delay="0.1s">
+                        <div class="tf-widget-place">
+                            <a href="#" class="place-image relative">
+                                <span class="feature">Featured</span>
+                                <img src="./assets/images/feature/feature1.jpg" alt="">
+                            </a>
+                            <div class="content">
+                                <p class="price-place">From <span class="price">$169.00</span></p>
+                                <div class="place-content">
+                                    <span class="map"><i class="icon-Vector-15"></i>United States USA</span>
+                                    <h4 class="title-place"><a href="#">Days and 6 nights From</a></h4>
+                                    <ul class="flex-three meta-place">
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 17 18"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_265_23)">
+                                                        <path
+                                                            d="M10.1092 15.9207C9.97052 15.9545 9.82911 15.9845 9.68875 16.0098C9.32183 16.0766 9.07926 16.422 9.14713 16.7815C9.18064 16.9584 9.28325 17.1057 9.42257 17.2018C9.56614 17.3007 9.74888 17.3454 9.93508 17.3115C10.1022 17.2811 10.2707 17.2454 10.436 17.205C10.7983 17.1168 11.0191 16.7575 10.9287 16.403C10.8385 16.0482 10.4718 15.8323 10.1092 15.9207Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.1093 7.0493C15.1567 7.18903 15.2471 7.30309 15.3613 7.38191C15.5307 7.49867 15.7523 7.53795 15.9638 7.4695C16.3183 7.35427 16.5104 6.98004 16.3931 6.63318C16.3397 6.47505 16.2804 6.31643 16.2172 6.16198C16.0785 5.82258 15.6852 5.65734 15.3383 5.7931C14.9917 5.92879 14.8229 6.31388 14.9617 6.65339C15.0147 6.7832 15.0645 6.91645 15.1093 7.0493Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M12.3064 14.976C12.1871 15.0531 12.064 15.1277 11.94 15.1976C11.6164 15.3803 11.5056 15.7851 11.6922 16.1017C11.7428 16.1878 11.8103 16.2582 11.888 16.312C12.0966 16.4556 12.3798 16.4771 12.6157 16.3441C12.7631 16.2609 12.9098 16.1723 13.0518 16.0804C13.3633 15.879 13.449 15.4683 13.2431 15.1633C13.0373 14.8582 12.6179 14.7744 12.3064 14.976Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M16.8137 8.8981C16.799 8.53279 16.4847 8.24846 16.1113 8.26272C15.7385 8.27713 15.4478 8.58492 15.4624 8.95009C15.468 9.0897 15.4695 9.23141 15.4662 9.37089C15.461 9.59997 15.5754 9.80418 15.7533 9.92692C15.8593 9.99996 15.9879 10.0442 16.1274 10.0473C16.5006 10.0554 16.8099 9.76564 16.8181 9.40015C16.8219 9.2335 16.8204 9.06465 16.8137 8.8981Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M14.9989 13.2347C14.6996 13.0149 14.2762 13.0746 14.0521 13.367C13.9662 13.4789 13.8759 13.5895 13.7833 13.696C13.5414 13.9742 13.5756 14.392 13.8598 14.629C13.876 14.6424 13.8923 14.6548 13.9093 14.6664C14.1919 14.8614 14.5845 14.8166 14.813 14.5542C14.9235 14.4271 15.0312 14.295 15.1338 14.1613C15.358 13.8689 15.2973 13.4541 14.9989 13.2347Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.9931 10.842C15.6368 10.7327 15.2573 10.9268 15.1456 11.2756C15.1029 11.4088 15.0555 11.5427 15.0044 11.6738C14.8921 11.9625 14.9997 12.2801 15.2463 12.4503C15.2915 12.4814 15.3414 12.5078 15.3955 12.5278C15.7444 12.6581 16.135 12.4868 16.268 12.1451C16.3287 11.9892 16.385 11.83 16.436 11.6715C16.5475 11.3227 16.3493 10.9514 15.9931 10.842Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.15894 16.016C6.5544 15.9097 5.97449 15.7288 5.42458 15.4765C5.41807 15.4731 5.41225 15.4694 5.40542 15.4663C5.27583 15.4066 5.14647 15.3427 5.02108 15.2758C5.02064 15.2753 5.01985 15.275 5.01916 15.2747C4.78909 15.1507 4.56456 15.0135 4.34643 14.8632C1.16567 12.67 0.400889 8.35274 2.64165 5.23935C3.1289 4.5626 3.71854 3.998 4.3759 3.55052C4.384 3.545 4.3921 3.53951 4.40012 3.53395C6.71656 1.97165 9.86193 1.86636 12.3216 3.47177L11.7933 4.21891C11.6465 4.42687 11.7368 4.57842 11.9939 4.55577L14.2887 4.35467C14.5461 4.33202 14.7001 4.11405 14.6308 3.8707L14.0146 1.69748C13.9456 1.45384 13.769 1.42468 13.622 1.6326L13.0925 2.38151C11.2874 1.19545 9.12238 0.74319 6.97349 1.10793C6.75706 1.1446 6.54366 1.18947 6.33319 1.24171C6.33157 1.24199 6.33027 1.24217 6.32896 1.24245C6.32083 1.2444 6.31258 1.24698 6.30467 1.24914C4.45165 1.71492 2.83491 2.7728 1.68126 4.28216C1.67154 4.29345 1.66152 4.30449 1.65234 4.31677C1.61398 4.36734 1.5759 4.41909 1.53863 4.47083C1.47767 4.55562 1.41757 4.64255 1.36009 4.72947C1.35289 4.73994 1.34739 4.75059 1.3411 4.76118C0.389103 6.20517 -0.070085 7.87457 0.00866385 9.57412C0.00884463 9.57971 0.00851922 9.58534 0.00866385 9.59107C0.0162929 9.75709 0.0297431 9.92541 0.0480021 10.0911C0.0489783 10.1018 0.0514008 10.1119 0.0532448 10.1226C0.0721185 10.2892 0.095801 10.4562 0.125485 10.6232C0.427175 12.3269 1.24822 13.8599 2.47851 15.0528C2.48137 15.0556 2.48434 15.0586 2.48723 15.0615C2.48824 15.0626 2.48936 15.0632 2.49034 15.0642C2.82088 15.3833 3.18042 15.6785 3.56755 15.9454C4.58065 16.6441 5.70877 17.106 6.9203 17.3188C7.28791 17.3835 7.63906 17.144 7.70501 16.7843C7.77092 16.4244 7.52643 16.0804 7.15894 16.016Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.99505 3.86963C7.69268 3.86963 7.44775 4.10958 7.44775 4.40513V9.74023L12.4326 12.2626C12.5129 12.3033 12.5988 12.3224 12.6833 12.3224C12.8813 12.3224 13.0725 12.2169 13.1698 12.0327C13.3084 11.7699 13.2035 11.447 12.935 11.3113L8.54174 9.08812V4.40513C8.5417 4.10958 8.29707 3.86963 7.99505 3.86963Z"
+                                                            fill="currentColor"></path>
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_265_33">
+                                                            <rect width="16.82" height="16.4639" fill="white"
+                                                                transform="translate(0 0.925293)"></rect>
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                            <span>5 days</span>
+                                        </li>
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 18 13"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M3.57959 3.89694C3.57959 2.4 4.81937 1.18646 6.34869 1.18646C7.87801 1.18646 9.11779 2.4 9.11779 3.89694C9.11779 5.39389 7.87801 6.60742 6.34869 6.60742C4.81937 6.60742 3.57959 5.39389 3.57959 3.89694Z"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path
+                                                        d="M7.90165 12.2642H2.02575C1.10962 12.2642 0.459183 11.3904 0.739707 10.5367C1.4849 8.26878 3.7688 6.62765 6.33346 6.62765C7.55689 6.62765 8.69118 7.0011 9.62389 7.6379"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M14.0815 12.2642V7.30596" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                    <path d="M16.6147 9.7832H11.5493" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <span>12 Person</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 wow fadeInUp animated " data-wow-delay="0.2s">
+                        <div class="tf-widget-place">
+                            <a href="#" class="place-image relative">
+                                <span class="feature">Featured</span>
+                                <img src="./assets/images/feature/feature2.jpg" alt="">
+                            </a>
+                            <div class="content">
+                                <p class="price-place">From <span class="price">$169.00</span></p>
+                                <div class="place-content">
+                                    <span class="map"><i class="icon-Vector-15"></i>United States USA</span>
+                                    <h4 class="title-place"><a href="#">Days and 6 nights From</a></h4>
+                                    <ul class="flex-three meta-place">
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 17 18"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_265_23)">
+                                                        <path
+                                                            d="M10.1092 15.9207C9.97052 15.9545 9.82911 15.9845 9.68875 16.0098C9.32183 16.0766 9.07926 16.422 9.14713 16.7815C9.18064 16.9584 9.28325 17.1057 9.42257 17.2018C9.56614 17.3007 9.74888 17.3454 9.93508 17.3115C10.1022 17.2811 10.2707 17.2454 10.436 17.205C10.7983 17.1168 11.0191 16.7575 10.9287 16.403C10.8385 16.0482 10.4718 15.8323 10.1092 15.9207Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.1093 7.0493C15.1567 7.18903 15.2471 7.30309 15.3613 7.38191C15.5307 7.49867 15.7523 7.53795 15.9638 7.4695C16.3183 7.35427 16.5104 6.98004 16.3931 6.63318C16.3397 6.47505 16.2804 6.31643 16.2172 6.16198C16.0785 5.82258 15.6852 5.65734 15.3383 5.7931C14.9917 5.92879 14.8229 6.31388 14.9617 6.65339C15.0147 6.7832 15.0645 6.91645 15.1093 7.0493Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M12.3064 14.976C12.1871 15.0531 12.064 15.1277 11.94 15.1976C11.6164 15.3803 11.5056 15.7851 11.6922 16.1017C11.7428 16.1878 11.8103 16.2582 11.888 16.312C12.0966 16.4556 12.3798 16.4771 12.6157 16.3441C12.7631 16.2609 12.9098 16.1723 13.0518 16.0804C13.3633 15.879 13.449 15.4683 13.2431 15.1633C13.0373 14.8582 12.6179 14.7744 12.3064 14.976Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M16.8137 8.8981C16.799 8.53279 16.4847 8.24846 16.1113 8.26272C15.7385 8.27713 15.4478 8.58492 15.4624 8.95009C15.468 9.0897 15.4695 9.23141 15.4662 9.37089C15.461 9.59997 15.5754 9.80418 15.7533 9.92692C15.8593 9.99996 15.9879 10.0442 16.1274 10.0473C16.5006 10.0554 16.8099 9.76564 16.8181 9.40015C16.8219 9.2335 16.8204 9.06465 16.8137 8.8981Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M14.9989 13.2347C14.6996 13.0149 14.2762 13.0746 14.0521 13.367C13.9662 13.4789 13.8759 13.5895 13.7833 13.696C13.5414 13.9742 13.5756 14.392 13.8598 14.629C13.876 14.6424 13.8923 14.6548 13.9093 14.6664C14.1919 14.8614 14.5845 14.8166 14.813 14.5542C14.9235 14.4271 15.0312 14.295 15.1338 14.1613C15.358 13.8689 15.2973 13.4541 14.9989 13.2347Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.9931 10.842C15.6368 10.7327 15.2573 10.9268 15.1456 11.2756C15.1029 11.4088 15.0555 11.5427 15.0044 11.6738C14.8921 11.9625 14.9997 12.2801 15.2463 12.4503C15.2915 12.4814 15.3414 12.5078 15.3955 12.5278C15.7444 12.6581 16.135 12.4868 16.268 12.1451C16.3287 11.9892 16.385 11.83 16.436 11.6715C16.5475 11.3227 16.3493 10.9514 15.9931 10.842Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.15894 16.016C6.5544 15.9097 5.97449 15.7288 5.42458 15.4765C5.41807 15.4731 5.41225 15.4694 5.40542 15.4663C5.27583 15.4066 5.14647 15.3427 5.02108 15.2758C5.02064 15.2753 5.01985 15.275 5.01916 15.2747C4.78909 15.1507 4.56456 15.0135 4.34643 14.8632C1.16567 12.67 0.400889 8.35274 2.64165 5.23935C3.1289 4.5626 3.71854 3.998 4.3759 3.55052C4.384 3.545 4.3921 3.53951 4.40012 3.53395C6.71656 1.97165 9.86193 1.86636 12.3216 3.47177L11.7933 4.21891C11.6465 4.42687 11.7368 4.57842 11.9939 4.55577L14.2887 4.35467C14.5461 4.33202 14.7001 4.11405 14.6308 3.8707L14.0146 1.69748C13.9456 1.45384 13.769 1.42468 13.622 1.6326L13.0925 2.38151C11.2874 1.19545 9.12238 0.74319 6.97349 1.10793C6.75706 1.1446 6.54366 1.18947 6.33319 1.24171C6.33157 1.24199 6.33027 1.24217 6.32896 1.24245C6.32083 1.2444 6.31258 1.24698 6.30467 1.24914C4.45165 1.71492 2.83491 2.7728 1.68126 4.28216C1.67154 4.29345 1.66152 4.30449 1.65234 4.31677C1.61398 4.36734 1.5759 4.41909 1.53863 4.47083C1.47767 4.55562 1.41757 4.64255 1.36009 4.72947C1.35289 4.73994 1.34739 4.75059 1.3411 4.76118C0.389103 6.20517 -0.070085 7.87457 0.00866385 9.57412C0.00884463 9.57971 0.00851922 9.58534 0.00866385 9.59107C0.0162929 9.75709 0.0297431 9.92541 0.0480021 10.0911C0.0489783 10.1018 0.0514008 10.1119 0.0532448 10.1226C0.0721185 10.2892 0.095801 10.4562 0.125485 10.6232C0.427175 12.3269 1.24822 13.8599 2.47851 15.0528C2.48137 15.0556 2.48434 15.0586 2.48723 15.0615C2.48824 15.0626 2.48936 15.0632 2.49034 15.0642C2.82088 15.3833 3.18042 15.6785 3.56755 15.9454C4.58065 16.6441 5.70877 17.106 6.9203 17.3188C7.28791 17.3835 7.63906 17.144 7.70501 16.7843C7.77092 16.4244 7.52643 16.0804 7.15894 16.016Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.99505 3.86963C7.69268 3.86963 7.44775 4.10958 7.44775 4.40513V9.74023L12.4326 12.2626C12.5129 12.3033 12.5988 12.3224 12.6833 12.3224C12.8813 12.3224 13.0725 12.2169 13.1698 12.0327C13.3084 11.7699 13.2035 11.447 12.935 11.3113L8.54174 9.08812V4.40513C8.5417 4.10958 8.29707 3.86963 7.99505 3.86963Z"
+                                                            fill="currentColor"></path>
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_265_22">
+                                                            <rect width="16.82" height="16.4639" fill="white"
+                                                                transform="translate(0 0.925293)"></rect>
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                            <span>5 days</span>
+                                        </li>
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 18 13"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M3.57959 3.89694C3.57959 2.4 4.81937 1.18646 6.34869 1.18646C7.87801 1.18646 9.11779 2.4 9.11779 3.89694C9.11779 5.39389 7.87801 6.60742 6.34869 6.60742C4.81937 6.60742 3.57959 5.39389 3.57959 3.89694Z"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path
+                                                        d="M7.90165 12.2642H2.02575C1.10962 12.2642 0.459183 11.3904 0.739707 10.5367C1.4849 8.26878 3.7688 6.62765 6.33346 6.62765C7.55689 6.62765 8.69118 7.0011 9.62389 7.6379"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M14.0815 12.2642V7.30596" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                    <path d="M16.6147 9.7832H11.5493" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <span>12 Person</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 wow fadeInUp animated " data-wow-delay="0.3s">
+                        <div class="tf-widget-place">
+                            <a href="#" class="place-image relative">
+                                <span class="feature">Featured</span>
+                                <img src="./assets/images/feature/feature3.jpg" alt="">
+                            </a>
+                            <div class="content">
+                                <p class="price-place">From <span class="price">$169.00</span></p>
+                                <div class="place-content">
+                                    <span class="map"><i class="icon-Vector-15"></i>United States USA</span>
+                                    <h4 class="title-place"><a href="#">Days and 6 nights From</a></h4>
+                                    <ul class="flex-three meta-place">
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 17 18"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_265_23)">
+                                                        <path
+                                                            d="M10.1092 15.9207C9.97052 15.9545 9.82911 15.9845 9.68875 16.0098C9.32183 16.0766 9.07926 16.422 9.14713 16.7815C9.18064 16.9584 9.28325 17.1057 9.42257 17.2018C9.56614 17.3007 9.74888 17.3454 9.93508 17.3115C10.1022 17.2811 10.2707 17.2454 10.436 17.205C10.7983 17.1168 11.0191 16.7575 10.9287 16.403C10.8385 16.0482 10.4718 15.8323 10.1092 15.9207Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.1093 7.0493C15.1567 7.18903 15.2471 7.30309 15.3613 7.38191C15.5307 7.49867 15.7523 7.53795 15.9638 7.4695C16.3183 7.35427 16.5104 6.98004 16.3931 6.63318C16.3397 6.47505 16.2804 6.31643 16.2172 6.16198C16.0785 5.82258 15.6852 5.65734 15.3383 5.7931C14.9917 5.92879 14.8229 6.31388 14.9617 6.65339C15.0147 6.7832 15.0645 6.91645 15.1093 7.0493Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M12.3064 14.976C12.1871 15.0531 12.064 15.1277 11.94 15.1976C11.6164 15.3803 11.5056 15.7851 11.6922 16.1017C11.7428 16.1878 11.8103 16.2582 11.888 16.312C12.0966 16.4556 12.3798 16.4771 12.6157 16.3441C12.7631 16.2609 12.9098 16.1723 13.0518 16.0804C13.3633 15.879 13.449 15.4683 13.2431 15.1633C13.0373 14.8582 12.6179 14.7744 12.3064 14.976Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M16.8137 8.8981C16.799 8.53279 16.4847 8.24846 16.1113 8.26272C15.7385 8.27713 15.4478 8.58492 15.4624 8.95009C15.468 9.0897 15.4695 9.23141 15.4662 9.37089C15.461 9.59997 15.5754 9.80418 15.7533 9.92692C15.8593 9.99996 15.9879 10.0442 16.1274 10.0473C16.5006 10.0554 16.8099 9.76564 16.8181 9.40015C16.8219 9.2335 16.8204 9.06465 16.8137 8.8981Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M14.9989 13.2347C14.6996 13.0149 14.2762 13.0746 14.0521 13.367C13.9662 13.4789 13.8759 13.5895 13.7833 13.696C13.5414 13.9742 13.5756 14.392 13.8598 14.629C13.876 14.6424 13.8923 14.6548 13.9093 14.6664C14.1919 14.8614 14.5845 14.8166 14.813 14.5542C14.9235 14.4271 15.0312 14.295 15.1338 14.1613C15.358 13.8689 15.2973 13.4541 14.9989 13.2347Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.9931 10.842C15.6368 10.7327 15.2573 10.9268 15.1456 11.2756C15.1029 11.4088 15.0555 11.5427 15.0044 11.6738C14.8921 11.9625 14.9997 12.2801 15.2463 12.4503C15.2915 12.4814 15.3414 12.5078 15.3955 12.5278C15.7444 12.6581 16.135 12.4868 16.268 12.1451C16.3287 11.9892 16.385 11.83 16.436 11.6715C16.5475 11.3227 16.3493 10.9514 15.9931 10.842Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.15894 16.016C6.5544 15.9097 5.97449 15.7288 5.42458 15.4765C5.41807 15.4731 5.41225 15.4694 5.40542 15.4663C5.27583 15.4066 5.14647 15.3427 5.02108 15.2758C5.02064 15.2753 5.01985 15.275 5.01916 15.2747C4.78909 15.1507 4.56456 15.0135 4.34643 14.8632C1.16567 12.67 0.400889 8.35274 2.64165 5.23935C3.1289 4.5626 3.71854 3.998 4.3759 3.55052C4.384 3.545 4.3921 3.53951 4.40012 3.53395C6.71656 1.97165 9.86193 1.86636 12.3216 3.47177L11.7933 4.21891C11.6465 4.42687 11.7368 4.57842 11.9939 4.55577L14.2887 4.35467C14.5461 4.33202 14.7001 4.11405 14.6308 3.8707L14.0146 1.69748C13.9456 1.45384 13.769 1.42468 13.622 1.6326L13.0925 2.38151C11.2874 1.19545 9.12238 0.74319 6.97349 1.10793C6.75706 1.1446 6.54366 1.18947 6.33319 1.24171C6.33157 1.24199 6.33027 1.24217 6.32896 1.24245C6.32083 1.2444 6.31258 1.24698 6.30467 1.24914C4.45165 1.71492 2.83491 2.7728 1.68126 4.28216C1.67154 4.29345 1.66152 4.30449 1.65234 4.31677C1.61398 4.36734 1.5759 4.41909 1.53863 4.47083C1.47767 4.55562 1.41757 4.64255 1.36009 4.72947C1.35289 4.73994 1.34739 4.75059 1.3411 4.76118C0.389103 6.20517 -0.070085 7.87457 0.00866385 9.57412C0.00884463 9.57971 0.00851922 9.58534 0.00866385 9.59107C0.0162929 9.75709 0.0297431 9.92541 0.0480021 10.0911C0.0489783 10.1018 0.0514008 10.1119 0.0532448 10.1226C0.0721185 10.2892 0.095801 10.4562 0.125485 10.6232C0.427175 12.3269 1.24822 13.8599 2.47851 15.0528C2.48137 15.0556 2.48434 15.0586 2.48723 15.0615C2.48824 15.0626 2.48936 15.0632 2.49034 15.0642C2.82088 15.3833 3.18042 15.6785 3.56755 15.9454C4.58065 16.6441 5.70877 17.106 6.9203 17.3188C7.28791 17.3835 7.63906 17.144 7.70501 16.7843C7.77092 16.4244 7.52643 16.0804 7.15894 16.016Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.99505 3.86963C7.69268 3.86963 7.44775 4.10958 7.44775 4.40513V9.74023L12.4326 12.2626C12.5129 12.3033 12.5988 12.3224 12.6833 12.3224C12.8813 12.3224 13.0725 12.2169 13.1698 12.0327C13.3084 11.7699 13.2035 11.447 12.935 11.3113L8.54174 9.08812V4.40513C8.5417 4.10958 8.29707 3.86963 7.99505 3.86963Z"
+                                                            fill="currentColor"></path>
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_265_44">
+                                                            <rect width="16.82" height="16.4639" fill="white"
+                                                                transform="translate(0 0.925293)"></rect>
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                            <span>5 days</span>
+                                        </li>
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 18 13"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M3.57959 3.89694C3.57959 2.4 4.81937 1.18646 6.34869 1.18646C7.87801 1.18646 9.11779 2.4 9.11779 3.89694C9.11779 5.39389 7.87801 6.60742 6.34869 6.60742C4.81937 6.60742 3.57959 5.39389 3.57959 3.89694Z"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path
+                                                        d="M7.90165 12.2642H2.02575C1.10962 12.2642 0.459183 11.3904 0.739707 10.5367C1.4849 8.26878 3.7688 6.62765 6.33346 6.62765C7.55689 6.62765 8.69118 7.0011 9.62389 7.6379"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M14.0815 12.2642V7.30596" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                    <path d="M16.6147 9.7832H11.5493" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <span>12 Person</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 wow fadeInUp animated " data-wow-delay="0.4s">
+                        <div class="tf-widget-place">
+                            <a href="#" class="place-image relative">
+                                <span class="feature">Featured</span>
+                                <img src="./assets/images/feature/feature4.jpg" alt="">
+                            </a>
+                            <div class="content">
+                                <p class="price-place">From <span class="price">$169.00</span></p>
+                                <div class="place-content">
+                                    <span class="map"><i class="icon-Vector-15"></i>United States USA</span>
+                                    <h4 class="title-place"><a href="#">Days and 6 nights From</a></h4>
+                                    <ul class="flex-three meta-place">
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 17 18"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_265_23)">
+                                                        <path
+                                                            d="M10.1092 15.9207C9.97052 15.9545 9.82911 15.9845 9.68875 16.0098C9.32183 16.0766 9.07926 16.422 9.14713 16.7815C9.18064 16.9584 9.28325 17.1057 9.42257 17.2018C9.56614 17.3007 9.74888 17.3454 9.93508 17.3115C10.1022 17.2811 10.2707 17.2454 10.436 17.205C10.7983 17.1168 11.0191 16.7575 10.9287 16.403C10.8385 16.0482 10.4718 15.8323 10.1092 15.9207Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.1093 7.0493C15.1567 7.18903 15.2471 7.30309 15.3613 7.38191C15.5307 7.49867 15.7523 7.53795 15.9638 7.4695C16.3183 7.35427 16.5104 6.98004 16.3931 6.63318C16.3397 6.47505 16.2804 6.31643 16.2172 6.16198C16.0785 5.82258 15.6852 5.65734 15.3383 5.7931C14.9917 5.92879 14.8229 6.31388 14.9617 6.65339C15.0147 6.7832 15.0645 6.91645 15.1093 7.0493Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M12.3064 14.976C12.1871 15.0531 12.064 15.1277 11.94 15.1976C11.6164 15.3803 11.5056 15.7851 11.6922 16.1017C11.7428 16.1878 11.8103 16.2582 11.888 16.312C12.0966 16.4556 12.3798 16.4771 12.6157 16.3441C12.7631 16.2609 12.9098 16.1723 13.0518 16.0804C13.3633 15.879 13.449 15.4683 13.2431 15.1633C13.0373 14.8582 12.6179 14.7744 12.3064 14.976Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M16.8137 8.8981C16.799 8.53279 16.4847 8.24846 16.1113 8.26272C15.7385 8.27713 15.4478 8.58492 15.4624 8.95009C15.468 9.0897 15.4695 9.23141 15.4662 9.37089C15.461 9.59997 15.5754 9.80418 15.7533 9.92692C15.8593 9.99996 15.9879 10.0442 16.1274 10.0473C16.5006 10.0554 16.8099 9.76564 16.8181 9.40015C16.8219 9.2335 16.8204 9.06465 16.8137 8.8981Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M14.9989 13.2347C14.6996 13.0149 14.2762 13.0746 14.0521 13.367C13.9662 13.4789 13.8759 13.5895 13.7833 13.696C13.5414 13.9742 13.5756 14.392 13.8598 14.629C13.876 14.6424 13.8923 14.6548 13.9093 14.6664C14.1919 14.8614 14.5845 14.8166 14.813 14.5542C14.9235 14.4271 15.0312 14.295 15.1338 14.1613C15.358 13.8689 15.2973 13.4541 14.9989 13.2347Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M15.9931 10.842C15.6368 10.7327 15.2573 10.9268 15.1456 11.2756C15.1029 11.4088 15.0555 11.5427 15.0044 11.6738C14.8921 11.9625 14.9997 12.2801 15.2463 12.4503C15.2915 12.4814 15.3414 12.5078 15.3955 12.5278C15.7444 12.6581 16.135 12.4868 16.268 12.1451C16.3287 11.9892 16.385 11.83 16.436 11.6715C16.5475 11.3227 16.3493 10.9514 15.9931 10.842Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.15894 16.016C6.5544 15.9097 5.97449 15.7288 5.42458 15.4765C5.41807 15.4731 5.41225 15.4694 5.40542 15.4663C5.27583 15.4066 5.14647 15.3427 5.02108 15.2758C5.02064 15.2753 5.01985 15.275 5.01916 15.2747C4.78909 15.1507 4.56456 15.0135 4.34643 14.8632C1.16567 12.67 0.400889 8.35274 2.64165 5.23935C3.1289 4.5626 3.71854 3.998 4.3759 3.55052C4.384 3.545 4.3921 3.53951 4.40012 3.53395C6.71656 1.97165 9.86193 1.86636 12.3216 3.47177L11.7933 4.21891C11.6465 4.42687 11.7368 4.57842 11.9939 4.55577L14.2887 4.35467C14.5461 4.33202 14.7001 4.11405 14.6308 3.8707L14.0146 1.69748C13.9456 1.45384 13.769 1.42468 13.622 1.6326L13.0925 2.38151C11.2874 1.19545 9.12238 0.74319 6.97349 1.10793C6.75706 1.1446 6.54366 1.18947 6.33319 1.24171C6.33157 1.24199 6.33027 1.24217 6.32896 1.24245C6.32083 1.2444 6.31258 1.24698 6.30467 1.24914C4.45165 1.71492 2.83491 2.7728 1.68126 4.28216C1.67154 4.29345 1.66152 4.30449 1.65234 4.31677C1.61398 4.36734 1.5759 4.41909 1.53863 4.47083C1.47767 4.55562 1.41757 4.64255 1.36009 4.72947C1.35289 4.73994 1.34739 4.75059 1.3411 4.76118C0.389103 6.20517 -0.070085 7.87457 0.00866385 9.57412C0.00884463 9.57971 0.00851922 9.58534 0.00866385 9.59107C0.0162929 9.75709 0.0297431 9.92541 0.0480021 10.0911C0.0489783 10.1018 0.0514008 10.1119 0.0532448 10.1226C0.0721185 10.2892 0.095801 10.4562 0.125485 10.6232C0.427175 12.3269 1.24822 13.8599 2.47851 15.0528C2.48137 15.0556 2.48434 15.0586 2.48723 15.0615C2.48824 15.0626 2.48936 15.0632 2.49034 15.0642C2.82088 15.3833 3.18042 15.6785 3.56755 15.9454C4.58065 16.6441 5.70877 17.106 6.9203 17.3188C7.28791 17.3835 7.63906 17.144 7.70501 16.7843C7.77092 16.4244 7.52643 16.0804 7.15894 16.016Z"
+                                                            fill="currentColor"></path>
+                                                        <path
+                                                            d="M7.99505 3.86963C7.69268 3.86963 7.44775 4.10958 7.44775 4.40513V9.74023L12.4326 12.2626C12.5129 12.3033 12.5988 12.3224 12.6833 12.3224C12.8813 12.3224 13.0725 12.2169 13.1698 12.0327C13.3084 11.7699 13.2035 11.447 12.935 11.3113L8.54174 9.08812V4.40513C8.5417 4.10958 8.29707 3.86963 7.99505 3.86963Z"
+                                                            fill="currentColor"></path>
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_265_55">
+                                                            <rect width="16.82" height="16.4639" fill="white"
+                                                                transform="translate(0 0.925293)"></rect>
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                            <span>5 days</span>
+                                        </li>
+                                        <li class="flex-three">
+                                            <div class="icon">
+                                                <svg width="18" height="18" viewBox="0 0 18 13"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M3.57959 3.89694C3.57959 2.4 4.81937 1.18646 6.34869 1.18646C7.87801 1.18646 9.11779 2.4 9.11779 3.89694C9.11779 5.39389 7.87801 6.60742 6.34869 6.60742C4.81937 6.60742 3.57959 5.39389 3.57959 3.89694Z"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path
+                                                        d="M7.90165 12.2642H2.02575C1.10962 12.2642 0.459183 11.3904 0.739707 10.5367C1.4849 8.26878 3.7688 6.62765 6.33346 6.62765C7.55689 6.62765 8.69118 7.0011 9.62389 7.6379"
+                                                        stroke="currentColor" stroke-miterlimit="10"
+                                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M14.0815 12.2642V7.30596" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                    <path d="M16.6147 9.7832H11.5493" stroke="currentColor"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <span>12 Person</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- Widget places -->
+
+        <!-- Widget Testimonial -->
+        <section class="testimonial-section-h4 bg-1">
+            <div class="tf-container full">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="content">
+                            <div class="mb-30">
+                                <span class="sub-title-heading text-main fs-28-46 font-yes  wow fadeInUp animated">Explore
+                                    the
+                                    world</span>
+                                <h2 class="title-heading  wow fadeInUp animated">Our Clients Amazing <span
+                                        class="font-yes text-gray">Feedback</span> Here</h2>
+                            </div>
+                            <div class="swiper mySwiper222 overflow-hidden relative">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="widget-testimonial-style5">
+                                            <p class="des">Denouncing <span class="text-main">pleasure</span>
+                                                and praising pain was born and I will
+                                                give you a complete account of the system, and expound
+                                                the actual teachings of the great explorer of truth the
+                                                master builder Denouncing pleasure and praising pain
+                                                Denouncing pleasure and praising pain
+                                            </p>
+                                            <div class="flex-two">
+                                                <div class="flex-three relative">
+                                                    <div class="image-avata">
+                                                        <img src="./assets/images/testimonial/avt4-3.jpg"
+                                                            alt="image">
+                                                    </div>
+                                                    <div class="content-testimonial">
+                                                        <h6 class="title">Cameron Williamson</h6>
+                                                        <span class="job">Medical Worker</span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="start">
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="widget-testimonial-style5">
+                                            <p class="des">Denouncing <span class="text-main">pleasure</span>
+                                                and praising pain was born and I will
+                                                give you a complete account of the system, and expound
+                                                the actual teachings of the great explorer of truth the
+                                                master builder Denouncing pleasure and praising pain
+                                                Denouncing pleasure and praising pain
+                                            </p>
+                                            <div class="flex-two">
+                                                <div class="flex-three relative">
+                                                    <div class="image-avata">
+                                                        <img src="./assets/images/testimonial/avt4-4.jpg"
+                                                            alt="image">
+                                                    </div>
+                                                    <div class="content-testimonial">
+                                                        <h6 class="title">Cameron Williamson</h6>
+                                                        <span class="job">Medical Worker</span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="start">
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="widget-testimonial-style5">
+                                            <p class="des">Denouncing <span class="text-main">pleasure</span>
+                                                and praising pain was born and I will
+                                                give you a complete account of the system, and expound
+                                                the actual teachings of the great explorer of truth the
+                                                master builder Denouncing pleasure and praising pain
+                                                Denouncing pleasure and praising pain
+                                            </p>
+                                            <div class="flex-two">
+                                                <div class="flex-three relative">
+                                                    <div class="image-avata">
+                                                        <img src="./assets/images/testimonial/avt4-5.jpg"
+                                                            alt="image">
+                                                    </div>
+                                                    <div class="content-testimonial">
+                                                        <h6 class="title">Cameron Williamson</h6>
+                                                        <span class="job">Medical Worker</span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="start">
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                    <i class="icon-Star"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-5">
+                        <div class="gallery-testimonial-h4 relative">
+                            <div thumbsSlider="" class="swiper mySwiperGalllery overflow-hidden">
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="image">
+                                            <img src="./assets/images/testimonial/avt4-3.jpg" alt="image">
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="image">
+                                            <img src="./assets/images/testimonial/avt4-4.jpg" alt="image">
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="image">
+                                            <img src="./assets/images/testimonial/avt4-5.jpg" alt="image">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <!-- Widget Testimonial -->
+
+        <!-- Widget Blog -->
+        <section class="section-blog pd-main relative">
+            <div class="bg-blog-h4 bg-1"></div>
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12 mb-40">
+                        <div class="center m0-auto w-text-heading">
+                            <span class="sub-title-heading text-main font-yes fs-28-46  wow fadeInUp animated">Explore
+                                the world</span>
+                            <h2 class="title-heading  wow fadeInUp animated">Latest news & articles from the
+                                blog</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="tf-widget-blog blog-style2">
+                            <a href="blog-details.html" class="blog-image">
+                                <img src="./assets/images/blog/bl-h4.jpg" alt="">
+                                <div class="category-blog">
+                                    <i class="icon-Group-8"></i>
+                                    <span>Business</span>
+                                </div>
+                            </a>
+                            <div class="blog-content">
+                                <ul class="meta-list flex-three">
+                                    <li>
+                                        <i class="icon-profile-user-1"></i>
+                                        <span>Mehedii .H</span>
+                                    </li>
+                                    <li>
+                                        <i class="icon-7"></i>
+                                        <span>Coments (03)</span>
+                                    </li>
+                                </ul>
+                                <h3 class="entry-title"><a href="#">How to Prepare for your First Track his
+                                        consumer-focused </a></h3>
+                                <a href="blog-details.html" class="btn-read-more">Read More <i
+                                        class="icon-Vector-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="tf-widget-blog flex-three blog-style3 wow fadeInUp animated">
+                            <a href="blog-details.html" class="blog-image">
+                                <img src="./assets/images/blog/bl-h4-1.jpg" alt="">
+                            </a>
+                            <div class="blog-content">
+                                <ul class="meta-list flex-three">
+                                    <li>
+                                        <i class="icon-profile-user-1"></i>
+                                        <span>Mehedii .H</span>
+                                    </li>
+                                    <li>
+                                        <i class="icon-7"></i>
+                                        <span>Coments (03)</span>
+                                    </li>
+                                </ul>
+                                <h3 class="entry-title"><a href="blog-details.html">Get Best Advertiser In Your
+                                        Side Pocket</a>
+                                </h3>
+                                <a href="blog-details.html" class="btn-read-more">Read More <i
+                                        class="icon-Vector-4"></i></a>
+                            </div>
+                        </div>
+                        <div class="tf-widget-blog flex-three blog-style3 wow fadeInUp animated">
+                            <a href="blog-details.html" class="blog-image">
+                                <img src="./assets/images/blog/bl-h4-2.jpg" alt="">
+                            </a>
+                            <div class="blog-content">
+                                <ul class="meta-list flex-three">
+                                    <li>
+                                        <i class="icon-profile-user-1"></i>
+                                        <span>Mehedii .H</span>
+                                    </li>
+                                    <li>
+                                        <i class="icon-7"></i>
+                                        <span>Coments (03)</span>
+                                    </li>
+                                </ul>
+                                <h3 class="entry-title"><a href="blog-details.html">Get Best Advertiser In Your
+                                        Side Pocket</a>
+                                </h3>
+                                <a href="blog-details.html" class="btn-read-more">Read More <i
+                                        class="icon-Vector-4"></i></a>
+                            </div>
+                        </div>
+                        <div class="tf-widget-blog flex-three blog-style3 wow fadeInUp animated">
+                            <a href="blog-details.html" class="blog-image">
+                                <img src="./assets/images/blog/bl-h4-3.jpg" alt="">
+                            </a>
+                            <div class="blog-content">
+                                <ul class="meta-list flex-three">
+                                    <li>
+                                        <i class="icon-profile-user-1"></i>
+                                        <span>Mehedii .H</span>
+                                    </li>
+                                    <li>
+                                        <i class="icon-7"></i>
+                                        <span>Coments (03)</span>
+                                    </li>
+                                </ul>
+                                <h3 class="entry-title"><a href="blog-details.html">Get Best Advertiser In Your
+                                        Side Pocket</a>
+                                </h3>
+                                <a href="blog-details.html" class="btn-read-more">Read More <i
+                                        class="icon-Vector-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- Widget Blog -->
+
+        <!-- Widget Brand logo -->
+        <section class="relative bg-1 brand-logo-h4">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12 relative center line-brand-logo wow fadeInUp animated">
+                        <div class="line"></div>
+                        <p class="line-text">We’ve been mentioned in Below Brands</p>
+                    </div>
+                    <div class="col-lg-12 widget-brand-logo">
+                        <div class="swiper brand-logo overflow-hidden">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="./assets/images/page/brand-logo.png" alt="">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="./assets/images/page/brand-logo.png" alt="">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="./assets/images/page/brand-logo.png" alt="">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="./assets/images/page/brand-logo.png" alt="">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="./assets/images/page/brand-logo.png" alt="">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="./assets/images/page/brand-logo.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Widget Brand logo -->
+
+    </main>
+
+
+@endsection

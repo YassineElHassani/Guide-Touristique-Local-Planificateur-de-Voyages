@@ -29,19 +29,19 @@
 
                 <ul class="footer-menu">
                     <li>
-                        <a href="#">About Us</a>
+                        <a href="about-us.html">About Us</a>
                     </li>
                     <li>
-                        <a href="#">Faq</a>
+                        <a href="gallery.html">Gallery</a>
                     </li>
                     <li>
-                        <a href="#">Our Team</a>
+                        <a href="team.html">Our Team</a>
                     </li>
                     <li>
-                        <a href="#">Blog Insights</a>
+                        <a href="blog.html">Blog Insights</a>
                     </li>
                     <li>
-                        <a href="#">Contact</a>
+                        <a href="contact-us.html">Contact</a>
                     </li>
                 </ul>
 
@@ -112,8 +112,7 @@
 
         <div class="row footer-bottom">
             <div class="col-md-6">
-                <p class="copy-right">Copyright © 2024 by <a href="#" class="text-main">Themesflat.</a> All Rights
-                    Reserved</p>
+                <p class="copy-right">Copyright © 2024 by Themesflat. All Rights Reserved</p>
             </div>
             <div class="col-md-6">
                 <ul class="social flex-six">
@@ -152,15 +151,54 @@
 
 <a id="scroll-top" class="button-go"></a>
 
-
-
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        ...
+        <div class="logo-canvas">
+            <img src="./assets/images/logo.png" alt="image">
+        </div>
+        <p class="des">The world’s first and largest digital market
+            for crypto collectibles and non-fungible
+        </p>
+        <ul class="canvas-info">
+            <li class="flex-three">
+                <i class="icon-noun-mail-5780740-1"></i>
+                <p>Info@webmail.com</p>
+            </li>
+            <li class="flex-three">
+                <i class="icon-Group-9"></i>
+                <p>684 555-0102 490</p>
+            </li>
+            <li class="flex-three">
+                <i class="icon-Layer-19"></i>
+                <p>6391 Elgin St. Celina, NYC 10299</p>
+            </li>
+        </ul>
+        <ul class="social flex-three">
+            <li>
+                <a href="#">
+                    <i class="icon-icon-2"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="icon-x"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="icon-8"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="icon-6"></i>
+                </a>
+            </li>
+        </ul>
+
     </div>
 </div>
 
@@ -168,14 +206,11 @@
 <script src="app/js/jquery.min.js"></script>
 <script src="app/js/jquery.nice-select.min.js"></script>
 <script src="app/js/bootstrap.min.js"></script>
-<script src="app/js/jquery.magnific-popup.min.js"></script>
 <script src="app/js/swiper-bundle.min.js"></script>
 <script src="app/js/swiper.js"></script>
 <script src="app/js/plugin.js"></script>
 <script src="app/js/jquery.fancybox.js"></script>
-<script src="app/js/countto.js"></script>
 <script src="app/js/price-ranger.js"></script>
-<script src="app/js/textanimation.js"></script>
 <script src="app/js/shortcodes.js"></script>
 <script src="app/js/main.js"></script>
 

@@ -11,9 +11,9 @@
 
 <body>
 
-    @include('include.header')
+    @include('admin.layouts.header')
     @yield('content')
-    @include('include.footer')
+    @include('admin.layouts.footer')
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
