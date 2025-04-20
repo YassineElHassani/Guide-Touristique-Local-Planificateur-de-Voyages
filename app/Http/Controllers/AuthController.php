@@ -40,11 +40,9 @@ class AuthController extends Controller
 
     public function signup(Request $request) {
         $data = [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'gender' => 'required',
-            'birthday' => 'required|date',
-            'phone' => 'required',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'phone' => 'required|max:20',
             'role' => 'required|in:travler,guide',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8',
@@ -56,8 +54,6 @@ class AuthController extends Controller
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'gender' => $request->gender,
-            'birthday' => $request->birthday,
             'phone' => $request->phone,
             'role' => $request->role,
             'email' => $request->email,
@@ -66,25 +62,26 @@ class AuthController extends Controller
         ]);
 
         if(!$user) {
-            return redirect(route('register'))->with("Error", "Registration failed, try again!");
+            return redirect(route('register'))->with("error", "Registration failed, try again!");
         }
 
-        return redirect(route('login'))->with("Success", "You have registered Successfully, Login to access the platform.");
+        return redirect(route('login'))->with("success", "You have registered Successfully, Login to access the platform.");
     }
 
     public function signin(Request $request) {
         $request->validate([
-            'email' => 'required',
-            'password' => 'required'
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
         $messageCredentials = $request->only('email', 'password');
         
+        
         if(Auth::attempt($messageCredentials)) {
-            return redirect()->intended()->with("Success", "You have logged in successfully!");
+            return redirect()->intended()->with("success", "You have logged in successfully!");
         }
 
-        return redirect(route('login'))->with("Error", "Email or Password is invalid!");
+        return redirect(route('login'))->with("error", "Email or Password is invalid!");
     }
 
     public function logout() {

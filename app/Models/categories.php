@@ -13,7 +13,6 @@ class categories extends Model
     protected $fillable = [
         'id',
         'name',
-        'icon',
     ];
 
     // Methods

@@ -32,7 +32,7 @@ class itineraries extends Model
 
     public function destinations()
     {
-        return $this->belongsToMany(destinations::class, 'itinerary_destination')
+        return $this->belongsToMany(destinations::class, 'itinerary_destination', 'itineraries_id', 'destinations_id')
             ->withPivot('day', 'order')
             ->withTimestamps();
     }

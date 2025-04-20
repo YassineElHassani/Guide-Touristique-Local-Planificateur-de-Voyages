@@ -23,15 +23,15 @@ class AuthMiddleware
             $role = Auth::user()->role;
             $currentRoute = $request->route()->getName();
 
-            if ($role == 'travler' && $currentRoute !== 'travler.dashboard') {
-                return redirect()->route('travler.dashboard');
+            if ($role == 'travler' && $currentRoute !== 'client.home') {
+                return redirect()->route('client.home');
             } elseif ($role == 'guide' && $currentRoute !== 'guide.dashboard') {
                 return redirect()->route('guide.dashboard');
             } elseif ($role == 'admin' && $currentRoute !== 'admin.dashboard') {
                 return redirect()->route('admin.dashboard');
             }
         } else {
-            return redirect()->route('login')->with('Error', 'You must be logged in to access this page.');
+            return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
         }
 
         return $response;

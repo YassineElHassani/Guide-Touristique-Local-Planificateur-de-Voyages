@@ -1,224 +1,192 @@
-@extends('auth.template')
-@section('title', 'Sign Up')
+@extends('layouts.template')
+
+@section('title', 'Register')
 
 @section('content')
-    <main id="main">
-
-        <section class="breadcumb-section">
-            <div class="tf-container">
-                <div class="row">
-                    <div class="col-lg-12 center z-index1">
-                        <h1 class="title">user sign up</h1>
-                        <ul class="breadcumb-list flex-five">
-                            <li><a href="#">Home</a></li>
-                            <li><span>user sign up</span></li>
-                        </ul>
-                        <img class="bcrumb-ab" src="{{ url('/assets/images/page/mask-bcrumb.png') }}" alt="">
-                    </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-lg overflow-hidden">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h4 class="fw-bold mb-0">Create Your Account</h4>
+                    <p class="mb-0">Join our community of travelers</p>
                 </div>
-            </div>
-        </section>
+                <div class="card-body p-5">
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
-        <div>
-            @if ($errors->any())
-                <div class="col-12">
-                    @foreach ($errors->all() as $error)
-                        <div class="d-flex justify-content-center alert alert-danger">{{ $error }}</div>
-                    @endforeach
-                </div>
-            @endif
-
-            @if (session()->has('Error'))
-                <div class="d-flex justify-content-center alert alert-danger">{{ session('Error') }}</div>
-            @endif
-
-            @if (session()->has('Success'))
-                <div class="d-flex justify-content-center alert alert-success">{{ session('Success') }}</div>
-            @endif
-        </div>
-
-        <section class="login">
-            <div class="tf-container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="login-wrap flex">
-                            <div class="image">
-                                <img src="{{ url('/assets/images/page/sign-up.jpg') }}" alt="image">
-                            </div>
-                            <div class="content">
-                                <div class="inner-header-login">
-                                    <h3 class="title">Create an account to get started</h3>
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    
+                    <form method="POST" action="{{ route('register.post') }}">
+                        @csrf
+                        
+                        <div class="row g-4">
+                            <input type="hidden" name="status" value="active" />
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="first_name" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="Enter your first name" required>
+                                    @error('first_name')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
-                                <form action="{{ route('register.post') }}" method="POST" id="sign-up"
-                                    class="login-user">
-                                    @csrf
-                                    <input type="hidden" name="status" id="status" value="inavtive">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="input-wrap">
-                                                <label>First Name</label>
-                                                <input name="first_name" id="first_name" type="text"
-                                                    placeholder="Enter your first name" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="input-wrap">
-                                                <label>Last Name</label>
-                                                <input name="last_name" id="last_name" type="text"
-                                                    placeholder="Enter your last name" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="input-wrap">
-                                                <label>Birthday</label>
-                                                <input name="birthday" id="birthday" type="date"
-                                                    placeholder="Enter your birthday" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="input-wrap">
-                                                <label for="gender">Gender</label>
-                                                <select class="nice-select" name="gender" id="gender" required>
-                                                    <option class="option selected focus" value="">Choose your gender</option>
-                                                    <option class="option" value="male">Male</option>
-                                                    <option class="option" value="female">Female</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="input-wrap">
-                                                <div class="flex-two">
-                                                    <label>Role</label>
-                                                </div>
-                                                <select class="nice-select" name="role" id="role" required>
-                                                    <option class="option selected focus" value="">Choose your account
-                                                        type</option>
-                                                    <option class="option" value="travler">Travler</option>
-                                                    <option class="option" value="guide">Guide</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="input-wrap">
-                                                <div class="flex-two">
-                                                    <label>Phone Number</label>
-                                                </div>
-                                                <input name="phone" id="phone" type="tel"
-                                                    placeholder="Enter your phone" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="input-wrap">
-                                                <div class="flex-two">
-                                                    <label>Email</label>
-                                                </div>
-                                                <input name="email" id="email" type="email"
-                                                    placeholder="Enter your email" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="input-wrap">
-                                                <div class="flex-two">
-                                                    <label>Password</label>
-                                                </div>
-                                                <input name="password" id="password" type="password"
-                                                    placeholder="Enter your Password" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 mb-40">
-                                            <div class="input-wrap-social ">
-                                                <span class="or">or</span>
-                                                <div class="flex-three">
-                                                    <a href="#" class="login-social flex-three">
-                                                        <img src="{{ url('/assets/images/page/gg.png') }}" alt="image">
-                                                        <span>Sign in with Google</span>
-                                                    </a>
-                                                    <a href="#" class="login-social flex-three">
-                                                        <img src="{{ url('/assets/images/page/fb.png') }}" alt="image">
-                                                        <span>Sign in with facebook</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 mb-30">
-                                            <div class="checkbox">
-                                                <input id="check-policy" type="checkbox" name="check" value="check" required>
-                                                <label for="check-policy">By signing up, you agree to our 
-                                                    Customers <a href="">Terms Of Service and Privacy Policy</a></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 mb-30">
-                                            <button type="submit" class="btn-submit">Sign Up</button>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="flex-three">
-                                                <span class="account">Don,t you have an account?</span>
-                                                <a href="{{ route('login') }}" class="link-login">Login</a>
-                                            </div>
-                                        </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="last_name" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" value="{{ old('last_name') }}" placeholder="Enter your last name" required>
+                                    @error('last_name')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email">
+                                    @error('email')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" placeholder="Enter your phone number">
+                                    @error('phone')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Create a password">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
                                     </div>
-                                </form>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="brand-logo-widget bg-1">
-            <div class="tf-container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="swiper brand-logo overflow-hidden">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="{{ url('/assets/images/page/brand-logo.png') }}" alt="">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ url('/assets/images/page/brand-logo.png') }}" alt="">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ url('/assets/images/page/brand-logo.png') }}" alt="">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ url('/assets/images/page/brand-logo.png') }}" alt="">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ url('/assets/images/page/brand-logo.png') }}" alt="">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ url('/assets/images/page/brand-logo.png') }}" alt="">
+                                    @error('password')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    @error('password_confirmation')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Register As</label>
+                                    <select class="form-select" id="role" name="role" required>
+                                        <option value="" selected disabled>Select your role</option>
+                                        <option value="travler" {{ old('role') == 'travler' ? 'selected' : '' }}>Traveler</option>
+                                        <option value="guide" {{ old('role') == 'guide' ? 'selected' : '' }}>Local Guide</option>
+                                    </select>
+                                    @error('role')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <div class="mb-4 form-check">
+                                    <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                                    <label class="form-check-label" for="terms">
+                                        I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                    </label>
+                                    @error('terms')
+                                        <small class="d-block text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100 py-2 mb-4">Create Account</button>
+                            </div>
                         </div>
-                    </div>
+                        
+                        <div class="text-center">
+                            <p class="mb-4">Or sign up with</p>
+                            <div class="d-flex justify-content-center gap-3 mb-4">
+                                <a href="{{ route('google.login') }}" class="btn btn-outline-danger rounded-circle">
+                                    <i class="fab fa-google"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-primary rounded-circle">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-info rounded-circle">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                            <p class="mb-0">Already have an account? <a href="{{ route('login') }}" class="text-decoration-none">Sign in</a></p>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-        </section>
-
-
-        <section class="mb--93 bg-1">
-            <div class="tf-container">
-                <div class="callt-to-action flex-two z-index3 relative">
-                    <div class="callt-to-action-content flex-three">
-                        <div class="image">
-                            <img src="{{ url('/assets/images/page/ready.png') }}" alt="Image">
-                        </div>
-                        <div class="content">
-                            <h2 class="title-call">Ready to adventure and enjoy natural</h2>
-                            <p class="des">Lorem ipsum dolor sit amet, consectetur notted adipisicin</p>
-                        </div>
-                    </div>
-                    <img src="{{ url('/assets/images/page/vector4.png') }}" alt="" class="shape-ab">
-                    <div class="callt-to-action-button">
-                        <a href="#" class="get-call">Let,s get started</a>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-    </main>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const icon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+    
+    // Toggle confirm password visibility
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password_confirmation');
+        const icon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+</script>
+@endpush

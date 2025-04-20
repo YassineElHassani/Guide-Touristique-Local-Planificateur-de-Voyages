@@ -3,64 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Models\categories;
-use App\Http\Requests\StorecategoriesRequest;
-use App\Http\Requests\UpdatecategoriesRequest;
+use App\Models\destinations;
+use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        $categories = categories::all();
+        return view('categories.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function show($id)
+    {
+        $category = categories::findOrFail($id);
+        $destinations = destinations::where('category', $category->name)->get();
+        return view('categories.show', compact('category', 'destinations'));
+    }
+
+    // Admin methods below - protected by middleware in routes
+
+    public function adminIndex()
+    {
+        $categories = categories::all();
+        return view('admin.categories', compact('categories'));
+    }
+
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorecategoriesRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+        ]);
+
+
+        categories::create([
+            'name' => $request->name,
+        ]);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(categories $categories)
+    public function edit($id)
     {
-        //
+        $category = categories::findOrFail($id);
+        return view('admin.categories.edit', compact('category'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(categories $categories)
+    public function update(Request $request, $id)
     {
-        //
+        $category = categories::findOrFail($id);
+        
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $id,
+        ]);
+
+        $category->update([
+            'name' => $request->name,
+        ]);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatecategoriesRequest $request, categories $categories)
+    public function destroy($id)
     {
-        //
-    }
+        $category = categories::findOrFail($id);
+        
+        // Check if there are destinations using this category
+        $destinationsCount = destinations::where('category', $category->name)->count();
+        if ($destinationsCount > 0) {
+            return redirect()->route('admin.categories.index')->with('error', 'Cannot delete category. It is being used by ' . $destinationsCount . ' destinations.');
+        }
+        
+        $category->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(categories $categories)
-    {
-        //
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 }

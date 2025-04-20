@@ -14,10 +14,15 @@ class DestinationsFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
+            'description' => fake()->paragraph(),
+            'address' => fake()->text(),
+            'category' => fake()->name(),
+            'coordinates' => fake()->latitude(),
         ];
     }
 }

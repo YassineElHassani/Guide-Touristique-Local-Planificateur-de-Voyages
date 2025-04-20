@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('itinerary_destination', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('itinerary_id')->constrained()->onDelete('cascade');
-            $table->foreignId('destination_id')->constrained()->onDelete('cascade');
-            $table->integer('day');
-            $table->integer('order');
+            $table->foreignId('itineraries_id')->constrained('itineraries')->onDelete('cascade');
+            $table->foreignId('destinations_id')->constrained('destinations')->onDelete('cascade');
+            $table->integer('day')->nullable();
+            $table->integer('order')->nullable();
             $table->timestamps();
         });
     }

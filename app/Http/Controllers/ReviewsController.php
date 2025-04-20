@@ -3,64 +3,111 @@
 namespace App\Http\Controllers;
 
 use App\Models\reviews;
-use App\Http\Requests\StorereviewsRequest;
-use App\Http\Requests\UpdatereviewsRequest;
+use App\Models\destinations;
+use App\Models\events;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function store(Request $request)
     {
-        //
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please login to leave a review.');
+        }
+        
+        $request->validate([
+            'destination_id' => 'nullable|exists:destinations,id',
+            'event_id' => 'nullable|exists:events,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+        ]);
+        
+        // Ensure at least one of destination_id or event_id is provided
+        if (!$request->destination_id && !$request->event_id) {
+            return back()->with('error', 'A destination or event must be specified.');
+        }
+        
+        reviews::create([
+            'user_id' => Auth::id(),
+            'destination_id' => $request->destination_id,
+            'event_id' => $request->event_id,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+        
+        if ($request->destination_id) {
+            return redirect()->route('destinations.show', $request->destination_id)
+                ->with('success', 'Review submitted successfully.');
+        } else {
+            return redirect()->route('events.show', $request->event_id)
+                ->with('success', 'Review submitted successfully.');
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(Request $request, $id)
     {
-        //
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please login to update a review.');
+        }
+        
+        $review = reviews::findOrFail($id);
+        
+        // Check if the review belongs to the authenticated user
+        if ($review->user_id !== Auth::id()) {
+            return back()->with('error', 'You are not authorized to update this review.');
+        }
+        
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+        ]);
+        
+        $review->update([
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+        
+        if ($review->destination_id) {
+            return redirect()->route('destinations.show', $review->destination_id)
+                ->with('success', 'Review updated successfully.');
+        } else {
+            return redirect()->route('events.show', $review->event_id)
+                ->with('success', 'Review updated successfully.');
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorereviewsRequest $request)
+    public function destroy($id)
     {
-        //
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please login to delete a review.');
+        }
+        
+        $review = reviews::findOrFail($id);
+        
+        // Check if the review belongs to the authenticated user or if user is admin
+        if ($review->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+            return back()->with('error', 'You are not authorized to delete this review.');
+        }
+        
+        $destinationId = $review->destination_id;
+        $eventId = $review->event_id;
+        
+        $review->delete();
+        
+        if ($destinationId) {
+            return redirect()->route('destinations.show', $destinationId)
+                ->with('success', 'Review deleted successfully.');
+        } else {
+            return redirect()->route('events.show', $eventId)
+                ->with('success', 'Review deleted successfully.');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(reviews $reviews)
+    public function adminIndex()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(reviews $reviews)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatereviewsRequest $request, reviews $reviews)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(reviews $reviews)
-    {
-        //
+        $reviews = reviews::all();
+        return view('admin.reviews', compact('reviews'));
     }
 }
