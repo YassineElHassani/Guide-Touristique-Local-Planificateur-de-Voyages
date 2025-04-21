@@ -224,7 +224,6 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ $destination->image_url ?? 'https://via.placeholder.com/32' }}" alt="{{ $destination->name }}" class="rounded me-2" width="32" height="32" style="object-fit: cover;">
                                                 <div>
                                                     <div class="fw-semibold">{{ $destination->name }}</div>
                                                     <div class="small text-muted">{{ $destination->category }}</div>
@@ -264,7 +263,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ $event->image_url ?? 'https://via.placeholder.com/32' }}" alt="{{ $event->name }}" class="rounded me-2" width="32" height="32" style="object-fit: cover;">
+                                                <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" class="rounded me-2" width="32" height="32" style="object-fit: cover;">
                                                 <div>
                                                     <div class="fw-semibold">{{ $event->name }}</div>
                                                     <div class="small text-muted">

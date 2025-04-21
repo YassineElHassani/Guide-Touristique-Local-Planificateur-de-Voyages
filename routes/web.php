@@ -4,9 +4,6 @@ use App\Http\Middleware\AuthMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\GuideMiddleware;
-use App\Http\Middleware\ClientMiddleware;
 use App\Http\Controllers\DestinationsController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\ReviewsController;
@@ -20,7 +17,6 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\BlogController;
-use App\Models\Auth;
 
 
 // Authentication routes
@@ -168,6 +164,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
     Route::post('/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
     Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('admin.users.show');
+    Route::get('/users/{id}/profile', [AdminController::class, 'userProfile'])->name('users.profile');
     Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
     Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
     Route::put('/users/{id}/status', [AdminController::class, 'updateUserStatus'])->name('admin.users.update-status');
@@ -187,11 +184,10 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/events', [EventsController::class, 'adminIndex'])->name('admin.events.index');
     Route::get('/events/create', [EventsController::class, 'create'])->name('admin.events.create');
     Route::post('/events', [EventsController::class, 'store'])->name('admin.events.store');
-    Route::get('/events/{id}', [EventsController::class, 'show'])->name('admin.events.show');
+    Route::get('/events/{id}', [EventsController::class, 'adminShow'])->name('admin.events.show');
     Route::get('/events/{id}/edit', [EventsController::class, 'edit'])->name('admin.events.edit');
     Route::put('/events/{id}', [EventsController::class, 'update'])->name('admin.events.update');
     Route::delete('/events/{id}', [EventsController::class, 'destroy'])->name('admin.events.destroy');
-    Route::post('/events/{id}/feature', [EventsController::class, 'toggleFeatured'])->name('admin.events.toggle-featured');
 
     // Category management
     Route::get('/categories', [CategoriesController::class, 'adminIndex'])->name('admin.categories.index');
@@ -210,8 +206,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.blogs.edit');
     Route::put('/blogs/{id}', [BlogController::class, 'update'])->name('admin.blogs.update');
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('admin.blogs.destroy');
-    Route::put('/blogs/{id}/status', [BlogController::class, 'updateStatus'])->name('admin.blogs.update-status');
-    Route::put('/blogs/{id}/feature', [BlogController::class, 'toggleFeatured'])->name('admin.blogs.toggle-featured');
+    Route::patch('/blogs/{id}/toggle-featured', [BlogController::class, 'toggleFeatured'])->name('admin.blogs.toggle-featured');
+    Route::patch('/blogs/{id}/status', [BlogController::class, 'updateStatus'])->name('admin.blogs.update-status');
 
     // Blog Comments management
     Route::get('/comments', [BlogController::class, 'adminComments'])->name('admin.comments.index');

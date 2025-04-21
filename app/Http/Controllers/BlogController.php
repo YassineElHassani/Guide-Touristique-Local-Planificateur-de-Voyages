@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\BlogComment;
+use App\Models\categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -38,10 +39,10 @@ class BlogController extends Controller
                 ->get()
                 ->pluck('category');
             
-            return view('blogs.index', compact('blogs', 'featuredBlogs', 'categories'));
+            return view('admin.blogs.index', compact('blogs', 'featuredBlogs', 'categories'));
         } catch (\Exception $e) {
             Log::error('Error loading blogs: ' . $e->getMessage());
-            return view('blogs.index')
+            return view('admin.blogs.index')
                 ->with('error', 'There was an error loading the blog posts. Please try again later.');
         }
     }
@@ -59,16 +60,12 @@ class BlogController extends Controller
         }
         
         try {
-            $categories = Blog::select('category')
-                ->distinct()
-                ->whereNotNull('category')
-                ->get()
-                ->pluck('category');
+            $categories = categories::all();
             
-            return view('blogs.create', compact('categories'));
+            return view('admin.blogs.create', compact('categories'));
         } catch (\Exception $e) {
             Log::error('Error loading blog create form: ' . $e->getMessage());
-            return redirect()->route('blogs.index')
+            return redirect()->route('admin.blogs.index')
                 ->with('error', 'There was an error loading the create form. Please try again later.');
         }
     }
@@ -110,10 +107,8 @@ class BlogController extends Controller
             
             // Handle image upload
             if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/blogs', $imageName);
-                $blogData['image'] = 'blogs/' . $imageName;
+                $imagePath = $request->file('image')->store('blogs', 'public');
+                $blogData['image'] = $imagePath;
             }
             
             $blog = Blog::create($blogData);
@@ -163,10 +158,10 @@ class BlogController extends Controller
                 ->take(4)
                 ->get();
             
-            return view('blogs.show', compact('blog', 'relatedBlogs', 'latestBlogs'));
+            return view('admin.blogs.show', compact('blog', 'relatedBlogs', 'latestBlogs'));
         } catch (\Exception $e) {
             Log::error('Error showing blog post: ' . $e->getMessage());
-            return redirect()->route('blogs.index')
+            return redirect()->route('admin.blogs.index')
                 ->with('error', 'The blog post you are looking for does not exist or has been removed.');
         }
     }
@@ -188,16 +183,12 @@ class BlogController extends Controller
                     ->with('error', 'You are not authorized to edit this blog post.');
             }
             
-            $categories = Blog::select('category')
-                ->distinct()
-                ->whereNotNull('category')
-                ->get()
-                ->pluck('category');
+            $categories = categories::all();
             
-            return view('blogs.edit', compact('blog', 'categories'));
+            return view('admin.blogs.edit', compact('blog', 'categories'));
         } catch (\Exception $e) {
             Log::error('Error editing blog post: ' . $e->getMessage());
-            return redirect()->route('blogs.index')
+            return redirect()->route('admin.blogs.index')
                 ->with('error', 'The blog post you are trying to edit does not exist or has been removed.');
         }
     }
@@ -216,7 +207,7 @@ class BlogController extends Controller
             
             // Check if user is authenticated and is the author of the blog post
             if (!Auth::check() || Auth::id() !== $blog->user_id) {
-                return redirect()->route('blogs.show', $blog->slug)
+                return redirect()->route('admin.blogs.show', $blog->slug)
                     ->with('error', 'You are not authorized to edit this blog post.');
             }
             
@@ -248,18 +239,15 @@ class BlogController extends Controller
             if ($request->hasFile('image')) {
                 // Delete old image if exists
                 if ($blog->image) {
-                    Storage::delete('public/' . $blog->image);
+                    Storage::disk('public')->delete($blog->image);
                 }
-                
-                $image = $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/blogs', $imageName);
-                $blogData['image'] = 'blogs/' . $imageName;
+                $imagePath = $request->file('image')->store('events', 'public');
+                $blogData['image'] = $imagePath;
             }
             
             $blog->update($blogData);
             
-            return redirect()->route('blogs.show', $blog->slug)
+            return redirect()->route('admin.blogs.show', $blog->slug)
                 ->with('success', 'Blog post updated successfully.');
         } catch (\Exception $e) {
             Log::error('Error updating blog post: ' . $e->getMessage());
@@ -282,7 +270,7 @@ class BlogController extends Controller
             
             // Check if user is authenticated and is the author of the blog post or an admin
             if (!Auth::check() || (Auth::id() !== $blog->user_id && Auth::user()->role !== 'admin')) {
-                return redirect()->route('blogs.show', $blog->slug)
+                return redirect()->route('admin.blogs.show', $blog->slug)
                     ->with('error', 'You are not authorized to delete this blog post.');
             }
             
@@ -296,11 +284,11 @@ class BlogController extends Controller
             
             $blog->delete();
             
-            return redirect()->route('blogs.index')
+            return redirect()->route('admin.blogs.index')
                 ->with('success', 'Blog post deleted successfully.');
         } catch (\Exception $e) {
             Log::error('Error deleting blog post: ' . $e->getMessage());
-            return redirect()->route('blogs.index')
+            return redirect()->route('admin.blogs.index')
                 ->with('error', 'Error deleting blog post: ' . $e->getMessage());
         }
     }
@@ -404,7 +392,7 @@ class BlogController extends Controller
                 'content' => $request->content,
             ]);
             
-            return redirect()->route('blogs.show', $blog->slug)
+            return redirect()->route('admin.blogs.show', $blog->slug)
                 ->with('success', 'Comment added successfully.');
         } catch (\Exception $e) {
             Log::error('Error adding comment: ' . $e->getMessage());
@@ -426,7 +414,7 @@ class BlogController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(15);
             
-            return view('admin.blogs', compact('blogs'));
+            return view('admin.blogs.index', compact('blogs'));
         } catch (\Exception $e) {
             Log::error('Error loading admin blogs: ' . $e->getMessage());
             return redirect()->route('admin.dashboard.index')

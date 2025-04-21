@@ -11,7 +11,7 @@
 
 @section('actions')
 <div class="btn-group">
-    <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="btn btn-primary">
+    <a href="{{ route('admin.blogs.edit', $blog->slug) }}" class="btn btn-primary">
         <i class="fas fa-edit me-1"></i> Edit
     </a>
     <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank" class="btn btn-info">
@@ -73,7 +73,7 @@
                 @endif
                 
                 <div class="blog-content">
-                    {!! nl2br(e($blog->content)) !!}
+                    {!! $blog->content !!}
                 </div>
             </div>
         </div>
@@ -212,7 +212,7 @@
                         <td width="120"><strong>Author</strong></td>
                         <td>
                             @if($blog->user)
-                                <a href="{{ route('admin.users.profile', $blog->user->id) }}">
+                                <a href="{{ route('users.profile', $blog->user->id) }}">
                                     {{ $blog->user->first_name }} {{ $blog->user->last_name }}
                                 </a>
                             @else
@@ -275,7 +275,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST">
+                <form action="{{ route('admin.blogs.destroy', $blog->slug) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete</button>

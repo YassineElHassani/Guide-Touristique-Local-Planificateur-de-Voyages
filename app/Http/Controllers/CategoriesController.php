@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
-
+    // Public routes
     public function index()
     {
         $categories = categories::all();
@@ -22,12 +22,11 @@ class CategoriesController extends Controller
         return view('categories.show', compact('category', 'destinations'));
     }
 
-    // Admin methods below - protected by middleware in routes
-
+    // Admin routes
     public function adminIndex()
     {
         $categories = categories::all();
-        return view('admin.categories', compact('categories'));
+        return view('admin.categories.index', compact('categories'));
     }
 
     public function create()
@@ -40,7 +39,6 @@ class CategoriesController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
         ]);
-
 
         categories::create([
             'name' => $request->name,

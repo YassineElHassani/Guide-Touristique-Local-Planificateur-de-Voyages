@@ -126,11 +126,26 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Get monthly statistics for the dashboard
-     * 
-     * @return array
-     */
+    public function userProfile($id)
+    {
+        $user = User::findOrFail($id);
+        $profile = $user; // Displaying user info directly from the users table
+
+        // Get user's reservations
+        $reservations = reservations::where('user_id', $id)->get();
+
+        // Get user's reviews
+        $reviews = reviews::where('user_id', $id)->get();
+
+        // Get user's blogs if they exist
+        $blogs = Blog::where('user_id', $id)->get();
+
+        // Get user's itineraries if they exist
+        $itineraries = itineraries::where('user_id', $id)->get();
+
+        return view('admin.users.profile', compact('user', 'profile', 'reservations', 'reviews', 'blogs', 'itineraries'));
+    }
+
     private function getMonthlyStats()
     {
         $currentYear = Carbon::now()->year;
@@ -184,7 +199,7 @@ class AdminController extends Controller
      */
     public function users()
     {
-        $users = User::with('profile')->paginate(15);
+        $users = User::paginate(15);
         return view('admin.users.index', compact('users'));
     }
 
@@ -197,7 +212,7 @@ class AdminController extends Controller
     public function showUser($id)
     {
         $user = User::findOrFail($id);
-        $profile = $user->profile()->first();
+        $profile = $user->first();
 
         // Get user's reservations
         $reservations = reservations::where('user_id', $id)->get();
@@ -262,7 +277,7 @@ class AdminController extends Controller
      */
     public function editUser($id)
     {
-        $user = User::with('profile')->findOrFail($id);
+        $user = User::findOrFail($id);
         return view('admin.users.edit', compact('user'));
     }
 
@@ -385,11 +400,6 @@ class AdminController extends Controller
         if ($user->id === Auth::user()->id) {
             return redirect()->route('admin.users.index')
                 ->with('error', 'You cannot delete your own account.');
-        }
-
-        // Delete user's profile first
-        if ($profile = $user->profile) {
-            $profile->delete();
         }
 
         $user->delete();

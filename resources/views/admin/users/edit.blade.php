@@ -179,8 +179,14 @@
                 </div>
                 <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
-                        <img src="{{ $user->picture ?? asset('/assets/images/default-avatar.png') }}"
-                            alt="{{ $user->first_name }}" class="rounded-circle img-thumbnail mb-3" width="150">
+                        @php
+                            $avatar = $user->picture
+                                ? (Str::startsWith($user->picture, 'http')
+                                    ? $user->picture
+                                    : asset('storage/' . $user->picture))
+                                : asset('/assets/images/default-avatar.png');
+                        @endphp
+                        <img src="{{ $avatar }}" alt="{{ $user->first_name }}" class="rounded-circle img-thumbnail mb-3" width="150">
                         <h5 class="fw-bold">{{ $user->first_name }} {{ $user->last_name }}</h5>
                         <p class="text-muted">{{ $user->email }}</p>
                         <div>

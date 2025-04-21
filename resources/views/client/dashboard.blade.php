@@ -14,7 +14,14 @@
             <div class="dashboard-sidebar p-4">
                 <!-- User Info -->
                 <div class="d-flex align-items-center mb-4">
-                    <img src="{{ Auth::user()->picture ?? asset('/assets/images/default-avatar.png') }}" alt="User" class="user-avatar me-3">
+                    @php
+                        $avatar = Auth::user()->picture
+                            ? (Str::startsWith(Auth::user()->picture, 'http')
+                                ? Auth::user()->picture
+                                : asset('storage/' . Auth::user()->picture))
+                            : asset('/assets/images/default-avatar.png');
+                    @endphp
+                    <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User" class="user-avatar me-3">
                     <div>
                         <h5 class="mb-1">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h5>
                         <p class="text-muted mb-0 small">{{ Auth::user()->email }}</p>

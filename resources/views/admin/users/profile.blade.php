@@ -1,49 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'User Details')
-@section('heading', 'User Details')
-
-@section('breadcrumbs')
-    <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Users</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ $user->name }}</li>
-@endsection
-
-@section('actions')
-    <div class="btn-group">
-        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary">
-            <i class="fas fa-edit"></i> Edit User
-        </a>
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-            <i class="fas fa-trash"></i> Delete
-        </button>
-    </div>
-
-    <!-- Delete User Modal -->
-    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-danger">Delete User Account</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to permanently delete <strong>{{ $user->first_name }}
-                            {{ $user->last_name }}</strong>'s account?</p>
-                    <p class="text-danger">This action cannot be undone. All data associated with this account will be
-                        permanently deleted.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete Permanently</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
+@section('title', 'User Profile')
 
 @section('content')
     <div class="row">
@@ -123,37 +80,6 @@
                                 {{ $user->created_at->format('M d, Y') }}
                             </div>
                         </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- User Actions -->
-                    <div class="d-flex justify-content-between">
-                        <form action="{{ route('admin.users.update-status', $user->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="status"
-                                value="{{ $user->status == 'active' ? 'inactive' : 'active' }}">
-                            <button type="submit"
-                                class="btn btn-sm {{ $user->status == 'active' ? 'btn-warning' : 'btn-success' }}">
-                                <i class="fas {{ $user->status == 'active' ? 'fa-ban' : 'fa-check' }}"></i>
-                                {{ $user->status == 'active' ? 'Deactivate Account' : 'Activate Account' }}
-                            </button>
-                        </form>
-
-                        <form action="{{ route('admin.users.update-role', $user->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="input-group input-group-sm">
-                                <select class="form-select form-select-sm" name="role" required>
-                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="guide" {{ $user->role == 'guide' ? 'selected' : '' }}>Guide</option>
-                                    <option value="travler" {{ $user->role == 'travler' ? 'selected' : '' }}>Traveler
-                                    </option>
-                                </select>
-                                <button class="btn btn-outline-secondary" type="submit">Change Role</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>

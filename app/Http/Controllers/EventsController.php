@@ -3,26 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\events;
+use App\Models\destinations;
 use App\Models\reviews;
 use App\Models\reservations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class EventsController extends Controller
 {
-    /**
-     * Display a listing of all events.
-     */
+    // Public routes
     public function index()
     {
         $events = events::all();
         return view('events.index', compact('events'));
     }
 
-    /**
-     * Display the specified event.
-     */
     public function show($id)
     {
         $event = events::findOrFail($id);
@@ -39,9 +36,6 @@ class EventsController extends Controller
         return view('events.show', compact('event', 'reviews', 'hasReservation'));
     }
 
-    /**
-     * Search for events.
-     */
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -66,184 +60,165 @@ class EventsController extends Controller
         return view('events.search_results', compact('events', 'query', 'dateFilter'));
     }
 
-    /**
-     * Get upcoming events (for homepage).
-     */
-    public function upcoming()
+    // Admin methods
+    public function adminShow($id)
     {
-        $now = now();
-        $upcomingEvents = events::where('date', '>=', $now)
-            ->orderBy('date', 'asc')
-            ->take(4)
-            ->get();
-            
-        return view('events.upcoming', compact('upcomingEvents'));
-    }
-
-    /**
-     * Book an event.
-     */
-    public function book(Request $request, $id)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login to book events.');
+        try {
+            $event = events::findOrFail($id);
+            $reviews = reviews::where('event_id', $id)->get();
+            return view('admin.events.show', compact('event', 'reviews'));
+        } catch (\Exception $e) {
+            Log::error('Error showing event: ' . $e->getMessage());
+            return redirect()->route('admin.events.index')
+                ->with('error', 'Error showing event: ' . $e->getMessage());
         }
-        
-        $request->validate([
-            'date' => 'required|date|after_or_equal:today',
-        ]);
-        
-        reservations::create([
-            'event_id' => $id,
-            'user_id' => Auth::id(),
-            'date' => $request->date,
-            'status' => 'pending',
-        ]);
-        
-        return redirect()->route('client.reservations')
-            ->with('success', 'Event booked successfully.');
+    }
+    
+    public function adminIndex()
+    {
+        try {
+            $events = events::all();
+            return view('admin.events.index', compact('events'));
+        } catch (\Exception $e) {
+            Log::error('Error loading events: ' . $e->getMessage());
+            return redirect()->route('admin.dashboard.index')
+                ->with('error', 'Error loading events: ' . $e->getMessage());
+        }
     }
 
-    // Guide & Admin methods below - protected by middleware in routes
-
-    /**
-     * Show the form for creating a new event.
-     */
     public function create()
     {
-        return view('guide.events.create');
+        try {
+            $destinations = destinations::all();
+            return view('admin.events.create', compact('destinations'));
+        } catch (\Exception $e) {
+            Log::error('Error loading destinations: ' . $e->getMessage());
+            return redirect()->route('admin.events.index')
+                ->with('error', 'Error loading destinations: ' . $e->getMessage());
+        }
     }
 
-    /**
-     * Store a newly created event in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'date' => 'required|date|after_or_equal:today',
-            'image' => 'nullable|image|max:2048',
-            'location' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'date' => 'required|date',
+                'location' => 'required|string',
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('events', 'public');
-        }
+            $data = [
+                'name' => $request->name,
+                'date' => $request->date,
+                'location' => $request->location,
+                'description' => $request->description,
+                'price' => $request->price,
+            ];
 
-        events::create([
-            'name' => $request->name,
-            'date' => $request->date,
-            'image' => $imagePath,
-            'location' => $request->location,
-            'description' => $request->description,
-            'price' => $request->price,
-        ]);
+            // Handle image upload if present
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('events', 'public');
+                $data['image'] = $imagePath;
+            }
 
-        // Redirect based on user role
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.events.index')->with('success', 'Event created successfully.');
-        } else {
-            return redirect()->route('guide.events.index')->with('success', 'Event created successfully.');
+            events::create($data);
+
+            return redirect()->route('admin.events.index')
+                ->with('success', 'Event created successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error creating event: ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error creating event: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Show the form for editing the specified event.
-     */
     public function edit($id)
     {
-        $event = events::findOrFail($id);
-        
-        // Determine the appropriate view based on user role
-        if (Auth::user()->role === 'admin') {
-            return view('admin.events.edit', compact('event'));
-        } else {
-            return view('guide.events.edit', compact('event'));
+        try {
+            $event = events::findOrFail($id);
+            $destinations = destinations::all();
+            return view('admin.events.edit', compact('event', 'destinations'));
+        } catch (\Exception $e) {
+            Log::error('Error loading event for edit: ' . $e->getMessage());
+            return redirect()->route('admin.events.index')
+                ->with('error', 'Error loading event for edit: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Update the specified event in storage.
-     */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'date' => 'required|date',
-            'image' => 'nullable|image|max:2048',
-            'location' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'date' => 'required|date',
+                'location' => 'required|string',
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        $event = events::findOrFail($id);
-        
-        $imagePath = $event->image;
-        if ($request->hasFile('image')) {
-            // Delete old image if it exists
+            $event = events::findOrFail($id);
+            
+            $data = [
+                'name' => $request->name,
+                'date' => $request->date,
+                'location' => $request->location,
+                'description' => $request->description,
+                'price' => $request->price,
+            ];
+
+            // Handle image upload if present
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($event->image) {
+                    Storage::disk('public')->delete($event->image);
+                }
+                $imagePath = $request->file('image')->store('events', 'public');
+                $data['image'] = $imagePath;
+            }
+
+            $event->update($data);
+
+            return redirect()->route('admin.events.index')
+                ->with('success', 'Event updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error updating event: ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error updating event: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $event = events::findOrFail($id);
+            
+            // Check if there are any reservations before deleting
+            $reservationsCount = reservations::where('event_id', $id)->count();
+            
+            if ($reservationsCount > 0) {
+                return redirect()->route('admin.events.index')
+                    ->with('error', 'Cannot delete event with existing reservations. Cancel all reservations first.');
+            }
+            
+            // Delete image if exists
             if ($event->image) {
                 Storage::disk('public')->delete($event->image);
             }
-            $imagePath = $request->file('image')->store('events', 'public');
+            
+            $event->delete();
+
+            return redirect()->route('admin.events.index')
+                ->with('success', 'Event deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting event: ' . $e->getMessage());
+            return redirect()->route('admin.events.index')
+                ->with('error', 'Error deleting event: ' . $e->getMessage());
         }
-
-        $event->update([
-            'name' => $request->name,
-            'date' => $request->date,
-            'image' => $imagePath,
-            'location' => $request->location,
-            'description' => $request->description,
-            'price' => $request->price,
-        ]);
-
-        // Redirect based on user role
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.events.index')->with('success', 'Event updated successfully.');
-        } else {
-            return redirect()->route('guide.events.index')->with('success', 'Event updated successfully.');
-        }
-    }
-
-    /**
-     * Remove the specified event from storage.
-     */
-    public function destroy($id)
-    {
-        $event = events::findOrFail($id);
-        
-        // Delete image if it exists
-        if ($event->image) {
-            Storage::disk('public')->delete($event->image);
-        }
-        
-        $event->delete();
-
-        // Redirect based on user role
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.events.index')->with('success', 'Event deleted successfully.');
-        } else {
-            return redirect()->route('guide.events.index')->with('success', 'Event deleted successfully.');
-        }
-    }
-
-    /**
-     * Admin index - show all events for management.
-     */
-    public function adminIndex()
-    {
-        $events = events::all();
-        return view('admin.events', compact('events'));
-    }
-
-    /**
-     * Guide index - show only events for this guide.
-     */
-    public function guideIndex()
-    {
-        $events = events::all(); // In a real app, filter by guide ID
-        return view('guide.events.index', compact('events'));
     }
 }

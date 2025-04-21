@@ -14,21 +14,4 @@ class categories extends Model
         'id',
         'name',
     ];
-
-    // Methods
-    public function addCategory()
-    {
-        return self::create([
-            'name' => $this->name,
-            'icon' => $this->icon,
-        ]);
-    }
-
-    public function updateCategory()
-    {
-        return $this->update([
-            'name' => $this->name,
-            'icon' => $this->icon,
-        ]);
-    }
 }

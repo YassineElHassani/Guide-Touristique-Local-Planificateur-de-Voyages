@@ -5,20 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\destinations;
 use App\Models\categories;
 use App\Models\reviews;
-use App\Models\user_favorites;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class DestinationsController extends Controller
 {
-    /**
-     * Display a listing of the destinations.
-     *
-     * @return \Illuminate\View\View
-     */
+    // Public routes
     public function index()
     {
         $destinations = destinations::all();
@@ -26,12 +18,6 @@ class DestinationsController extends Controller
         return view('destinations.index', compact('destinations', 'categories'));
     }
 
-    /**
-     * Display a listing of the destinations by category.
-     *
-     * @param  string  $category
-     * @return \Illuminate\View\View
-     */
     public function byCategory($category)
     {
         $destinations = destinations::where('category', $category)->get();
@@ -39,34 +25,13 @@ class DestinationsController extends Controller
         return view('destinations.by_category', compact('destinations', 'categoryObj'));
     }
 
-    /**
-     * Display the specified destination.
-     *
-     * @param  int  $id
-     * @return \Illuminate\View\View
-     */
     public function show($id)
     {
         $destination = destinations::findOrFail($id);
         $reviews = reviews::where('destination_id', $id)->get();
-        
-        // Check if user has favorited this destination
-        $isFavorite = false;
-        if (Auth::check()) {
-            $isFavorite = user_favorites::where('user_id', Auth::id())
-                ->where('destination_id', $id)
-                ->exists();
-        }
-        
-        return view('destinations.show', compact('destination', 'reviews', 'isFavorite'));
+        return view('admin.destinations.show', compact('destination', 'reviews'));
     }
 
-    /**
-     * Search for destinations.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\View\View
-     */
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -92,80 +57,12 @@ class DestinationsController extends Controller
         return view('destinations.search_results', compact('destinations', 'query', 'categoryFilter', 'categories'));
     }
 
-    /**
-     * Add destination to user favorites.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function addToFavorites($id)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login to add favorites.');
-        }
-        
-        // Check if already favorited
-        $existingFavorite = user_favorites::where('user_id', Auth::id())
-            ->where('destination_id', $id)
-            ->first();
-            
-        if (!$existingFavorite) {
-            user_favorites::create([
-                'user_id' => Auth::id(),
-                'destination_id' => $id
-            ]);
-            return back()->with('success', 'Destination added to favorites.');
-        }
-        
-        return back()->with('info', 'This destination is already in your favorites.');
-    }
-
-    /**
-     * Remove destination from user favorites.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function removeFromFavorites($id)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login to manage favorites.');
-        }
-        
-        user_favorites::where('user_id', Auth::id())
-            ->where('destination_id', $id)
-            ->delete();
-            
-        return back()->with('success', 'Destination removed from favorites.');
-    }
-
-    /**
-     * Display featured destinations.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function featured()
-    {
-        // For simplicity, just showing some destinations as featured
-        // In a real app, you might have a 'featured' flag in the database
-        $featuredDestinations = destinations::take(6)->get();
-        return view('destinations.featured', compact('featuredDestinations'));
-    }
-
-    /*
-     * Admin Methods
-     */
-
-    /**
-     * Display a listing of all destinations for admin.
-     *
-     * @return \Illuminate\View\View
-     */
+    // Admin routes
     public function adminIndex()
     {
         try {
             $destinations = destinations::all();
-            return view('admin.destinations', compact('destinations'));
+            return view('admin.destinations.index', compact('destinations'));
         } catch (\Exception $e) {
             Log::error('Error loading destinations: ' . $e->getMessage());
             return redirect()->route('admin.dashboard.index')
@@ -173,11 +70,6 @@ class DestinationsController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new destination.
-     *
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
         try {
@@ -190,12 +82,6 @@ class DestinationsController extends Controller
         }
     }
 
-    /**
-     * Store a newly created destination in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
         try {
@@ -205,26 +91,15 @@ class DestinationsController extends Controller
                 'address' => 'required|string',
                 'category' => 'required|string',
                 'coordinates' => 'required|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $data = [
+            destinations::create([
                 'name' => $request->name,
                 'description' => $request->description,
                 'address' => $request->address,
                 'category' => $request->category,
                 'coordinates' => $request->coordinates,
-            ];
-
-            // Handle image upload if present
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_' . Str::slug($request->name) . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/destinations', $imageName);
-                $data['image'] = $imageName;
-            }
-
-            destinations::create($data);
+            ]);
 
             return redirect()->route('admin.destinations.index')
                 ->with('success', 'Destination created successfully.');
@@ -236,12 +111,6 @@ class DestinationsController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified destination.
-     *
-     * @param  int  $id
-     * @return \Illuminate\View\View
-     */
     public function edit($id)
     {
         try {
@@ -255,13 +124,6 @@ class DestinationsController extends Controller
         }
     }
 
-    /**
-     * Update the specified destination in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -271,33 +133,17 @@ class DestinationsController extends Controller
                 'address' => 'required|string',
                 'category' => 'required|string',
                 'coordinates' => 'required|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $destination = destinations::findOrFail($id);
             
-            $data = [
+            $destination->update([
                 'name' => $request->name,
                 'description' => $request->description,
                 'address' => $request->address,
                 'category' => $request->category,
                 'coordinates' => $request->coordinates,
-            ];
-
-            // Handle image upload if present
-            if ($request->hasFile('image')) {
-                // Delete old image if exists
-                if ($destination->image && Storage::exists('public/destinations/' . $destination->image)) {
-                    Storage::delete('public/destinations/' . $destination->image);
-                }
-                
-                $image = $request->file('image');
-                $imageName = time() . '_' . Str::slug($request->name) . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/destinations', $imageName);
-                $data['image'] = $imageName;
-            }
-
-            $destination->update($data);
+            ]);
 
             return redirect()->route('admin.destinations.index')
                 ->with('success', 'Destination updated successfully.');
@@ -309,21 +155,10 @@ class DestinationsController extends Controller
         }
     }
 
-    /**
-     * Remove the specified destination from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function destroy($id)
     {
         try {
             $destination = destinations::findOrFail($id);
-            
-            // Delete image if exists
-            if ($destination->image && Storage::exists('public/destinations/' . $destination->image)) {
-                Storage::delete('public/destinations/' . $destination->image);
-            }
             
             // Check if there are any dependencies before deleting
             $reviewsCount = reviews::where('destination_id', $id)->count();
