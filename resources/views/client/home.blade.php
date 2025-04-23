@@ -3,8 +3,8 @@
 @section('dashboard-title', 'Welcome Back, ' . (Auth::user()->first_name ?? ''))
 
 @section('dashboard-actions')
-<a href="#" class="btn btn-primary">
-    <i class="fas fa-plus me-1"></i> Create Blog
+<a href="{{ route('client.events.index') }}" class="btn btn-primary">
+    <i class="fas fa-compass me-1"></i> Explore Events
 </a>
 @endsection
 
@@ -19,13 +19,13 @@
                         <i class="fas fa-calendar-check text-warning fa-2x"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">Upcoming Trips</h6>
-                        <h3 class="mb-0">2</h3>
+                        <h6 class="text-muted mb-1">Reservations</h6>
+                        <h3 class="mb-0">{{ $reservations->count() }}</h3>
                     </div>
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="#" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
+                <a href="{{ route('client.reservations') }}" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
         </div>
     </div>
@@ -35,16 +35,16 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="bg-success bg-opacity-10 p-3 rounded me-3">
-                        <i class="fas fa-route text-success fa-2x"></i>
+                        <i class="fas fa-check-circle text-success fa-2x"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">Itineraries</h6>
-                        <h3 class="mb-0">5</h3>
+                        <h6 class="text-muted mb-1">Confirmed</h6>
+                        <h3 class="mb-0">{{ $reservations->where('status', 'confirmed')->count() }}</h3>
                     </div>
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="#" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
+                <a href="{{ route('client.reservations') }}" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
         </div>
     </div>
@@ -58,12 +58,12 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">Favorites</h6>
-                        <h3 class="mb-0">12</h3>
+                        <h3 class="mb-0">{{ $favorites->count() }}</h3>
                     </div>
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="#" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
+                <a href="{{ route('client.favorites') }}" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
         </div>
     </div>
@@ -77,12 +77,12 @@
                     </div>
                     <div>
                         <h6 class="text-muted mb-1">Reviews</h6>
-                        <h3 class="mb-0">8</h3>
+                        <h3 class="mb-0">{{ $reviews->count() }}</h3>
                     </div>
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="#" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
+                <a href="{{ route('client.reviews') }}" class="text-decoration-none small">View all <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
         </div>
     </div>
@@ -91,68 +91,102 @@
 <!-- Upcoming Trips Section -->
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-        <h5 class="mb-0">Upcoming Trips</h5>
-        <a href="#" class="text-decoration-none small">View all</a>
+        <h5 class="mb-0">Your Upcoming Trips</h5>
+        <a href="{{ route('client.reservations') }}" class="text-decoration-none small">View all</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Tour</th>
-                        <th>Guide</th>
+                        <th>Event</th>
+                        <th>Location</th>
                         <th>Date</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($reservations->where('date', '>=', now())->sortBy('date')->take(3) as $reservation)
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800" class="rounded me-2" width="50" height="50" alt="Paris Tour">
+                                @if($reservation->event && $reservation->event->image)
+                                    <img src="{{ asset('storage/' . $reservation->event->image) }}" class="rounded me-2" width="50" height="50" alt="{{ $reservation->event->name }}">
+                                @else
+                                    <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-calendar-alt text-secondary"></i>
+                                    </div>
+                                @endif
                                 <div>
-                                    <h6 class="mb-0">Paris Art and Culture Tour</h6>
-                                    <small class="text-muted">Paris, France</small>
+                                    <h6 class="mb-0">{{ $reservation->event->name ?? 'Unknown Event' }}</h6>
+                                    <small class="text-muted">Price: ${{ number_format($reservation->event->price ?? 0, 2) }}</small>
                                 </div>
                             </div>
                         </td>
+                        <td>{{ $reservation->event->location ?? 'Unknown Location' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($reservation->date)->format('M d, Y') }}</td>
                         <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://randomuser.me/api/portraits/women/11.jpg" class="rounded-circle me-2" width="32" height="32" alt="Guide">
-                                <span>Marie Dubois</span>
-                            </div>
+                            @php
+                                $statusClass = 'secondary';
+                                
+                                if ($reservation->status == 'pending') {
+                                    $statusClass = 'warning';
+                                } elseif ($reservation->status == 'confirmed') {
+                                    $statusClass = 'success';
+                                } elseif ($reservation->status == 'cancelled') {
+                                    $statusClass = 'danger';
+                                }
+                            @endphp
+                            <span class="badge bg-{{ $statusClass }}">{{ ucfirst($reservation->status) }}</span>
                         </td>
-                        <td>May 15, 2025</td>
-                        <td><span class="badge bg-success">Confirmed</span></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i></button>
+                            <a href="{{ route('client.reservations.show', $reservation->id) }}" class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></a>
+                            @if($reservation->status != 'cancelled')
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal{{ $reservation->id }}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                
+                                <!-- Cancel Modal -->
+                                <div class="modal fade" id="cancelModal{{ $reservation->id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Cancel Reservation</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to cancel your reservation for <strong>{{ $reservation->event->name ?? 'this event' }}</strong>?</p>
+                                                <p class="text-danger">This action cannot be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form action="{{ route('client.reservations.cancel', $reservation->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="submit" class="btn btn-danger">Cancel Reservation</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </td>
                     </tr>
+                    @empty
                     <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://images.unsplash.com/photo-1480796927426-f609979314bd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800" class="rounded me-2" width="50" height="50" alt="Tokyo Tour">
-                                <div>
-                                    <h6 class="mb-0">Tokyo Food Adventure</h6>
-                                    <small class="text-muted">Tokyo, Japan</small>
-                                </div>
+                        <td colspan="5" class="text-center py-5">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+                                <h5>No Upcoming Trips</h5>
+                                <p class="text-muted">You don't have any upcoming reservations.</p>
+                                <a href="{{ route('events.index') }}" class="btn btn-primary mt-2">
+                                    <i class="fas fa-search"></i> Explore Events
+                                </a>
                             </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://randomuser.me/api/portraits/men/42.jpg" class="rounded-circle me-2" width="32" height="32" alt="Guide">
-                                <span>Hiro Tanaka</span>
-                            </div>
-                        </td>
-                        <td>June 10, 2025</td>
-                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i></button>
                         </td>
                     </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -165,52 +199,52 @@
     <div class="col-md-8">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                <h5 class="mb-0">Recommended Tours</h5>
-                <a href="#" class="text-decoration-none small">View more</a>
+                <h5 class="mb-0">Recommended Events</h5>
+                <a href="{{ route('client.events.index') }}" class="text-decoration-none small">View more</a>
             </div>
             <div class="card-body">
                 <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm">
-                            <img src="https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800" class="card-img-top" height="160" style="object-fit: cover;" alt="Tour">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="badge bg-info rounded-pill">Adventure</span>
-                                    <span class="text-primary fw-bold">$189</span>
-                                </div>
-                                <h5 class="card-title mb-1">Santorini Island Exploration</h5>
-                                <p class="text-muted small mb-3"><i class="fas fa-map-marker-alt me-1"></i>Santorini, Greece</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <i class="fas fa-star text-warning"></i>
-                                        <span>4.9 (56 reviews)</span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">View</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @php
+                        $recommendedEvents = \App\Models\events::where('date', '>=', now())
+                            ->orderBy('date', 'asc')
+                            ->take(2)
+                            ->get();
+                    @endphp
                     
+                    @forelse($recommendedEvents as $event)
                     <div class="col-md-6">
                         <div class="card border-0 shadow-sm">
-                            <img src="https://images.unsplash.com/photo-1535139262971-c51845709a48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800" class="card-img-top" height="160" style="object-fit: cover;" alt="Tour">
+                            @if($event->image)
+                                <img src="{{ asset('storage/' . $event->image) }}" class="card-img-top" height="160" style="object-fit: cover;" alt="{{ $event->name }}">
+                            @else
+                                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 160px;">
+                                    <i class="fas fa-calendar-alt fa-3x text-secondary"></i>
+                                </div>
+                            @endif
                             <div class="card-body">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span class="badge bg-success rounded-pill">Nature</span>
-                                    <span class="text-primary fw-bold">$150</span>
+                                    <span class="badge bg-primary rounded-pill">Event</span>
+                                    <span class="text-primary fw-bold">${{ number_format($event->price, 2) }}</span>
                                 </div>
-                                <h5 class="card-title mb-1">Bali Temple and Rice Fields</h5>
-                                <p class="text-muted small mb-3"><i class="fas fa-map-marker-alt me-1"></i>Bali, Indonesia</p>
+                                <h5 class="card-title mb-1">{{ $event->name }}</h5>
+                                <p class="text-muted small mb-3"><i class="fas fa-map-marker-alt me-1"></i>{{ $event->location }}</p>
+                                <p class="text-muted small mb-3"><i class="fas fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($event->date)->format('M d, Y') }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <i class="fas fa-star text-warning"></i>
-                                        <span>4.8 (124 reviews)</span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                    <a href="{{ route('client.events.show', $event->id) }}" class="btn btn-sm btn-outline-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @empty
+                    <div class="col-12 text-center py-4">
+                        <i class="fas fa-calendar fa-3x text-muted mb-3"></i>
+                        <h5>No Recommended Events</h5>
+                        <p class="text-muted">We don't have any recommended events at this time.</p>
+                        <a href="{{ route('events.index') }}" class="btn btn-primary mt-2">
+                            <i class="fas fa-search"></i> Browse All Events
+                        </a>
+                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -223,50 +257,30 @@
                 <h5 class="mb-0">Weather Forecast</h5>
             </div>
             <div class="card-body">
-                <div class="text-center mb-4">
-                    <div class="mb-3">
-                        <i class="fas fa-sun fa-4x text-warning"></i>
-                    </div>
-                    <h2 class="mb-0">28°C</h2>
-                    <p class="text-muted">Paris, France</p>
-                </div>
+                @php
+                    $defaultLocation = 'Paris';
+                    if ($reservations->where('date', '>=', now())->count() > 0) {
+                        $nextTrip = $reservations->where('date', '>=', now())->sortBy('date')->first();
+                        if ($nextTrip && $nextTrip->event) {
+                            $defaultLocation = $nextTrip->event->location;
+                        }
+                    }
+                @endphp
                 
-                <div class="row g-2">
-                    <div class="col-3">
-                        <div class="text-center p-2 rounded bg-light">
-                            <p class="small mb-1">Thu</p>
-                            <i class="fas fa-cloud text-secondary"></i>
-                            <p class="mb-0">24°C</p>
+                <div id="weather-container" data-location="{{ $defaultLocation }}">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="text-center p-2 rounded bg-light">
-                            <p class="small mb-1">Fri</p>
-                            <i class="fas fa-cloud-sun text-secondary"></i>
-                            <p class="mb-0">26°C</p>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="text-center p-2 rounded bg-light">
-                            <p class="small mb-1">Sat</p>
-                            <i class="fas fa-sun text-warning"></i>
-                            <p class="mb-0">29°C</p>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="text-center p-2 rounded bg-light">
-                            <p class="small mb-1">Sun</p>
-                            <i class="fas fa-cloud-sun-rain text-secondary"></i>
-                            <p class="mb-0">25°C</p>
-                        </div>
+                        <p class="mt-2">Loading weather data...</p>
                     </div>
                 </div>
                 
                 <div class="mt-4">
                     <h6 class="mb-3">Check weather for your trip:</h6>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Enter location">
-                        <button class="btn btn-primary" type="button">
+                        <input type="text" id="location-input" class="form-control" placeholder="Enter location" value="{{ $defaultLocation }}">
+                        <button class="btn btn-primary" type="button" id="check-weather-btn">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -275,4 +289,171 @@
         </div>
     </div>
 </div>
+
+<!-- Your Recent Favorites -->
+<div class="card border-0 shadow-sm my-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0">Your Favorite Destinations</h5>
+        <a href="{{ route('client.favorites') }}" class="text-decoration-none small">View all</a>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            @forelse($favorites->take(3) as $favorite)
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="position-relative">
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 160px;">
+                                <i class="fas fa-map-marker-alt fa-3x text-secondary"></i>
+                            </div>
+                            <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2" 
+                                data-bs-toggle="modal" data-bs-target="#removeFavoriteModal{{ $favorite->id }}">
+                                <i class="fas fa-heart-broken"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $favorite->name }}</h5>
+                            <p class="card-text text-muted small">{{ $favorite->address }}</p>
+                            <p class="card-text">{{ \Illuminate\Support\Str::limit($favorite->description, 100) }}</p>
+                            <a href="{{ route('destinations.show', $favorite->id) }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                        </div>
+                        
+                        <!-- Remove Favorite Modal -->
+                        <div class="modal fade" id="removeFavoriteModal{{ $favorite->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Remove from Favorites</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to remove <strong>{{ $favorite->name }}</strong> from your favorites?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <form action="{{ route('client.favorites.remove', $favorite->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Remove</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-12 text-center py-4">
+                    <i class="fas fa-heart fa-3x text-muted mb-3"></i>
+                    <h5>No Favorite Destinations</h5>
+                    <p class="text-muted">You haven't added any destinations to your favorites yet.</p>
+                    <a href="{{ route('destinations.index') }}" class="btn btn-primary mt-2">
+                        <i class="fas fa-search"></i> Explore Destinations
+                    </a>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Weather functionality
+        const weatherContainer = document.getElementById('weather-container');
+        const locationInput = document.getElementById('location-input');
+        const checkWeatherBtn = document.getElementById('check-weather-btn');
+        
+        function loadWeather(location) {
+            weatherContainer.innerHTML = `
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading weather data...</p>
+                </div>
+            `;
+            
+            // In a real application, this would make an API call to your weather endpoint
+            // For demonstration, we'll just show a mock weather display
+            setTimeout(() => {
+                const mockTemp = Math.floor(Math.random() * 15) + 15; // Random temp between 15-30°C
+                const conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Rainy'][Math.floor(Math.random() * 4)];
+                const icon = {
+                    'Sunny': 'sun',
+                    'Partly Cloudy': 'cloud-sun',
+                    'Cloudy': 'cloud',
+                    'Rainy': 'cloud-rain'
+                }[conditions];
+                
+                weatherContainer.innerHTML = `
+                    <div class="text-center mb-4">
+                        <div class="mb-3">
+                            <i class="fas fa-${icon} fa-4x text-warning"></i>
+                        </div>
+                        <h2 class="mb-0">${mockTemp}°C</h2>
+                        <p class="text-muted">${location} - ${conditions}</p>
+                    </div>
+                    
+                    <div class="row g-2">
+                        <div class="col-3">
+                            <div class="text-center p-2 rounded bg-light">
+                                <p class="small mb-1">Today</p>
+                                <i class="fas fa-${icon} text-warning"></i>
+                                <p class="mb-0">${mockTemp}°C</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center p-2 rounded bg-light">
+                                <p class="small mb-1">Tomorrow</p>
+                                <i class="fas fa-${['sun', 'cloud-sun', 'cloud', 'cloud-rain'][Math.floor(Math.random() * 4)]} text-secondary"></i>
+                                <p class="mb-0">${mockTemp + Math.floor(Math.random() * 5) - 2}°C</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center p-2 rounded bg-light">
+                                <p class="small mb-1">Day 3</p>
+                                <i class="fas fa-${['sun', 'cloud-sun', 'cloud', 'cloud-rain'][Math.floor(Math.random() * 4)]} text-secondary"></i>
+                                <p class="mb-0">${mockTemp + Math.floor(Math.random() * 5) - 2}°C</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center p-2 rounded bg-light">
+                                <p class="small mb-1">Day 4</p>
+                                <i class="fas fa-${['sun', 'cloud-sun', 'cloud', 'cloud-rain'][Math.floor(Math.random() * 4)]} text-secondary"></i>
+                                <p class="mb-0">${mockTemp + Math.floor(Math.random() * 5) - 2}°C</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }, 1000);
+        }
+        
+        // Initial load
+        loadWeather(weatherContainer.dataset.location);
+        
+        // Check weather button click
+        if (checkWeatherBtn) {
+            checkWeatherBtn.addEventListener('click', function() {
+                const location = locationInput.value.trim();
+                if (location) {
+                    loadWeather(location);
+                }
+            });
+        }
+        
+        // Enter key in location input
+        if (locationInput) {
+            locationInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const location = locationInput.value.trim();
+                    if (location) {
+                        loadWeather(location);
+                    }
+                }
+            });
+        }
+    });
+</script>
+@endpush

@@ -9,4 +9,9 @@ class user_favorites extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFavoritesFactory> */
     use HasFactory;
+    
+    protected $fillable = [
+        'user_id',
+        'destination_id'
+    ];
 }

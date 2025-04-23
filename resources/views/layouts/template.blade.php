@@ -105,7 +105,8 @@
                                                 : asset('storage/' . Auth::user()->picture))
                                             : asset('/assets/images/default-avatar.png');
                                     @endphp
-                                    <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User" height="40px" width="40px" style="border-radius: 2rem" class="user-avatar me-3" />
+                                    <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User" height="40px"
+                                        width="40px" style="border-radius: 2rem" class="user-avatar me-3" />
                                     {{ Auth::user()->first_name }}
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">

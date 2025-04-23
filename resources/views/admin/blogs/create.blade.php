@@ -85,28 +85,6 @@
                     </div>
 
                     <div class="col-md-4">
-                        <!-- Publishing Options -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h6 class="mb-0">Publishing Options</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="published" name="published"
-                                        {{ old('published') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="published">Publish immediately</label>
-                                    <small class="d-block text-muted">Uncheck to save as draft</small>
-                                </div>
-
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="featured" name="featured"
-                                        {{ old('featured') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="featured">Feature this post</label>
-                                    <small class="d-block text-muted">Featured posts appear in highlighted areas</small>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Categories -->
                         <div class="card mb-4">
                             <div class="card-header bg-light">

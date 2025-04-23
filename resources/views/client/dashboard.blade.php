@@ -3,113 +3,116 @@
 @section('title', 'Client Dashboard')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('/app/css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('/app/css/dashboard.css') }}">
 @endpush
 
 @section('content')
-<div class="container py-5">
-    <div class="row g-4">
-        <!-- Sidebar -->
-        <div class="col-lg-3">
-            <div class="dashboard-sidebar p-4">
-                <!-- User Info -->
-                <div class="d-flex align-items-center mb-4">
-                    @php
-                        $avatar = Auth::user()->picture
-                            ? (Str::startsWith(Auth::user()->picture, 'http')
-                                ? Auth::user()->picture
-                                : asset('storage/' . Auth::user()->picture))
-                            : asset('/assets/images/default-avatar.png');
-                    @endphp
-                    <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User" class="user-avatar me-3">
-                    <div>
-                        <h5 class="mb-1">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h5>
-                        <p class="text-muted mb-0 small">{{ Auth::user()->email }}</p>
-                    </div>
-                </div>
-                
-                <!-- Navigation Links -->
-                <div class="mb-4">
-                    <h6 class="text-uppercase text-muted small fw-bold mb-3">Main</h6>
-                    
-                    <a href="{{ route('client.home') }}" class="sidebar-link {{ request()->routeIs('client.home') ? 'active' : '' }}">
-                        <i class="fas fa-home"></i> Dashboard
-                    </a>
-                    
-                    <a href="{{ route('client.itineraries.index') }}" class="sidebar-link {{ request()->routeIs('client.itineraries.*') ? 'active' : '' }}">
-                        <i class="fas fa-route fas fa-blog"></i> Itineraries
-                    </a>
-                    
-                    <a href="{{ route('client.reservations') }}" class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
-                        <i class="fas fa-calendar-check"></i> Reservations
-                    </a>
-                    
-                    <a href="{{ route('client.favorites') }}" class="sidebar-link {{ request()->routeIs('client.favorites*') ? 'active' : '' }}">
-                        <i class="fas fa-heart"></i> Favorites
-                    </a>
-                    
-                    <a href="{{ route('client.reviews') }}" class="sidebar-link {{ request()->routeIs('client.reviews*') ? 'active' : '' }}">
-                        <i class="fas fa-star"></i> Reviews
-                    </a>
-                </div>
-                
-                <div class="sidebar-divider"></div>
-                
-                <div class="mb-4">
-                    <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
-                    
-                    <a href="{{ route('profile.show') }}" class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
-                        <i class="fas fa-user"></i> Profile
-                    </a>
-                    
-                    {{-- <a href="{{ route('client.settings') }}" class="sidebar-link {{ request()->routeIs('client.settings*') ? 'active' : '' }}">
-                        <i class="fas fa-cog"></i> Settings
-                    </a> --}}
-                    
-                    <a href="{{ route('logout') }}" class="sidebar-link text-danger">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
-                
-                <div class="sidebar-divider"></div>
-                
-                <!-- Help Card -->
-                <div class="card bg-light border-0 p-3">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                            <i class="fas fa-headset"></i>
+    <div class="container py-5">
+        <div class="row g-4">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <div class="dashboard-sidebar p-4">
+                    <!-- User Info -->
+                    <div class="d-flex align-items-center mb-4">
+                        @php
+                            $avatar = Auth::user()->picture
+                                ? (Str::startsWith(Auth::user()->picture, 'http')
+                                    ? Auth::user()->picture
+                                    : asset('storage/' . Auth::user()->picture))
+                                : asset('/assets/images/default-avatar.png');
+                        @endphp
+                        <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User" class="user-avatar me-3">
+                        <div>
+                            <h5 class="mb-1">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h5>
+                            <p class="text-muted mb-0 small">{{ Auth::user()->email }}</p>
                         </div>
-                        <h6 class="mb-0">Need Help?</h6>
                     </div>
-                    <p class="small mb-3">Our support team is here to help you with any questions or issues.</p>
-                    <a href="#" class="btn btn-sm btn-primary">Contact Support</a>
+
+                    <!-- Navigation Links -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted small fw-bold mb-3">Main</h6>
+
+                        <a href="{{ route('client.home') }}"
+                            class="sidebar-link {{ request()->routeIs('client.home') ? 'active' : '' }}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+
+                        <a href="{{ route('client.blogs.index') }}"
+                            class="sidebar-link {{ request()->routeIs('client.itineraries.*') ? 'active' : '' }}">
+                            <i class="fas fa-blog"></i> Blogs
+                        </a>
+
+                        <a href="{{ route('client.reservations') }}"
+                            class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check"></i> Reservations
+                        </a>
+
+                        <a href="{{ route('client.favorites') }}"
+                            class="sidebar-link {{ request()->routeIs('client.favorites*') ? 'active' : '' }}">
+                            <i class="fas fa-heart"></i> Favorites
+                        </a>
+
+                        <a href="{{ route('client.reviews') }}"
+                            class="sidebar-link {{ request()->routeIs('client.reviews*') ? 'active' : '' }}">
+                            <i class="fas fa-star"></i> Reviews
+                        </a>
+                    </div>
+
+                    <div class="sidebar-divider"></div>
+
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
+
+                        <a href="{{ route('profile.show') }}"
+                            class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+
+                        <a href="{{ route('logout') }}" class="sidebar-link text-danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+
+                    <div class="sidebar-divider"></div>
+
+                    <!-- Help Card -->
+                    <div class="card bg-light border-0 p-3">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+                                style="width: 40px; height: 40px;">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h6 class="mb-0">Need Help?</h6>
+                        </div>
+                        <p class="small mb-3">Our support team is here to help you with any questions or issues.</p>
+                        <a href="#" class="btn btn-sm btn-primary">Contact Support</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Main Content -->
-        <div class="col-lg-9">
-            <!-- Header -->
-            <div class="dashboard-header mb-4 p-4">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h3 class="mb-1">@yield('dashboard-title', 'Dashboard')</h3>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">@yield('dashboard-breadcrumb', 'Dashboard')</li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                        @yield('dashboard-actions')
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Header -->
+                <div class="dashboard-header mb-4 p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h3 class="mb-1">@yield('dashboard-title', 'Dashboard')</h3>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">@yield('dashboard-breadcrumb', 'Dashboard')</li>
+                                </ol>
+                            </nav>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            @yield('dashboard-actions')
+                        </div>
                     </div>
                 </div>
+
+                <!-- Dashboard Content -->
+                @yield('dashboard-content')
             </div>
-            
-            <!-- Dashboard Content -->
-            @yield('dashboard-content')
         </div>
     </div>
-</div>
 @endsection

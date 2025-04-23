@@ -75,8 +75,13 @@ class ReservationsController extends Controller
             return redirect()->route('client.reservations.index')
                 ->with('error', 'You are not authorized to view this reservation.');
         }
-        
-        return view('client.reservations.show', compact('reservation'));
+        if (Auth::user()->role === 'admin') {
+            return view('admin.reservations.show', compact('reservation'));
+        } elseif (Auth::user()->role === 'guide') {
+            return view('guide.reservations.show', compact('reservation'));
+        } elseif (Auth::user()->role === 'client') {
+            return view('client.reservations.show', compact('reservation'));
+        }
     }
 
     /**
@@ -107,8 +112,11 @@ class ReservationsController extends Controller
      */
     public function adminIndex()
     {
-        $reservations = reservations::all();
-        return view('admin.reservations', compact('reservations'));
+        $reservations = reservations::with(['user', 'event'])
+        ->orderBy('created_at', 'desc')
+        ->paginate(15);
+        
+        return view('admin.reservations.index', compact('reservations'));
     }
 
     /**
@@ -118,10 +126,14 @@ class ReservationsController extends Controller
     {
         $request->validate([
             'status' => 'required|in:pending,confirmed,cancelled',
+            'admin_notes' => 'nullable|string',
         ]);
         
         $reservation = reservations::findOrFail($id);
-        $reservation->update(['status' => $request->status]);
+        $reservation->update([
+            'status' => $request->status,
+            'admin_notes' => $request->admin_notes
+        ]);
         
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.reservations.index')
@@ -129,6 +141,37 @@ class ReservationsController extends Controller
         } else {
             return redirect()->route('guide.reservations.index')
                 ->with('success', 'Reservation status updated successfully.');
+        }
+    }
+
+    /**
+     * Remove the specified reservation from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($id)
+    {
+        try {
+            $reservation = reservations::findOrFail($id);
+            $reservation->delete();
+
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.reservations.index')
+                    ->with('success', 'Reservation has been deleted successfully.');
+            } else {
+                return redirect()->route('guide.reservations.index')
+                    ->with('success', 'Reservation has been deleted successfully.');
+            }
+            
+        } catch (\Exception $e) {
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.reservations.index')
+                    ->with('error', 'Error deleting reservation: ' . $e->getMessage());
+            } else {
+                return redirect()->route('guide.reservations.index')
+                    ->with('error', 'Error deleting reservation: ' . $e->getMessage());
+            }
         }
     }
 }

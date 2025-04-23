@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'first_name',
         'last_name',
+        'slug',
         'picture',
         'birthday',
         'gender',
@@ -51,7 +52,7 @@ class User extends Authenticatable
 
     public function favorites()
     {
-        return $this->belongsToMany(destinations::class, 'user_favorites');
+        return $this->belongsToMany(destinations::class, 'user_favorites', 'user_id', 'destination_id');
     }
 
     // Check if user is admin

@@ -17,7 +17,21 @@ class ClientController extends Controller
     protected array $middleware = [ClientMiddleware::class];
 
     public function home() {
-        return view('client.home');
+        $user = Auth::user();
+        
+        // Get user's favorites
+        $favorites = $user->favorites;
+        
+        // Get user's itineraries
+        $itineraries = itineraries::where('user_id', $user->id)->get();
+        
+        // Get user's reservations
+        $reservations = reservations::where('user_id', $user->id)->orderBy('date', 'desc')->get();
+        
+        // Get user's reviews
+        $reviews = reviews::where('user_id', $user->id)->get();
+        
+        return view('client.home', compact('user', 'favorites', 'itineraries', 'reservations', 'reviews'));
     }
     
     public function dashboard()
@@ -39,6 +53,18 @@ class ClientController extends Controller
         return view('client.home', compact('user', 'favorites', 'itineraries', 'reservations', 'reviews'));
     }
     
+    public function events()
+    {
+        $events = events::all();
+        return view('client.events.index', compact('events'));
+    }
+
+    public function eventDetails($id)
+    {
+        $event = events::findOrFail($id);
+        return view('client.events.show', compact('event'));
+    }
+
     public function favorites()
     {
         $favorites = Auth::user()->favorites;
@@ -48,7 +74,9 @@ class ClientController extends Controller
     public function addToFavorites($id)
     {
         // Check if already in favorites
-        $existingFavorite = user_favorites::where('user_id', Auth::id())->first();
+        $existingFavorite = user_favorites::where('user_id', Auth::id())
+            ->where('destination_id', $id)
+            ->first();
             
         if (!$existingFavorite) {
             user_favorites::create([
@@ -63,7 +91,9 @@ class ClientController extends Controller
     
     public function removeFromFavorites($id)
     {
-        user_favorites::where('user_id', Auth::id())->where('destination_id', $id)->delete();
+        user_favorites::where('user_id', Auth::id())
+            ->where('destination_id', $id)
+            ->delete();
             
         return back()->with('success', 'Destination removed from favorites.');
     }

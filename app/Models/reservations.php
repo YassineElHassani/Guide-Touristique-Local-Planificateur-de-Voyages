@@ -17,6 +17,7 @@ class reservations extends Model
         'user_id',
         'date',
         'status',
+        'admin_notes',
     ];
 
     protected $casts = [

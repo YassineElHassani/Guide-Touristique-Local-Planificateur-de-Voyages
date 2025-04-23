@@ -70,14 +70,9 @@ Route::post('/reviews', [ReviewsController::class, 'store'])->name('reviews.stor
 Route::put('/reviews/{id}', [ReviewsController::class, 'update'])->name('reviews.update');
 Route::delete('/reviews/{id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 
-// Blog routes
+// Blog routes for visitors
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
-Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
 Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
-Route::get('/blogs/{slug}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
-Route::put('/blogs/{slug}', [BlogController::class, 'update'])->name('blogs.update');
-Route::delete('/blogs/{slug}', [BlogController::class, 'destroy'])->name('blogs.destroy');
 Route::get('/blogs/category/{category}', [BlogController::class, 'byCategory'])->name('blogs.category');
 Route::get('/search/blogs', [BlogController::class, 'search'])->name('blogs.search');
 Route::post('/blogs/{slug}/comments', [BlogController::class, 'storeComment'])->name('blogs.comments.store');
@@ -94,6 +89,18 @@ Route::middleware(['client'])->prefix('client')->group(function () {
     Route::get('/profile/edit', [ProfilesController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfilesController::class, 'update'])->name('profile.update');
 
+    // Blog routes
+    Route::get('/blogs', [BlogController::class, 'index'])->name('client.blogs.index');
+    Route::get('/blogs/create', [BlogController::class, 'create'])->name('client.blogs.create');
+    Route::get('/blogs/my-blogs', [BlogController::class, 'myBlogs'])->name('client.blogs.my-blogs');
+    Route::post('/blogs', [BlogController::class, 'store'])->name('client.blogs.store');
+    Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('client.blogs.show');
+    Route::get('/blogs/{id}/edit', [BlogController::class, 'edit'])->name('client.blogs.edit');
+    Route::put('/blogs/{id}', [BlogController::class, 'update'])->name('client.blogs.update');
+    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('client.blogs.destroy');
+    Route::patch('/blogs/{id}/toggle-featured', [BlogController::class, 'toggleFeatured'])->name('client.blogs.toggle-featured');
+    Route::patch('/blogs/{id}/status', [BlogController::class, 'updateStatus'])->name('client.blogs.update-status');
+
     // Favorites routes
     Route::get('/favorites', [ClientController::class, 'favorites'])->name('client.favorites');
     Route::post('/favorites/add/{id}', [ClientController::class, 'addToFavorites'])->name('client.favorites.add');
@@ -106,22 +113,15 @@ Route::middleware(['client'])->prefix('client')->group(function () {
     Route::get('/events/{eventId}/book', [ReservationsController::class, 'create'])->name('client.reservations.create');
     Route::post('/events/{eventId}/book', [ReservationsController::class, 'store'])->name('client.reservations.store');
 
+    // Event routes
+    Route::get('/events', [ClientController::class, 'events'])->name('client.events.index');
+    Route::get('/events/{id}', [ClientController::class, 'eventDetails'])->name('client.events.show');
+
     // Review routes
     Route::get('/reviews', [ClientController::class, 'reviews'])->name('client.reviews');
     Route::get('/reviews/{id}/edit', [ClientController::class, 'editReview'])->name('client.reviews.edit');
     Route::put('/reviews/{id}', [ClientController::class, 'updateReview'])->name('client.reviews.update');
     Route::delete('/reviews/{id}', [ClientController::class, 'deleteReview'])->name('client.reviews.delete');
-
-    // Itinerary routes
-    Route::get('/itineraries', [ItinerariesController::class, 'index'])->name('client.itineraries.index');
-    Route::get('/itineraries/create', [ItinerariesController::class, 'create'])->name('client.itineraries.create');
-    Route::post('/itineraries', [ItinerariesController::class, 'store'])->name('client.itineraries.store');
-    Route::get('/itineraries/{id}', [ItinerariesController::class, 'show'])->name('client.itineraries.show');
-    Route::get('/itineraries/{id}/edit', [ItinerariesController::class, 'edit'])->name('client.itineraries.edit');
-    Route::put('/itineraries/{id}', [ItinerariesController::class, 'update'])->name('client.itineraries.update');
-    Route::delete('/itineraries/{id}', [ItinerariesController::class, 'destroy'])->name('client.itineraries.destroy');
-    Route::get('/itineraries/{id}/share', [ItinerariesController::class, 'share'])->name('client.itineraries.share');
-    Route::get('/itineraries/{id}/pdf', [ItinerariesController::class, 'generatePdf'])->name('client.itineraries.generate-pdf');
 });
 
 // Guide routes
@@ -132,6 +132,18 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     Route::get('/profile', [ProfilesController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfilesController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfilesController::class, 'update'])->name('profile.update');
+
+    // Blog routes
+    Route::get('/blogs', [BlogController::class, 'index'])->name('guide.blogs.index');
+    Route::get('/blogs/create', [BlogController::class, 'create'])->name('guide.blogs.create');
+    Route::post('/blogs', [BlogController::class, 'store'])->name('guide.blogs.store');
+    Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('guide.blogs.show');
+    Route::get('/blogs/{id}/edit', [BlogController::class, 'edit'])->name('guide.blogs.edit');
+    Route::put('/blogs/{id}', [BlogController::class, 'update'])->name('guide.blogs.update');
+    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('guide.blogs.destroy');
+    Route::get('/blogs/my-blogs', [BlogController::class, 'myBlogs'])->name('guide.blogs.my-blogs');
+    Route::patch('/blogs/{id}/toggle-featured', [BlogController::class, 'toggleFeatured'])->name('guide.blogs.toggle-featured');
+    Route::patch('/blogs/{id}/status', [BlogController::class, 'updateStatus'])->name('guide.blogs.update-status');
 
     // Events management
     Route::get('/events', [GuideController::class, 'events'])->name('guide.events');
@@ -146,6 +158,17 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     Route::get('/reservations', [GuideController::class, 'reservations'])->name('guide.reservations');
     Route::get('/reservations/{id}', [GuideController::class, 'showReservation'])->name('guide.reservations.show');
     Route::put('/reservations/{id}/status', [GuideController::class, 'updateReservationStatus'])->name('guide.reservations.update-status');
+
+    // Itinerary routes
+    Route::get('/itineraries', [ItinerariesController::class, 'index'])->name('guide.itineraries.index');
+    Route::get('/itineraries/create', [ItinerariesController::class, 'create'])->name('guide.itineraries.create');
+    Route::post('/itineraries', [ItinerariesController::class, 'store'])->name('guide.itineraries.store');
+    Route::get('/itineraries/{id}', [ItinerariesController::class, 'show'])->name('guide.itineraries.show');
+    Route::get('/itineraries/{id}/edit', [ItinerariesController::class, 'edit'])->name('guide.itineraries.edit');
+    Route::put('/itineraries/{id}', [ItinerariesController::class, 'update'])->name('guide.itineraries.update');
+    Route::delete('/itineraries/{id}', [ItinerariesController::class, 'destroy'])->name('guide.itineraries.destroy');
+    Route::get('/itineraries/{id}/share', [ItinerariesController::class, 'share'])->name('guide.itineraries.share');
+    Route::get('/itineraries/{id}/pdf', [ItinerariesController::class, 'generatePdf'])->name('guide.itineraries.generate-pdf');
 
     // Reviews
     Route::get('/reviews', [GuideController::class, 'reviews'])->name('guide.reviews');
