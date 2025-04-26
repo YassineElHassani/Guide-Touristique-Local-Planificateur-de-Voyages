@@ -25,13 +25,6 @@ class destinations extends Model
         return $this->hasMany(reviews::class);
     }
 
-    public function itineraries()
-    {
-        return $this->belongsToMany(itineraries::class, 'itinerary_destination')
-            ->withPivot('day', 'order')
-            ->withTimestamps();
-    }
-
     public function favoritedBy()
     {
         return $this->belongsToMany(User::class, 'user_favorites');

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\destinations;
 use App\Models\events;
-use App\Models\itineraries;
 use App\Models\reservations;
 use App\Models\reviews;
 use App\Models\user_favorites;
@@ -22,9 +21,6 @@ class ClientController extends Controller
         // Get user's favorites
         $favorites = $user->favorites;
         
-        // Get user's itineraries
-        $itineraries = itineraries::where('user_id', $user->id)->get();
-        
         // Get user's reservations
         $reservations = reservations::where('user_id', $user->id)->orderBy('date', 'desc')->get();
         
@@ -40,9 +36,6 @@ class ClientController extends Controller
         
         // Get user's favorites
         $favorites = $user->favorites;
-        
-        // Get user's itineraries
-        $itineraries = itineraries::where('user_id', $user->id)->get();
         
         // Get user's reservations
         $reservations = reservations::where('user_id', $user->id)->orderBy('date', 'desc')->get();

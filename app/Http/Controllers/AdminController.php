@@ -4,20 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Blog;
-use App\Models\BlogComment;
 use App\Models\destinations;
 use App\Models\events;
 use App\Models\reviews;
 use App\Models\reservations;
 use App\Models\categories;
-use App\Models\itineraries;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -154,9 +151,6 @@ class AdminController extends Controller
         // Get user's blogs if they exist
         $blogs = Blog::where('user_id', $id)->get();
 
-        // Get user's itineraries if they exist
-        $itineraries = itineraries::where('user_id', $id)->get();
-
         return view('admin.users.profile', compact('user', 'profile', 'reservations', 'reviews', 'blogs', 'itineraries'));
     }
 
@@ -256,9 +250,6 @@ class AdminController extends Controller
 
         // Get user's blogs if they exist
         $blogs = Blog::where('user_id', $id)->get();
-
-        // Get user's itineraries if they exist
-        $itineraries = itineraries::where('user_id', $id)->get();
 
         return view('admin.users.show', compact('user', 'profile', 'reservations', 'reviews', 'blogs', 'itineraries'));
     }

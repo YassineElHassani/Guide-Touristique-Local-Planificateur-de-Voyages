@@ -21,7 +21,6 @@ class User extends Authenticatable
     protected $fillable = [
         'first_name',
         'last_name',
-        // 'slug',
         'picture',
         'birthday',
         'gender',
@@ -38,11 +37,6 @@ class User extends Authenticatable
     public function reviews()
     {
         return $this->hasMany(reviews::class);
-    }
-
-    public function itineraries()
-    {
-        return $this->hasMany(itineraries::class);
     }
 
     public function reservations()
