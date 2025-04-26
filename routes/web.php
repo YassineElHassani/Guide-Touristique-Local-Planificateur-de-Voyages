@@ -9,7 +9,6 @@ use App\Http\Controllers\DestinationsController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\ReservationsController;
-use App\Http\Controllers\ItinerariesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\WeatherForecastsController;
 use App\Http\Controllers\ProfilesController;
@@ -57,9 +56,6 @@ Route::get('/categories/{id}', [CategoriesController::class, 'show'])->name('cat
 // Weather route
 Route::get('/weather', [WeatherForecastsController::class, 'getWeather'])->name('weather.get');
 Route::get('/weather/widget/{location}', [WeatherForecastsController::class, 'widget'])->name('weather.widget');
-
-// Shared itinerary route
-Route::get('/itineraries/shared/{token}', [ItinerariesController::class, 'showShared'])->name('shared.itinerary');
 
 // Profile routes
 Route::get('/profile', [ProfilesController::class, 'show'])->name('profile.show');
@@ -163,17 +159,6 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     Route::post('/reservations', [GuideController::class, 'storeReservation'])->name('guide.reservations.store');
     Route::put('/reservations/{id}/status', [GuideController::class, 'updateReservationStatus'])->name('guide.reservations.update-status');
 
-    // Itinerary routes
-    Route::get('/itineraries', [ItinerariesController::class, 'index'])->name('guide.itineraries.index');
-    Route::get('/itineraries/create', [ItinerariesController::class, 'create'])->name('guide.itineraries.create');
-    Route::post('/itineraries', [ItinerariesController::class, 'store'])->name('guide.itineraries.store');
-    Route::get('/itineraries/{id}', [ItinerariesController::class, 'show'])->name('guide.itineraries.show');
-    Route::get('/itineraries/{id}/edit', [ItinerariesController::class, 'edit'])->name('guide.itineraries.edit');
-    Route::put('/itineraries/{id}', [ItinerariesController::class, 'update'])->name('guide.itineraries.update');
-    Route::delete('/itineraries/{id}', [ItinerariesController::class, 'destroy'])->name('guide.itineraries.destroy');
-    Route::get('/itineraries/{id}/share', [ItinerariesController::class, 'share'])->name('guide.itineraries.share');
-    Route::get('/itineraries/{id}/pdf', [ItinerariesController::class, 'generatePdf'])->name('guide.itineraries.generate-pdf');
-
     // Reviews
     Route::get('/reviews', [GuideController::class, 'reviews'])->name('guide.reviews');
 
@@ -247,11 +232,6 @@ Route::middleware(['admin', AdminMiddleware::class])->prefix('admin')->group(fun
     Route::get('/reviews/{id}', [ReviewsController::class, 'show'])->name('admin.reviews.show');
     Route::put('/reviews/{id}', [ReviewsController::class, 'update'])->name('admin.reviews.update');
     Route::delete('/reviews/{id}', [ReviewsController::class, 'destroy'])->name('admin.reviews.destroy');
-
-    // Itinerary management
-    Route::get('/itineraries', [ItinerariesController::class, 'adminIndex'])->name('admin.itineraries.index');
-    Route::get('/itineraries/{id}', [ItinerariesController::class, 'show'])->name('admin.itineraries.show');
-    Route::delete('/itineraries/{id}', [ItinerariesController::class, 'destroy'])->name('admin.itineraries.destroy');
 
     // Profile routes
     Route::get('/profile', [ProfilesController::class, 'show'])->name('admin.profile.index');
