@@ -27,8 +27,8 @@ class AuthMiddleware
                 return redirect()->route('client.home');
             } elseif ($role == 'guide' && $currentRoute !== 'guide.dashboard') {
                 return redirect()->route('guide.dashboard');
-            } elseif ($role == 'admin' && $currentRoute !== 'admin.dashboard') {
-                return redirect()->route('admin.dashboard');
+            } elseif ($role == 'admin' && $currentRoute !== 'admin.dashboard.index') {
+                return redirect()->route('admin.dashboard.index');
             }
         } else {
             return redirect()->route('login')->with('error', 'You must be logged in to access this page.');

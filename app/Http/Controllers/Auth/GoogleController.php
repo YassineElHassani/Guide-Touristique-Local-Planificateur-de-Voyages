@@ -39,7 +39,13 @@ class GoogleController extends Controller
 
             Auth::login($findUser);
         }
-        return redirect()->route('index')->with('success', 'You are logged in with Google');
-    }
 
+        if (Auth::user()->role === 'travler') {
+            return redirect()->route('client.home')->with('success', 'You are logged in with Google');
+        } elseif (Auth::user()->role === 'guide') {
+            return redirect()->route('guide.dashboard')->with('success', 'You are logged in with Google');
+        } elseif (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard.index')->with('success', 'You are logged in with Google');
+        }
+    }
 }

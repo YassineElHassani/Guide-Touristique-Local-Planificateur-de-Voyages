@@ -102,12 +102,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="itineraries-tab" data-bs-toggle="tab" href="#itineraries"
-                                role="tab">
-                                Itineraries <span class="badge bg-primary">{{ $itineraries->count() }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" id="blogs-tab" data-bs-toggle="tab" href="#blogs" role="tab">
                                 Blogs <span class="badge bg-primary">{{ $blogs->count() }}</span>
                             </a>
@@ -241,51 +235,6 @@
                                     <i class="fas fa-star fa-3x text-muted mb-3"></i>
                                     <h5>No Reviews</h5>
                                     <p class="text-muted">This user hasn't left any reviews yet.</p>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Itineraries Tab -->
-                        <div class="tab-pane fade" id="itineraries" role="tabpanel">
-                            @if ($itineraries->count() > 0)
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Destinations</th>
-                                                <th>Created On</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($itineraries as $itinerary)
-                                                <tr>
-                                                    <td>{{ $itinerary->name }}</td>
-                                                    <td>{{ $itinerary->start_date ? \Carbon\Carbon::parse($itinerary->start_date)->format('M d, Y') : 'N/A' }}
-                                                    </td>
-                                                    <td>{{ $itinerary->end_date ? \Carbon\Carbon::parse($itinerary->end_date)->format('M d, Y') : 'N/A' }}
-                                                    </td>
-                                                    <td>{{ $itinerary->destinations->count() }}</td>
-                                                    <td>{{ $itinerary->created_at->format('M d, Y') }}</td>
-                                                    <td>
-                                                        <a href="{{ route('admin.itineraries.show', $itinerary->id) }}"
-                                                            class="btn btn-sm btn-outline-primary">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @else
-                                <div class="text-center py-4">
-                                    <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
-                                    <h5>No Itineraries</h5>
-                                    <p class="text-muted">This user hasn't created any travel itineraries yet.</p>
                                 </div>
                             @endif
                         </div>

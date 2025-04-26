@@ -66,12 +66,6 @@
                                 <a href="{{ route('google.login') }}" class="btn btn-outline-danger rounded-circle">
                                     <i class="fab fa-google"></i>
                                 </a>
-                                <a href="#" class="btn btn-outline-primary rounded-circle">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="#" class="btn btn-outline-info rounded-circle">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
                             </div>
                             <p class="mb-0">Don't have an account? <a href="{{ route('register') }}" class="text-decoration-none">Sign up</a></p>
                         </div>
