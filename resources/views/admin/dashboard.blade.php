@@ -164,6 +164,47 @@
         </div>
     </div>
 
+    <!-- Revenue and Reservation Charts -->
+    <div class="row g-4 mb-4">
+        <!-- Monthly Revenue Chart -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Monthly Revenue</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueChart" height="60"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Destinations by Category -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Destinations by Category</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="destinationsByCategoryChart" height="140"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities Summary -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Activity Comparison</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="activityComparisonChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-4">
         <!-- Recent Users -->
         <div class="col-lg-4">
@@ -310,30 +351,34 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Monthly Activity Chart
-            const ctx = document.getElementById('activityChart').getContext('2d');
-
             // Get monthly data from PHP
             const monthlyData = @json($monthlyStats ?? []);
+
+            // Monthly Activity Chart
+            const activityCtx = document.getElementById('activityChart').getContext('2d');
 
             // Prepare datasets
             const usersData = [];
             const reservationsData = [];
+            const eventsData = [];
+            const destinationsData = [];
 
             // Ensure we have data for all 12 months
             for (let i = 1; i <= 12; i++) {
                 usersData.push(monthlyData[i]?.users || 0);
                 reservationsData.push(monthlyData[i]?.reservations || 0);
+                eventsData.push(monthlyData[i]?.events || 0);
+                destinationsData.push(monthlyData[i]?.destinations || 0);
             }
 
-            const activityChart = new Chart(ctx, {
+            const activityChart = new Chart(activityCtx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
                         'Dec'
                     ],
                     datasets: [{
-                            label: 'New Users',
+                            label: 'Users',
                             data: usersData,
                             borderColor: '#2563eb',
                             backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -344,6 +389,24 @@
                         {
                             label: 'Reservations',
                             data: reservationsData,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Events',
+                            data: eventsData,
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Destinations',
+                            data: destinationsData,
                             borderColor: '#10b981',
                             backgroundColor: 'rgba(16, 185, 129, 0.1)',
                             fill: true,
@@ -371,6 +434,148 @@
                         legend: {
                             position: 'top',
                             align: 'end'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    return tooltipItems[0].label + ' Activity';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Monthly Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            
+            // Extract revenue data
+            const revenueData = [];
+            for (let i = 1; i <= 12; i++) {
+                revenueData.push(monthlyData[i]?.revenue || 0);
+            }
+            
+            const revenueChart = new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: revenueData,
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: '#10b981',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        maxBarThickness: 35
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Get destination categories from the controller
+            const destinationCategories = @json($destinationCategories ?? []);
+            
+            const destinationsByCategoryCtx = document.getElementById('destinationsByCategoryChart').getContext('2d');
+            
+            const destinationsByCategoryChart = new Chart(destinationsByCategoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: destinationCategories.map(cat => cat[0]),
+                    datasets: [{
+                        label: 'Number of Destinations',
+                        data: destinationCategories.map(cat => cat[1]),
+                        backgroundColor: 'rgba(245, 158, 11, 0.8)',
+                        borderColor: '#f59e0b',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        maxBarThickness: 50
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Activity Comparison Chart - Comparing different platform activities
+            const activityComparisonCtx = document.getElementById('activityComparisonChart').getContext('2d');
+            
+            const activityComparisonData = {
+                labels: ['Reservations', 'Reviews', 'Blogs'],
+                datasets: [{
+                    label: 'Count',
+                    data: [
+                        {{ $stats['reservations'] ?? 0 }},
+                        {{ $stats['reviews'] ?? 0 }},
+                        {{ $stats['blogs'] ?? 0 }}
+                    ],
+                    backgroundColor: [
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(37, 99, 235, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            };
+            
+            const activityComparisonChart = new Chart(activityComparisonCtx, {
+                type: 'polarArea',
+                data: activityComparisonData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            display: false
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12
+                            }
                         }
                     }
                 }

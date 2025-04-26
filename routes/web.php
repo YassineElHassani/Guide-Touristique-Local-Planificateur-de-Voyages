@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -85,9 +86,9 @@ Route::middleware(['client'])->prefix('client')->group(function () {
     Route::get('/home', [ClientController::class, 'home'])->name('client.home');
 
     // Profile routes
-    Route::get('/profile', [ProfilesController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfilesController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfilesController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfilesController::class, 'show'])->name('client.profile.show');
+    Route::get('/profile/edit', [ProfilesController::class, 'edit'])->name('client.profile.edit');
+    Route::put('/profile', [ProfilesController::class, 'update'])->name('client.profile.update');
 
     // Blog routes
     Route::get('/blogs', [BlogController::class, 'index'])->name('client.blogs.index');
@@ -107,7 +108,7 @@ Route::middleware(['client'])->prefix('client')->group(function () {
     Route::delete('/favorites/remove/{id}', [ClientController::class, 'removeFromFavorites'])->name('client.favorites.remove');
 
     // Reservation routes
-    Route::get('/reservations', [ClientController::class, 'reservations'])->name('client.reservations');
+    Route::get('/reservations', [ClientController::class, 'reservations'])->name('client.reservations.index');
     Route::get('/reservations/{id}', [ClientController::class, 'showReservation'])->name('client.reservations.show');
     Route::put('/reservations/{id}/cancel', [ClientController::class, 'cancelReservation'])->name('client.reservations.cancel');
     Route::get('/events/{eventId}/book', [ReservationsController::class, 'create'])->name('client.reservations.create');
@@ -119,6 +120,8 @@ Route::middleware(['client'])->prefix('client')->group(function () {
 
     // Review routes
     Route::get('/reviews', [ClientController::class, 'reviews'])->name('client.reviews');
+    Route::get('/reviews/create', [ClientController::class, 'createReview'])->name('client.reviews.create');
+    Route::get('/reviews/{id}', [ClientController::class, 'showReview'])->name('client.reviews.show');
     Route::get('/reviews/{id}/edit', [ClientController::class, 'editReview'])->name('client.reviews.edit');
     Route::put('/reviews/{id}', [ClientController::class, 'updateReview'])->name('client.reviews.update');
     Route::delete('/reviews/{id}', [ClientController::class, 'deleteReview'])->name('client.reviews.delete');
@@ -129,9 +132,9 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     Route::get('/dashboard', [GuideController::class, 'dashboard'])->name('guide.dashboard');
 
     // Profile routes
-    Route::get('/profile', [ProfilesController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfilesController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfilesController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfilesController::class, 'show'])->name('guide.profile.show');
+    Route::get('/profile/edit', [ProfilesController::class, 'edit'])->name('guide.profile.edit');
+    Route::put('/profile', [ProfilesController::class, 'update'])->name('guide.profile.update');
 
     // Blog routes
     Route::get('/blogs', [BlogController::class, 'index'])->name('guide.blogs.index');
@@ -157,6 +160,7 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     // Reservations management
     Route::get('/reservations', [GuideController::class, 'reservations'])->name('guide.reservations');
     Route::get('/reservations/{id}', [GuideController::class, 'showReservation'])->name('guide.reservations.show');
+    Route::post('/reservations', [GuideController::class, 'storeReservation'])->name('guide.reservations.store');
     Route::put('/reservations/{id}/status', [GuideController::class, 'updateReservationStatus'])->name('guide.reservations.update-status');
 
     // Itinerary routes
@@ -178,7 +182,7 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
 });
 
 // Admin routes
-Route::middleware(['admin'])->prefix('admin')->group(function () {
+Route::middleware(['admin', AdminMiddleware::class])->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard.index');
 
@@ -259,19 +263,6 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/reservations/{id}', [ReservationsController::class, 'show'])->name('admin.reservations.show');
     Route::put('/reservations/{id}/status', [ReservationsController::class, 'updateStatus'])->name('admin.reservations.update-status');
     Route::delete('/reservations/{id}', [ReservationsController::class, 'destroy'])->name('admin.reservations.destroy');
-
-    // Site settings
-    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings.index');
-    Route::put('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
-
-    // Analytics
-    Route::get('/analytics', [AdminController::class, 'analytics'])->name('admin.analytics.index');
-
-    // Export data
-    Route::get('/export/{type?}', [AdminController::class, 'exportData'])->name('admin.export');
-
-    // Activity logs
-    Route::get('/activity-logs', [AdminController::class, 'activityLogs'])->name('admin.activity-logs');
 
     // Global search
     Route::get('/search', [AdminController::class, 'search'])->name('admin.search');

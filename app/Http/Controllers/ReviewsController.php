@@ -96,7 +96,10 @@ class ReviewsController extends Controller
         
         $review->delete();
         
-        if ($destinationId) {
+        if (request()->routeIs('admin.*')) {
+            return redirect()->route('admin.reviews.index')
+                ->with('success', 'Review deleted successfully.');
+        } elseif ($destinationId) {
             return redirect()->route('destinations.show', $destinationId)
                 ->with('success', 'Review deleted successfully.');
         } else {
@@ -107,7 +110,13 @@ class ReviewsController extends Controller
 
     public function adminIndex()
     {
-        $reviews = reviews::all();
-        return view('admin.reviews', compact('reviews'));
+        $reviews = reviews::with(['user', 'destination', 'event'])->latest()->paginate(15);
+        return view('admin.reviews.index', compact('reviews'));
+    }
+    
+    public function show($id)
+    {
+        $review = reviews::with(['user', 'destination', 'event'])->findOrFail($id);
+        return view('admin.reviews.show', compact('review'));
     }
 }

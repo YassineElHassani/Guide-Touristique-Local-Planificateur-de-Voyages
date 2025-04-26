@@ -23,8 +23,15 @@ class ProfilesController extends Controller
         if (!$profile) {
             $profile = User::create(['id' => $user->id]);
         }
+
+        if ($user->role === 'travler') {
+            return view('client.profile.show', compact('user', 'profile'));
+        } elseif ($user->role === 'guide') {
+            return view('guide.profile.show', compact('user', 'profile'));
+        } else {
+            return view('profile.show', compact('user', 'profile'));
+        }
         
-        return view('profile.show', compact('user', 'profile'));
     }
 
     public function edit()
@@ -40,8 +47,12 @@ class ProfilesController extends Controller
         if (!$profile) {
             $profile = User::create(['id' => $user->id]);
         }
-        
-        return view('profile.edit', compact('user', 'profile'));
+
+        if ($user->role === 'travler') {
+            return view('client.profile.edit', compact('user', 'profile'));
+        } elseif ($user->role === 'guide') {
+            return view('guide.profile.edit', compact('user', 'profile'));
+        }
     }
 
     public function update(Request $request)
@@ -51,65 +62,73 @@ class ProfilesController extends Controller
         }
         
         $user = Auth::user();
-        $profile = User::where('id', $user->id)->first();
         
-        // Create a profile if none exists
-        if (!$profile) {
-            $profile = User::create(['id' => $user->id]);
-        }
+        // Determine the type of update (profile info or password)
+        $updateType = $request->input('update_type', 'profile_info');
         
-        // Validate user data
-        $request->validate([
-            'picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'gender' => 'nullable|in:male,female',
-            'birthday' => 'date',
-            'phone' => 'string|max:20',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'current_password' => 'nullable|required_with:password',
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
-        
-        // Handle picture upload
-        if ($request->hasFile('picture')) {
-            // Delete old picture if it exists
-            if ($user->picture && Storage::disk('public')->exists($user->picture)) {
-                Storage::disk('public')->delete($user->picture);
+        if ($updateType === 'profile_info') {
+            // Validate profile information data
+            $request->validate([
+                'picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'gender' => 'nullable|in:male,female,other',
+                'birthday' => 'nullable|date',
+                'phone' => 'nullable|string|max:20',
+                'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            ]);
+            
+            // Handle picture upload
+            if ($request->hasFile('picture')) {
+                // Delete old picture if it exists
+                if ($user->picture && Storage::disk('public')->exists($user->picture)) {
+                    Storage::disk('public')->delete($user->picture);
+                }
+
+                // Store new picture
+                $newPicturePath = $request->file('picture')->store('avatars', 'public');
+            } else {
+                $newPicturePath = $user->picture;
             }
 
-            // Store new picture
-            $newPicturePath = $request->file('picture')->store('avatars', 'public');
+            // Update user information
+            $user->update([
+                'picture' => $newPicturePath,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'gender' => $request->gender,
+                'birthday' => $request->birthday,
+                'phone' => $request->phone,
+                'email' => $request->email,
+            ]);
+            
+            $message = 'Profile information updated successfully.';
         } else {
-            $newPicturePath = $user->picture;
-        }
-
-        // Check current password if changing password
-        if ($request->filled('current_password')) {
+            // Validate password data
+            $request->validate([
+                'current_password' => 'required',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
+            
+            // Check current password
             if (!Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors(['current_password' => 'The provided password does not match your current password.']);
             }
-        }
-        
-        // Update user information
-        User::update([
-            'picture' => $newPicturePath,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'gender' => $request->gender,
-            'birthday' => $request->birthday,
-            'phone' => $request->phone,
-            'email' => $request->email,
-        ]);
-        
-        // Update password if provided
-        if ($request->filled('password')) {
-            User::update([
+            
+            // Update password
+            $user->update([
                 'password' => Hash::make($request->password),
             ]);
+            
+            $message = 'Password updated successfully.';
         }
         
-        return redirect()->route('profile.show')
-            ->with('success', 'Profile updated successfully.');
+        if ($user->role === 'travler') {
+            return redirect()->route('clientprofile.show')->with('success', $message);
+        } elseif ($user->role === 'guide') {
+            return redirect()->route('guide.profile.show')->with('success', $message);
+        }
+        
+        return redirect()->route('profile.show')->with('success', $message);
     }
 }

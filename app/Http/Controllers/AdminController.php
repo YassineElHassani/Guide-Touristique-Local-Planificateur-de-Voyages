@@ -65,6 +65,17 @@ class AdminController extends Controller
 
             // Get monthly statistics
             $monthlyStats = $this->getMonthlyStats();
+            
+            // Get destination categories
+            $destinationCategories = DB::table('destinations')
+                ->select('category', DB::raw('COUNT(*) as count'))
+                ->groupBy('category')
+                ->orderBy('count', 'desc')
+                ->get()
+                ->map(function($item) {
+                    return [$item->category, $item->count];
+                })
+                ->toArray();
 
             return view('admin.dashboard', compact(
                 'stats',
@@ -73,7 +84,8 @@ class AdminController extends Controller
                 'recentEvents',
                 'recentReservations',
                 'recentReviews',
-                'monthlyStats'
+                'monthlyStats',
+                'destinationCategories'
             ));
         } catch (\Exception $e) {
             // Log the error
@@ -98,19 +110,22 @@ class AdminController extends Controller
             $recentReservations = collect([]);
             $recentReviews = collect([]);
             $monthlyStats = [
-                1 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                2 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                3 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                4 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                5 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                6 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                7 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                8 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                9 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                10 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                11 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
-                12 => ['users' => 0, 'reservations' => 0, 'revenue' => 0],
+                1 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                2 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                3 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                4 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                5 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                6 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                7 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                8 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                9 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                10 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                11 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
+                12 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
             ];
+            
+            // Empty destination categories
+            $destinationCategories = [];
 
             return view('admin.dashboard', compact(
                 'stats',
@@ -119,7 +134,8 @@ class AdminController extends Controller
                 'recentEvents',
                 'recentReservations',
                 'recentReviews',
-                'monthlyStats'
+                'monthlyStats',
+                'destinationCategories'
             ))->with('error', 'There was an error loading the dashboard data. Please try again later.');
         }
     }
@@ -176,6 +192,24 @@ class AdminController extends Controller
             ->orderBy('month')
             ->pluck('total', 'month')
             ->toArray();
+            
+        // Get monthly events
+        $monthlyEvents = DB::table('events')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
+            ->whereYear('created_at', $currentYear)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month')
+            ->toArray();
+            
+        // Get monthly destinations
+        $monthlyDestinations = DB::table('destinations')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
+            ->whereYear('created_at', $currentYear)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month')
+            ->toArray();
 
         // Format data for all 12 months
         $formattedData = [];
@@ -184,6 +218,8 @@ class AdminController extends Controller
                 'users' => $monthlyUsers[$i] ?? 0,
                 'reservations' => $monthlyReservations[$i] ?? 0,
                 'revenue' => $monthlyRevenue[$i] ?? 0,
+                'events' => $monthlyEvents[$i] ?? 0,
+                'destinations' => $monthlyDestinations[$i] ?? 0,
             ];
         }
 
@@ -295,7 +331,7 @@ class AdminController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'gender' => 'nullable|in:male,female',
-            'birthday' => 'date',
+            'birthday' => 'nullable|date',
             'phone' => 'string|max:20',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'role' => 'required|in:admin,guide,travler',
@@ -317,7 +353,6 @@ class AdminController extends Controller
         }
 
         $user->update([
-            // 'picture' => $request->file('picture') ? $request->file('picture')->store('avatars', 'public') : $user->picture,
             'picture' => $newPicturePath,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -560,7 +595,13 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.search-results', compact('query', 'users', 'destinations', 'events', 'blogs'));
+        // search Categories
+        $categories = categories::where('name', 'like', "%{$query}%")
+            ->orWhere('description', 'like', "%{$query}%")
+            ->take(5)
+            ->get();
+
+        return view('admin.search-results', compact('query', 'users', 'destinations', 'events', 'blogs', 'categories'));
     }
 
     /**

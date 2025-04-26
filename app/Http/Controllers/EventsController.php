@@ -33,7 +33,15 @@ class EventsController extends Controller
                 ->exists();
         }
         
-        return view('events.show', compact('event', 'reviews', 'hasReservation'));
+        if (Auth::user()->role === 'travler') {
+            return view('client.events.show', compact('event', 'reviews', 'hasReservation'));
+        } elseif (Auth::user()->role === 'guide') {
+            return view('guide.events.show', compact('event', 'reviews', 'hasReservation'));
+        } elseif (Auth::user()->role === 'admin') {
+            return view('admin.events.show', compact('event', 'reviews', 'hasReservation'));
+        } else {
+            return view('events.show', compact('event', 'reviews', 'hasReservation'));
+        }
     }
 
     public function search(Request $request)

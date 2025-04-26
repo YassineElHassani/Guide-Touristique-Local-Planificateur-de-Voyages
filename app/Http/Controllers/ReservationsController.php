@@ -131,8 +131,7 @@ class ReservationsController extends Controller
         
         $reservation = reservations::findOrFail($id);
         $reservation->update([
-            'status' => $request->status,
-            'admin_notes' => $request->admin_notes
+            'status' => $request->status
         ]);
         
         if (Auth::user()->role === 'admin') {

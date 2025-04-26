@@ -27,16 +27,6 @@
                         </button>
                     </div>
                 </form>
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="exportDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-download"></i> Export
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="exportDropdown">
-                        <li><a class="dropdown-item" href="{{ route('admin.export', ['type' => 'users']) }}">Export as
-                                CSV</a></li>
-                    </ul>
-                </div>
             </div>
         </div>
         <div class="card-body p-0">

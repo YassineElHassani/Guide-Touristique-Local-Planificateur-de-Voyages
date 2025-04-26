@@ -6,13 +6,18 @@
 
 @section('dashboard-actions')
 <div class="d-flex">
-    <a href="{{ route('events.index') }}" class="btn btn-outline-secondary me-2">
+    <a href="{{ route('client.events.index') }}" class="btn btn-outline-secondary me-2">
         <i class="fas fa-arrow-left me-1"></i> Back to Events
     </a>
     <form action="{{ route('client.favorites.add', $event->id) }}" method="POST" class="me-2">
         @csrf
+        @php
+            $isFavorite = Auth::check() && App\Models\user_favorites::where('user_id', Auth::id())
+                ->where('destination_id', $event->id)
+                ->exists();
+        @endphp
         <button type="submit" class="btn btn-outline-warning">
-            <i class="far fa-heart me-1"></i> Add to Favorites
+            <i class="{{ $isFavorite ? 'fas' : 'far' }} fa-heart me-1" style="{{ $isFavorite ? 'color: red;' : '' }}"></i> {{ $isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
         </button>
     </form>
     <a href="{{ route('client.reservations.create', $event->id) }}" class="btn btn-primary">
@@ -74,9 +79,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="#details" data-bs-toggle="tab">Details</a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link" href="#reviews" data-bs-toggle="tab">Reviews <span class="badge bg-secondary rounded-pill">{{ count($reviews) }}</span></a>
-                    </li> --}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reviews" data-bs-toggle="tab">Reviews <span class="badge bg-secondary rounded-pill">{{ $event->reviews ? $event->reviews->count() : 0 }}</span></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#location" data-bs-toggle="tab">Location</a>
                     </li>
@@ -122,13 +127,45 @@
                             @endphp
                             
                             @if($hasReservation)
-                                <a href="{{ route('client.reservations') }}" class="btn btn-success">
+                                <a href="{{ route('client.reservations.index') }}" class="btn btn-success">
                                     <i class="fas fa-check-circle me-2"></i> You've Booked This Event
                                 </a>
                             @else
                                 <a href="{{ route('client.reservations.create', $event->id) }}" class="btn btn-primary">
                                     <i class="fas fa-ticket-alt me-2"></i> Book This Event
                                 </a>
+                            @endif
+                        </div>
+                        
+                        <div class="mt-4 pt-3 border-top">
+                            <h6 class="mb-3">Did you enjoy this event?</h6>
+                            @php
+                                $canReview = Auth::check() && App\Models\reservations::where('user_id', Auth::id())
+                                    ->where('event_id', $event->id)
+                                    ->where('status', 'confirmed')
+                                    ->exists();
+                                    
+                                $hasReviewed = Auth::check() && App\Models\reviews::where('user_id', Auth::id())
+                                    ->where('event_id', $event->id)
+                                    ->exists();
+                            @endphp
+                            
+                            @if($canReview && !$hasReviewed)
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                    <i class="fas fa-star me-1"></i> Write a Review
+                                </button>
+                            @elseif($hasReviewed)
+                                <div class="alert alert-success">
+                                    <i class="fas fa-check-circle me-2"></i> You've already reviewed this event. Thank you for your feedback!
+                                </div>
+                            @elseif(Auth::check())
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i> You can write a review after attending this event.
+                                </div>
+                            @else
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i> Please <a href="{{ route('login') }}">login</a> to write a review.
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -156,11 +193,15 @@
                             @endif
                         </div>
                         
-                        @if(count($reviews) > 0)
+                        @php
+                            $reviews = App\Models\reviews::where('event_id', $event->id)->with('user')->get();
+                        @endphp
+                        
+                        @if($reviews && $reviews->count() > 0)
                             <div class="mb-4">
                                 @php
                                     $averageRating = $reviews->avg('rating');
-                                    $reviewCount = count($reviews);
+                                    $reviewCount = $reviews->count();
                                     $fullStars = floor($averageRating);
                                     $halfStar = $averageRating - $fullStars > 0.4 ? 1 : 0;
                                     $emptyStars = 5 - $fullStars - $halfStar;
@@ -190,6 +231,19 @@
                             @foreach($reviews as $review)
                                 <div class="card mb-3">
                                     <div class="card-body">
+                                        <div class="d-flex align-items-center mb-4">
+                                            @php
+                                                $avatar = $review->user->picture
+                                                    ? (Str::startsWith($review->user->picture, 'http')
+                                                        ? $review->user->picture
+                                                        : asset('storage/' . $review->user->picture))
+                                                    : asset('/assets/images/default-avatar.png');
+                                            @endphp
+                                            <img src="{{ $avatar }}" alt="{{ $review->user->first_name }}" alt="User" class="user-avatar me-3">
+                                            <div>
+                                                <h5 class="mb-1">{{ $review->user->first_name }} {{ $review->user->last_name }}</h5>
+                                            </div>
+                                        </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <div>
                                                 @for($i = 0; $i < $review->rating; $i++)
@@ -203,10 +257,7 @@
                                             <small class="text-muted">{{ $review->created_at->format('M d, Y') }}</small>
                                         </div>
                                         
-                                        <h6 class="mb-1">
-                                            {{ $review->user ? $review->user->first_name . ' ' . $review->user->last_name : 'Anonymous' }}
-                                        </h6>
-                                        <p class="mb-0">{{ $review->comments }}</p>
+                                        <p class="mb-0">{{ $review->comment }}</p>
                                     </div>
                                 </div>
                             @endforeach
@@ -235,19 +286,17 @@
                             <div class="mb-3">
                                 <strong>About this location:</strong>
                                 <p>{{ Str::limit($destination->description, 200) }}</p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-info-circle me-1"></i> View Location Details
-                                </a>
+                                <div class="d-grid">
+                                    <a href="https://maps.google.com/?q={{ urlencode($event->location) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                        <i class="fas fa-directions me-2"></i> Get Directions on Google Maps
+                                    </a>
+                                </div>
                             </div>
                         @else
                             <p class="mb-3"><strong>{{ $event->location }}</strong></p>
                         @endif
                         
-                        <div class="d-grid">
-                            <a href="https://maps.google.com/?q={{ urlencode($event->location) }}" class="btn btn-outline-secondary" target="_blank">
-                                <i class="fas fa-directions me-2"></i> Get Directions on Google Maps
-                            </a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -284,7 +333,7 @@
                     @endphp
                     
                     @if($hasReservation)
-                        <a href="{{ route('client.reservations') }}" class="btn btn-success">
+                        <a href="{{ route('client.reservations.index') }}" class="btn btn-success">
                             <i class="fas fa-check-circle me-2"></i> You've Booked This Event
                         </a>
                     @else
@@ -295,8 +344,13 @@
                     
                     <form action="{{ route('client.favorites.add', $event->id) }}" method="POST">
                         @csrf
+                        @php
+                            $isFavorite = Auth::check() && App\Models\user_favorites::where('user_id', Auth::id())
+                                ->where('destination_id', $event->id)
+                                ->exists();
+                        @endphp
                         <button type="submit" class="btn btn-outline-warning w-100">
-                            <i class="far fa-heart me-2"></i> Add to Favorites
+                            <i class="{{ $isFavorite ? 'fas' : 'far' }} fa-heart me-2" style="{{ $isFavorite ? 'color: red;' : '' }}"></i> {{ $isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
                         </button>
                     </form>
                 </div>
@@ -358,7 +412,7 @@
                 @endif
             </div>
             <div class="card-footer bg-white text-center">
-                <a href="{{ route('events.index') }}" class="btn btn-sm btn-outline-primary">View All Events</a>
+                <a href="{{ route('client.events.index') }}" class="btn btn-sm btn-outline-primary">View All Events</a>
             </div>
         </div>
     </div>
@@ -393,8 +447,8 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="comments" class="form-label">Your Review</label>
-                        <textarea class="form-control" id="comments" name="comments" rows="4" required></textarea>
+                        <label for="comment" class="form-label">Your Review</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
                     </div>
                 </div>
                 

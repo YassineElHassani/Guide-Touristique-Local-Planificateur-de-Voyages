@@ -95,10 +95,6 @@
                                 <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteBlogModal">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
-                                <button type="button" class="btn btn-outline-info" title="{{ $blog->published ? 'Unpublish' : 'Publish' }}"
-                                    onclick="event.preventDefault(); document.getElementById('toggle-status-form-{{ $blog->id }}').submit();">
-                                <i class="fas {{ $blog->published ? 'fa-eye-slash' : 'fa-eye' }}"></i>
-                            </button>
                                 <form id="toggle-status-form-{{ $blog->id }}" action="{{ route('client.blogs.update-status', $blog->slug) }}" method="POST" class="d-none">
                                     @csrf
                                     @method('PATCH')
@@ -293,25 +289,6 @@
         
         <!-- Sidebar -->
         <div class="col-lg-4">
-            <!-- Author Card -->
-            @if($blog->user)
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body text-center p-4">
-                        <img src="{{ $authorAvatar }}" class="rounded-circle mb-3" width="100" height="100" alt="Author">
-                        <h5>{{ $blog->user->first_name }} {{ $blog->user->last_name }}</h5>
-                        <p class="text-muted mb-3">{{ $blog->user->role }}</p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="#" class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-envelope me-1"></i> Contact
-                            </a>
-                            <a href="#" class="btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-book me-1"></i> All Posts
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endif
-            
             <!-- Blog Info Card -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-white">

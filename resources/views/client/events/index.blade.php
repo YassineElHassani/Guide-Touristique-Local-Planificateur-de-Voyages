@@ -4,21 +4,6 @@
 
 @section('dashboard-title', 'Events & Activities')
 
-@section('dashboard-actions')
-<form action="{{ route('events.search') }}" method="GET" class="d-flex">
-    <div class="input-group me-2">
-        <input type="text" class="form-control" placeholder="Search events..." 
-               name="query" value="{{ request('query') }}">
-        <button type="submit" class="btn btn-outline-primary">
-            <i class="fas fa-search"></i>
-        </button>
-    </div>
-    <input type="date" class="form-control me-2" name="date" 
-           value="{{ request('date') }}" placeholder="Filter by date">
-    <button type="submit" class="btn btn-primary">Filter</button>
-</form>
-@endsection
-
 @section('dashboard-content')
 <!-- Header with navigation tabs -->
 <div class="card mb-4">
@@ -28,46 +13,12 @@
                 <a class="nav-link active" href="#">All Events</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('client.reservations') }}">My Reservations</a>
+                <a class="nav-link" href="{{ route('client.reservations.index') }}">My Reservations</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('client.favorites') }}">My Favorites</a>
             </li>
         </ul>
-    </div>
-    <div class="card-body p-0">
-        <!-- Filter toolbar -->
-        <div class="bg-light p-3 border-bottom">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h5 class="mb-md-0">Browse All Events</h5>
-                </div>
-                <div class="col-md-6">
-                    <div class="d-flex justify-content-md-end">
-                        <div class="btn-group btn-group-sm">
-                            <button type="button" class="btn btn-outline-secondary active">
-                                <i class="fas fa-th-large"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary">
-                                <i class="fas fa-list"></i>
-                            </button>
-                        </div>
-                        <div class="ms-2 dropdown">
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                Sort By: <span class="fw-medium">Newest</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item active" href="#">Newest First</a></li>
-                                <li><a class="dropdown-item" href="#">Date (Upcoming)</a></li>
-                                <li><a class="dropdown-item" href="#">Price (Low to High)</a></li>
-                                <li><a class="dropdown-item" href="#">Price (High to Low)</a></li>
-                                <li><a class="dropdown-item" href="#">Name (A-Z)</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -124,9 +75,9 @@
                         <a href="{{ route('client.events.show', $event->id) }}" class="btn btn-outline-primary">
                             <i class="fas fa-info-circle me-1"></i> Details
                         </a>
-                        <div class="btn-group">
+                        <div class="d-flex gap-2">
                             <a href="{{ route('client.reservations.create', $event->id) }}" class="btn btn-success">
-                                <i class="fas fa-ticket-alt me-1"></i> Book Now
+                                <i class="fas fa-ticket-alt me-1"></i> Book
                             </a>
                             <form action="{{ route('client.favorites.add', $event->id) }}" method="POST" class="d-inline">
                                 @csrf
@@ -145,7 +96,7 @@
                 <i class="fas fa-calendar-alt fa-4x text-muted mb-3"></i>
                 <h3>No Events Found</h3>
                 <p class="text-muted">We couldn't find any events matching your criteria.</p>
-                <a href="{{ route('events.index') }}" class="btn btn-primary mt-2">
+                <a href="{{ route('client.events.index') }}" class="btn btn-primary mt-2">
                     <i class="fas fa-sync me-1"></i> Reset Filters
                 </a>
             </div>
@@ -170,13 +121,13 @@
         
         @foreach($destinations as $destination)
             <div class="col-md-3">
-                <div class="card bg-dark text-white hover-zoom">
-                    <img src="{{ asset('storage/' . ($destination->image ?? 'destinations/default.jpg')) }}" 
+                <div class="card bg-dark text-white hover-zoom d-flex justify-content-between align-items-end">
+                    <img src="{{ asset('assets/images/destination.png') }}" 
                          class="card-img" alt="{{ $destination->name }}" 
-                         style="height: 150px; object-fit: cover; opacity: 0.7;">
+                         style="height: 100px; width: 100px; opacity: 0.9;">
                     <div class="card-img-overlay d-flex align-items-end">
                         <div>
-                            <h5 class="card-title mb-0">{{ $destination->name }}</h5>
+                            <h5 class="card-title mb-0 text-white">{{ $destination->name }}</h5>
                             <p class="card-text small">
                                 @php
                                     $eventCount = App\Models\events::where('location', $destination->name)->count();
@@ -190,12 +141,4 @@
         @endforeach
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize any JavaScript functionality here
-    });
-</script>
 @endsection

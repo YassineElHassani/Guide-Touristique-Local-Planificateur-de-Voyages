@@ -21,7 +21,8 @@
                                     : asset('storage/' . Auth::user()->picture))
                                 : asset('/assets/images/default-avatar.png');
                         @endphp
-                        <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User" class="user-avatar me-3">
+                        <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User"
+                            class="user-avatar me-3">
                         <div>
                             <h5 class="mb-1">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h5>
                             <p class="text-muted mb-0 small">{{ Auth::user()->email }}</p>
@@ -38,11 +39,16 @@
                         </a>
 
                         <a href="{{ route('client.blogs.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.itineraries.*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('client.blogs.*') ? 'active' : '' }}">
                             <i class="fas fa-blog"></i> Blogs
                         </a>
 
-                        <a href="{{ route('client.reservations') }}"
+                        <a href="{{ route('client.events.index') }}"
+                            class="sidebar-link {{ request()->routeIs('client.events.*') ? 'active' : '' }}">
+                            <i class="fas fa-ticket-alt"></i> Events
+                        </a>
+
+                        <a href="{{ route('client.reservations.index') }}"
                             class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check"></i> Reservations
                         </a>
@@ -64,7 +70,7 @@
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
 
                         <a href="{{ route('profile.show') }}"
-                            class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('client.profile.*') ? 'active' : '' }}">
                             <i class="fas fa-user"></i> Profile
                         </a>
 

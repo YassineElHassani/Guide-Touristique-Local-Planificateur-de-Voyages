@@ -28,12 +28,12 @@ class events extends Model
     // Relationships
     public function reviews()
     {
-        return $this->hasMany(reviews::class);
+        return $this->hasMany(reviews::class, 'event_id');
     }
 
     public function reservations()
     {
-        return $this->hasMany(reservations::class);
+        return $this->hasMany(reservations::class, 'event_id');
     }
 
     // Methods

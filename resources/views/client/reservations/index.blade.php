@@ -17,18 +17,6 @@
         padding: 6px 12px;
         border-radius: 20px;
     }
-    .status-pending {
-        background-color: #fff3cd;
-        color: #856404;
-    }
-    .status-confirmed {
-        background-color: #d4edda;
-        color: #155724;
-    }
-    .status-cancelled {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
     .event-image {
         height: 160px;
         object-fit: cover;
@@ -69,8 +57,13 @@
                     <a href="{{ route('client.blogs.index') }}" class="sidebar-link {{ request()->routeIs('client.blogs.*') ? 'active' : '' }}">
                         <i class="fas fa-blog"></i> Blogs
                     </a>
+
+                    <a href="{{ route('client.events.index') }}"
+                            class="sidebar-link {{ request()->routeIs('client.events.*') ? 'active' : '' }}">
+                            <i class="fas fa-ticket-alt"></i> Events
+                        </a>
                     
-                    <a href="{{ route('client.reservations') }}" class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
+                    <a href="{{ route('client.reservations.index') }}" class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
                         <i class="fas fa-calendar-check"></i> Reservations
                     </a>
                     
@@ -88,7 +81,7 @@
                 <div class="mb-4">
                     <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
                     
-                    <a href="{{ route('profile.show') }}" class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
+                    <a href="{{ route('client.profile.show') }}" class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
                         <i class="fas fa-user"></i> Profile
                     </a>
                     
@@ -121,32 +114,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Status filters -->
-            <div class="mb-4">
-                <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link {{ !request('status') ? 'active' : '' }}" href="{{ route('client.reservations') }}">
-                            All Reservations
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request('status') == 'pending' ? 'active' : '' }}" href="{{ route('client.reservations', ['status' => 'pending']) }}">
-                            Pending
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request('status') == 'confirmed' ? 'active' : '' }}" href="{{ route('client.reservations', ['status' => 'confirmed']) }}">
-                            Confirmed
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request('status') == 'cancelled' ? 'active' : '' }}" href="{{ route('client.reservations', ['status' => 'cancelled']) }}">
-                            Cancelled
-                        </a>
-                    </li>
-                </ul>
             </div>
             
             @if(session('success'))
@@ -215,14 +182,16 @@
                                     </a>
                                     
                                     @if($reservation->status === 'pending' || $reservation->status === 'confirmed')
-                                        <form action="{{ route('client.reservations.cancel', $reservation->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this reservation?')">
+                                        <form action="{{ route('client.reservations.cancel', $reservation->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PUT')
-                                            <button type="submit" class="btn btn-outline-danger">
+                                            <button type="submit" class="btn btn-outline-danger cancel-reservation-btn">
                                                 <i class="fas fa-times-circle me-1"></i> Cancel
                                             </button>
                                         </form>
                                     @endif
+
+                                    
                                 </div>
                             </div>
                             
@@ -250,15 +219,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize tooltips
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-    });
-</script>
-@endpush
