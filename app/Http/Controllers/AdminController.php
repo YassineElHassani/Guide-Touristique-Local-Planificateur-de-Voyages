@@ -151,7 +151,7 @@ class AdminController extends Controller
         // Get user's blogs if they exist
         $blogs = Blog::where('user_id', $id)->get();
 
-        return view('admin.users.profile', compact('user', 'profile', 'reservations', 'reviews', 'blogs', 'itineraries'));
+        return view('admin.users.profile', compact('user', 'profile', 'reservations', 'reviews', 'blogs'));
     }
 
     private function getMonthlyStats()
@@ -251,7 +251,7 @@ class AdminController extends Controller
         // Get user's blogs if they exist
         $blogs = Blog::where('user_id', $id)->get();
 
-        return view('admin.users.show', compact('user', 'profile', 'reservations', 'reviews', 'blogs', 'itineraries'));
+        return view('admin.users.show', compact('user', 'profile', 'reservations', 'reviews', 'blogs'));
     }
 
     /**
@@ -492,8 +492,7 @@ class AdminController extends Controller
                 'users.id',
                 'users.name',
                 DB::raw('(SELECT COUNT(*) FROM reservations WHERE user_id = users.id) as reservation_count'),
-                DB::raw('(SELECT COUNT(*) FROM reviews WHERE user_id = users.id) as review_count'),
-                DB::raw('(SELECT COUNT(*) FROM itineraries WHERE user_id = users.id) as itinerary_count')
+                DB::raw('(SELECT COUNT(*) FROM reviews WHERE user_id = users.id) as review_count')
             )
             ->groupBy('users.id', 'users.name')
             ->orderByRaw('(reservation_count + review_count + itinerary_count) DESC')

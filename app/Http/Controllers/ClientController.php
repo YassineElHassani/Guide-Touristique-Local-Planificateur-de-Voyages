@@ -27,7 +27,7 @@ class ClientController extends Controller
         // Get user's reviews
         $reviews = reviews::where('user_id', $user->id)->get();
         
-        return view('client.home', compact('user', 'favorites', 'itineraries', 'reservations', 'reviews'));
+        return view('client.home', compact('user', 'favorites', 'reservations', 'reviews'));
     }
     
     public function dashboard()
@@ -43,7 +43,7 @@ class ClientController extends Controller
         // Get user's reviews
         $reviews = reviews::where('user_id', $user->id)->get();
         
-        return view('client.home', compact('user', 'favorites', 'itineraries', 'reservations', 'reviews'));
+        return view('client.home', compact('user', 'favorites', 'reservations', 'reviews'));
     }
     
     public function events()

@@ -105,12 +105,16 @@
                                                 : asset('storage/' . Auth::user()->picture))
                                             : asset('/assets/images/default-avatar.png');
                                     @endphp
-                                    <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User" height="40px"
-                                        width="40px" style="border-radius: 2rem" class="user-avatar me-3" />
+                                    <img src="{{ $avatar }}" alt="{{ Auth::user()->first_name }}" alt="User"
+                                        height="40px" width="40px" style="border-radius: 2rem" class="user-avatar me-3" />
                                     {{ Auth::user()->first_name }}
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('profile.show') }}">My Profile</a></li>
+                                    @if (Auth::user()->role === 'admin')
+                                        <li><a class="dropdown-item" href="{{ route('users.profile', Auth::id()) }}">My Profile</a></li>
+                                    @elseif (Auth::user()->role === 'guide' || Auth::user()->role == 'travler')
+                                        <li><a class="dropdown-item" href="{{ route('profile.show') }}">My Profile</a></li>
+                                    @endif
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
