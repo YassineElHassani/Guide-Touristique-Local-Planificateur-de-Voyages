@@ -1,10 +1,10 @@
-@extends('guide.dashboard')
+@extends('client.dashboard')
 
 @section('dashboard-title', 'My Profile')
 @section('dashboard-breadcrumb', 'Profile')
 
 @section('dashboard-actions')
-<a href="{{ route('profile.edit') }}" class="btn btn-primary">
+<a href="{{ route('client.profile.edit') }}" class="btn btn-primary">
     <i class="fas fa-edit me-1"></i> Edit Profile
 </a>
 @endsection
@@ -59,10 +59,10 @@
                 </div>
                 
                 <div class="d-grid gap-2">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-primary">
+                        <a href="{{ route('client.profile.edit') }}" class="btn btn-primary">
                             <i class="fas fa-edit me-2"></i> Edit Profile
                         </a>
-                    <a href="{{ route('guide.reservations.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('client.reservations.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-calendar-check me-2"></i> View Reservations
                     </a>
                 </div>
@@ -123,7 +123,7 @@
                         </p>
                     </div>
                     <div class="col-md-6 text-md-end">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ route('client.profile.edit') }}" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit me-1"></i> Update Information
                         </a>
                     </div>
@@ -137,7 +137,6 @@
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Recent Activity</h5>
-                <a href="#" class="btn btn-sm btn-link">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
@@ -154,7 +153,7 @@
                                             <i class="far fa-clock me-1"></i> {{ $reservation->created_at->diffForHumans() }}
                                         </p>
                                     </div>
-                                    <a href="{{ route('guide.reservations.show', $reservation->id) }}" class="btn btn-sm btn-outline-primary ms-auto">
+                                    <a href="{{ route('client.reservations.show', $reservation->id) }}" class="btn btn-sm btn-outline-primary ms-auto">
                                         View
                                     </a>
                                 </div>
@@ -165,7 +164,7 @@
                             <i class="fas fa-calendar-day fa-3x text-muted mb-3"></i>
                             <h5>No Reservations Yet</h5>
                             <p class="text-muted mb-3">Explore events and book your next adventure!</p>
-                            <a href="{{ route('guide.events.index') }}" class="btn btn-primary">
+                            <a href="{{ route('client.events.index') }}" class="btn btn-primary">
                                 <i class="fas fa-ticket-alt me-1"></i> Browse Events
                             </a>
                         </div>

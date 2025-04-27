@@ -24,7 +24,6 @@ class reviews extends Model
         'rating' => 'float',
     ];
 
-    // Relationships
     public function user()
     {
         return $this->belongsTo(User::class);

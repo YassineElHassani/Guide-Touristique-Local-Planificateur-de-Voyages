@@ -19,7 +19,6 @@ class destinations extends Model
         'coordinates',
     ];
 
-    // Relationships
     public function reviews()
     {
         return $this->hasMany(reviews::class);
@@ -30,7 +29,6 @@ class destinations extends Model
         return $this->belongsToMany(User::class, 'user_favorites');
     }
 
-    // Methods
     public function getDetails()
     {
         return [

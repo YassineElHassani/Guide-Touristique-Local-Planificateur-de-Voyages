@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class DestinationsController extends Controller
 {
-    // Public routes
     public function index()
     {
         $destinations = destinations::all();
@@ -47,6 +46,8 @@ class DestinationsController extends Controller
             return view('guide.destinations.show', compact('destination', 'reviews'));
         } elseif (Auth::user()->role === 'admin') {
             return view('admin.destinations.show', compact('destination', 'reviews'));
+        } elseif (Auth::user()->role === 'travler') {
+            return view('client.destinations.show', compact('destination', 'reviews'));
         }
     }
 
@@ -75,7 +76,6 @@ class DestinationsController extends Controller
         return view('destinations.search_results', compact('destinations', 'query', 'categoryFilter', 'categories'));
     }
 
-    // Admin routes
     public function adminIndex()
     {
         try {
@@ -200,7 +200,6 @@ class DestinationsController extends Controller
         try {
             $destination = destinations::findOrFail($id);
 
-            // Check if there are any dependencies before deleting
             $reviewsCount = reviews::where('destination_id', $id)->count();
 
             if ($reviewsCount > 0) {

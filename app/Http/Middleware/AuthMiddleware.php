@@ -5,8 +5,11 @@ use Illuminate\Support\Facades\Auth;
 
 
 use Closure;
+use Error;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+use function Laravel\Prompts\error;
 
 class AuthMiddleware
 {

@@ -4,7 +4,7 @@
 @section('dashboard-breadcrumb', 'Profile')
 
 @section('dashboard-actions')
-<a href="{{ route('profile.edit') }}" class="btn btn-primary">
+<a href="{{ route('guide.profile.edit') }}" class="btn btn-primary">
     <i class="fas fa-edit me-1"></i> Edit Profile
 </a>
 @endsection
@@ -49,17 +49,11 @@
                                 <p class="small text-muted mb-0">Reviews</p>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="p-3">
-                                <h5>{{ $user->favorites->count() }}</h5>
-                                <p class="small text-muted mb-0">Favorites</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 
                 <div class="d-grid gap-2">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-primary">
+                        <a href="{{ route('guide.profile.edit') }}" class="btn btn-primary">
                             <i class="fas fa-edit me-2"></i> Edit Profile
                         </a>
                     <a href="{{ route('guide.reservations.index') }}" class="btn btn-outline-secondary">
@@ -123,7 +117,7 @@
                         </p>
                     </div>
                     <div class="col-md-6 text-md-end">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ route('guide.profile.edit') }}" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit me-1"></i> Update Information
                         </a>
                     </div>
@@ -137,7 +131,6 @@
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Recent Activity</h5>
-                <a href="#" class="btn btn-sm btn-link">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">

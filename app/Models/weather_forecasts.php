@@ -23,7 +23,6 @@ class weather_forecasts extends Model
         'temperature' => 'float',
     ];
 
-    // Methods
     public function fetchForecast($location, $date)
     {
         return self::where('location', $location)

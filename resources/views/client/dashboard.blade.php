@@ -69,7 +69,7 @@
                     <div class="mb-4">
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
 
-                        <a href="{{ route('profile.show') }}"
+                        <a href="{{ route('client.profile.show') }}"
                             class="sidebar-link {{ request()->routeIs('client.profile.*') ? 'active' : '' }}">
                             <i class="fas fa-user"></i> Profile
                         </a>
@@ -91,7 +91,7 @@
                             <h6 class="mb-0">Need Help?</h6>
                         </div>
                         <p class="small mb-3">Our support team is here to help you with any questions or issues.</p>
-                        <a href="#" class="btn btn-sm btn-primary">Contact Support</a>
+                        <a href="{{ route('contact') }}" class="btn btn-sm btn-primary">Contact Support</a>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoriesController extends Controller
 {
-    // Public routes
     public function index()
     {
         $categories = categories::all();
@@ -85,7 +84,6 @@ class CategoriesController extends Controller
     {
         $category = categories::findOrFail($id);
 
-        // Check if there are destinations using this category
         $destinationsCount = destinations::where('category', $category->name)->count();
         if ($destinationsCount > 0) {
             return redirect()->route('admin.categories.index')->with('error', 'Cannot delete category. It is being used by ' . $destinationsCount . ' destinations.');

@@ -101,7 +101,7 @@
                     <div class="mb-4">
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
 
-                        <a href="{{ route('profile.show') }}"
+                        <a href="{{ route('client.profile.show') }}"
                             class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
                             <i class="fas fa-user"></i> Profile
                         </a>

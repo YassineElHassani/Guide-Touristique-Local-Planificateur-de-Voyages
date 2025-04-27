@@ -25,7 +25,6 @@ class events extends Model
         'price' => 'float',
     ];
 
-    // Relationships
     public function reviews()
     {
         return $this->hasMany(reviews::class, 'event_id');
@@ -41,7 +40,6 @@ class events extends Model
         return $this->belongsTo(categories::class);
     }
 
-    // Methods
     public function getDetails()
     {
         return [

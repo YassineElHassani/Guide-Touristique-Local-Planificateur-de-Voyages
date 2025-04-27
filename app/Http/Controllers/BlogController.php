@@ -13,11 +13,7 @@ use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of all blog posts.
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
+
     public function index()
     {
         try {
@@ -39,41 +35,61 @@ class BlogController extends Controller
                 ->get()
                 ->pluck('category');
 
-            if (Auth::user()->role == 'admin') {
+            if (Auth::user()->role === 'admin') {
                 return view('admin.blogs.index', compact('blogs', 'featuredBlogs', 'categories'));
-            } elseif (Auth::user()->role == 'travler') {
+            } elseif (Auth::user()->role === 'travler') {
                 return view('client.blogs.index', compact('blogs', 'featuredBlogs', 'categories'));
-            } elseif (Auth::user()->role == 'guide') {
+            } elseif (Auth::user()->role === 'guide') {
                 return view('guide.blogs.index', compact('blogs', 'featuredBlogs', 'categories'));
             }
+
+        } catch (\Exception $e) {
+            Log::error('Error loading blogs: ' . $e->getMessage());
+            if (Auth::user()->role === 'admin') {
+                return view('admin.blogs.index')
+                    ->with('error', 'There was an error loading the blog posts. Please try again later.');
+
+            } elseif (Auth::user()->role === 'travler') {
+                return view('client.blogs.index')
+                    ->with('error', 'There was an error loading the blog posts. Please try again later.');
+
+            } elseif (Auth::user()->role === 'guide') {
+                return view('guide.blogs.index')
+                    ->with('error', 'There was an error loading the blog posts. Please try again later.');
+            }
+        }
+    }
+
+    public function indexVist() 
+    {
+        try {
+            $blogs = Blog::published()
+                ->with('user')
+                ->withCount('comments')
+                ->orderBy('created_at', 'desc')
+                ->paginate(9);
+
+            $featuredBlogs = Blog::published()
+                ->featured()
+                ->with('user')
+                ->take(3)
+                ->get();
+
+            $categories = Blog::select('category')
+                ->distinct()
+                ->whereNotNull('category')
+                ->get()
+                ->pluck('category');
 
             return view('blogs.index', compact('blogs', 'featuredBlogs', 'categories'));
 
         } catch (\Exception $e) {
             Log::error('Error loading blogs: ' . $e->getMessage());
-            if (Auth::user()->role == 'admin') {
-                return view('admin.blogs.index')
-                    ->with('error', 'There was an error loading the blog posts. Please try again later.');
-
-            } elseif (Auth::user()->role == 'travler') {
-                return view('client.blogs.index')
-                    ->with('error', 'There was an error loading the blog posts. Please try again later.');
-
-            } elseif (Auth::user()->role == 'guide') {
-                return view('guide.blogs.index')
-                    ->with('error', 'There was an error loading the blog posts. Please try again later.');
-            }
-
             return view('blogs.index')
                 ->with('error', 'There was an error loading the blog posts. Please try again later.');
         }
     }
 
-    /**
-     * Show the form for creating a new blog post.
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
     public function create()
     {
 
@@ -107,12 +123,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Store a newly created blog post in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
 
@@ -138,7 +148,6 @@ class BlogController extends Controller
                 'featured' => $request->has('featured') ? true : false,
             ];
 
-            // Handle image upload
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('blogs', 'public');
                 $blogData['image'] = $imagePath;
@@ -167,23 +176,15 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Display the specified blog post.
-     *
-     * @param  string  $slug
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function show($slug)
+    public function showVisit($slug)
     {
         try {
             $blog = Blog::where('slug', $slug)
                 ->with(['user', 'comments.user'])
                 ->firstOrFail();
 
-            // Increment view count
             $blog->increment('views');
 
-            // Get related blog posts
             $relatedBlogs = Blog::published()
                 ->where('id', '!=', $blog->id)
                 ->where(function ($query) use ($blog) {
@@ -194,7 +195,41 @@ class BlogController extends Controller
                 ->take(3)
                 ->get();
 
-            // Get latest blog posts
+            $latestBlogs = Blog::published()
+                ->where('id', '!=', $blog->id)
+                ->with('user')
+                ->orderBy('created_at', 'desc')
+                ->take(4)
+                ->get();
+
+            return view('blogs.show', compact('blog', 'relatedBlogs', 'latestBlogs'));
+
+        } catch (\Exception $e) {
+            Log::error('Error loading blogs: ' . $e->getMessage());
+            return view('blogs.index')
+                ->with('error', 'The blog post you are looking for does not exist or has been removed.');
+        }
+    }
+
+    public function show($slug)
+    {
+        try {
+            $blog = Blog::where('slug', $slug)
+                ->with(['user', 'comments.user'])
+                ->firstOrFail();
+
+            $blog->increment('views');
+
+            $relatedBlogs = Blog::published()
+                ->where('id', '!=', $blog->id)
+                ->where(function ($query) use ($blog) {
+                    $query->where('category', $blog->category)
+                        ->orWhere('user_id', $blog->user_id);
+                })
+                ->with('user')
+                ->take(3)
+                ->get();
+
             $latestBlogs = Blog::published()
                 ->where('id', '!=', $blog->id)
                 ->with('user')
@@ -215,34 +250,25 @@ class BlogController extends Controller
         } catch (\Exception $e) {
             Log::error('Error showing blog post: ' . $e->getMessage());
 
-            if (Auth::user()->role == 'admin') {
+            if (Auth::user()->role === 'admin') {
                 return redirect()->route('admin.blogs.index')
                 ->with('error', 'The blog post you are looking for does not exist or has been removed.');
-            } elseif (Auth::user()->role == 'travler') {
+            } elseif (Auth::user()->role === 'travler') {
                 return redirect()->route('client.blogs.index')
                 ->with('error', 'The blog post you are looking for does not exist or has been removed.');
-            } elseif (Auth::user()->role == 'guide') {
+            } elseif (Auth::user()->role === 'guide') {
                 return redirect()->route('guide.blogs.index')
                 ->with('error', 'The blog post you are looking for does not exist or has been removed.');
             }
 
-            return redirect()->route('blogs.index')
-                ->with('error', 'The blog post you are looking for does not exist or has been removed.');
         }
     }
 
-    /**
-     * Show the form for editing the specified blog post.
-     *
-     * @param  string  $slug
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
     public function edit($slug)
     {
         try {
             $blog = Blog::where('slug', $slug)->firstOrFail();
             
-            // Check if user is authenticated and is the author of the blog post
             if (!Auth::check() || Auth::id() !== $blog->user_id) {
                 return redirect()->route('blogs.show', $blog->slug)
                     ->with('error', 'You are not authorized to edit this blog post.');
@@ -278,19 +304,11 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Update the specified blog post in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $slug
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function update(Request $request, $slug)
     {
         try {
             $blog = Blog::where('slug', $slug)->firstOrFail();
 
-            // Check if user is authenticated and is the author of the blog post
             if (!Auth::check() || Auth::id() !== $blog->user_id) {
                 return redirect()->route('admin.blogs.show', $blog->slug)
                     ->with('error', 'You are not authorized to edit this blog post.');
@@ -315,14 +333,11 @@ class BlogController extends Controller
                 'featured' => $request->has('featured') ? true : false,
             ];
 
-            // Update slug if title has changed
             if ($blog->title !== $request->title) {
                 $blogData['slug'] = Str::slug($request->title);
             }
 
-            // Handle image upload
             if ($request->hasFile('image')) {
-                // Delete old image if exists
                 if ($blog->image) {
                     Storage::disk('public')->delete($blog->image);
                 }
@@ -353,29 +368,20 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Remove the specified blog post from storage.
-     *
-     * @param  string  $slug
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function destroy($slug)
     {
         try {
             $blog = Blog::where('slug', $slug)->firstOrFail();
 
-            // Check if user is authenticated and is the author of the blog post or an admin
             if (!Auth::check() || (Auth::id() !== $blog->user_id && Auth::user()->role !== 'admin')) {
                 return redirect()->route('admin.blogs.show', $blog->slug)
                     ->with('error', 'You are not authorized to delete this blog post.');
             }
 
-            // Delete image if exists
             if ($blog->image) {
                 Storage::delete('public/' . $blog->image);
             }
 
-            // Delete associated comments
             BlogComment::where('blog_id', $blog->id)->delete();
 
             $blog->delete();
@@ -412,12 +418,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Display blog posts by category.
-     *
-     * @param  string  $category
-     * @return \Illuminate\Contracts\View\View
-     */
     public function byCategory($category)
     {
         try {
@@ -442,12 +442,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Search blog posts.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\View\View
-     */
     public function search(Request $request)
     {
         try {
@@ -483,16 +477,8 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Store a newly created comment in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $slug
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function storeComment(Request $request, $slug)
     {
-        // Check if user is authenticated
         if (!Auth::check()) {
             return redirect()->route('login')
                 ->with('error', 'You need to be logged in to comment on a blog post.');
@@ -529,11 +515,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Display a listing of all blog posts for admin.
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
     public function adminIndex()
     {
         try {
@@ -550,13 +531,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Toggle the published status of a blog post.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function updateStatus(Request $request, $id)
     {
         try {
@@ -603,12 +577,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Toggle the featured status of a blog post.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function toggleFeatured($id)
     {
         try {
@@ -649,11 +617,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Display all comments for admin.
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
     public function adminComments()
     {
         try {
@@ -669,12 +632,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Display specific comment for admin.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
     public function showComment($id)
     {
         try {
@@ -710,13 +667,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Update the comment.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function updateComment(Request $request, $id)
     {
         try {
@@ -752,12 +702,6 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Remove the specified comment from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function destroyComment($id)
     {
         try {
@@ -773,14 +717,8 @@ class BlogController extends Controller
         }
     }
 
-    /**
-     * Display the user's blog posts.
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
     public function myBlogs()
     {
-        // Check if user is authenticated
         if (!Auth::check()) {
             return redirect()->route('login')
                 ->with('error', 'You need to be logged in to view your blog posts.');
@@ -792,7 +730,6 @@ class BlogController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
 
-            // Redirect to appropriate view based on user role
             if (Auth::user()->role == 'admin') {
                 return view('admin.blogs.my-blogs', compact('blogs'));
             } elseif (Auth::user()->role == 'travler') {

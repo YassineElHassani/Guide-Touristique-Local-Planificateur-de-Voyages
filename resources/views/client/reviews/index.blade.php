@@ -8,9 +8,6 @@
         <a href="{{ route('client.events.index') }}" class="btn btn-primary me-2">
             <i class="fas fa-search me-1"></i> Find Events to Review
         </a>
-        <a href="{{ route('client.reviews.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-star me-1"></i> Write a Review
-        </a>
     </div>
 @endsection
 

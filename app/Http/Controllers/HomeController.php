@@ -42,6 +42,11 @@ class HomeController extends Controller
         return view('contact');
     }
 
+    public function warning()
+    {
+        return view('warning');
+    }
+
     /**
      * Handle contact form submission.
      */

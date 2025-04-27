@@ -235,35 +235,7 @@
             </div>
         </div>
     </section>
-    
-    <!-- Related Categories -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h2 class="fw-bold">Explore Other Categories</h2>
-                    <p class="text-muted">Discover more amazing destinations in different categories</p>
-                </div>
-            </div>
-            
-            <div class="row g-4">
-                @for($i = 1; $i <= 4; $i++)
-                    <div class="col-lg-3 col-md-6">
-                        <a href="#" class="text-decoration-none">
-                            <div class="card h-100 border-0 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-{{ 1520250497591 + $i*20 }}-112f2f40a3f4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600" class="card-img-top" alt="Category" style="height: 200px; object-fit: cover;">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">Category {{ $i }}</h5>
-                                    <p class="card-text text-muted">{{ rand(10, 30) }} destinations</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endfor
-            </div>
-        </div>
-    </section>
-    
+
     <!-- Newsletter Section -->
     <section class="py-5">
         <div class="container">

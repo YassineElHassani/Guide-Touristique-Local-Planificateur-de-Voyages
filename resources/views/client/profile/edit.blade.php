@@ -1,10 +1,10 @@
-@extends('guide.dashboard')
+@extends('client.dashboard')
 
 @section('dashboard-title', 'Edit Profile')
 @section('dashboard-breadcrumb', 'Edit Profile')
 
 @section('dashboard-actions')
-<a href="{{ route('guide.profile.show') }}" class="btn btn-outline-primary">
+<a href="{{ route('client.profile.show') }}" class="btn btn-outline-primary">
     <i class="fas fa-arrow-left me-1"></i> Back to Profile
 </a>
 @endsection
@@ -34,7 +34,7 @@
             </div>
             
             <div class="card-body p-4">
-                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('client.profile.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="update_type" value="profile_info">
@@ -131,7 +131,7 @@
                     </div>
                     
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ route('guide.profile.show') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <a href="{{ route('client.profile.show') }}" class="btn btn-outline-secondary">Cancel</a>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-1"></i> Save Changes
                         </button>
@@ -148,7 +148,7 @@
             </div>
             
             <div class="card-body p-4">
-                <form action="{{ route('profile.update') }}" method="POST">
+                <form action="{{ route('client.profile.update') }}" method="POST">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="update_type" value="password">
@@ -249,15 +249,15 @@
             
             <div class="card-body p-4">
                 <div class="d-grid gap-2">
-                    <a href="{{ route('guide.reservations.index') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('client.reservations.index') }}" class="btn btn-outline-primary">
                         <i class="fas fa-calendar-check me-2"></i> View Reservations
                     </a>
                     
-                    <a href="{{ route('guide.favorites') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('client.favorites') }}" class="btn btn-outline-primary">
                         <i class="fas fa-heart me-2"></i> View Favorites
                     </a>
                     
-                    <a href="{{ route('guide.reviews') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('client.reviews') }}" class="btn btn-outline-primary">
                         <i class="fas fa-star me-2"></i> View Reviews
                     </a>
                     

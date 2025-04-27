@@ -9,19 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next)
     {
-        // Check if user is authenticated and has client/traveler role
         if (Auth::check() && Auth::user()->role === 'travler') {
             return $next($request);
         }
 
-        // Redirect to home with error message
         return redirect()->route('index')->with('error', 'Access denied. You need to be logged in as a traveler to access this area.');
     }
 }

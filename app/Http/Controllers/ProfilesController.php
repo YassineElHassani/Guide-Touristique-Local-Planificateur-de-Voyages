@@ -19,7 +19,6 @@ class ProfilesController extends Controller
         $user = Auth::user();
         $profile = User::where('id', $user->id)->first();
         
-        // Create a profile if none exists
         if (!$profile) {
             $profile = User::create(['id' => $user->id]);
         }
@@ -43,7 +42,6 @@ class ProfilesController extends Controller
         $user = Auth::user();
         $profile = User::where('id', $user->id)->first();
         
-        // Create a profile if none exists
         if (!$profile) {
             $profile = User::create(['id' => $user->id]);
         }
@@ -63,11 +61,9 @@ class ProfilesController extends Controller
         
         $user = Auth::user();
         
-        // Determine the type of update (profile info or password)
         $updateType = $request->input('update_type', 'profile_info');
         
         if ($updateType === 'profile_info') {
-            // Validate profile information data
             $request->validate([
                 'picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'first_name' => 'required|string|max:255',
@@ -78,20 +74,16 @@ class ProfilesController extends Controller
                 'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             ]);
             
-            // Handle picture upload
             if ($request->hasFile('picture')) {
-                // Delete old picture if it exists
                 if ($user->picture && Storage::disk('public')->exists($user->picture)) {
                     Storage::disk('public')->delete($user->picture);
                 }
 
-                // Store new picture
                 $newPicturePath = $request->file('picture')->store('avatars', 'public');
             } else {
                 $newPicturePath = $user->picture;
             }
 
-            // Update user information
             $user->update([
                 'picture' => $newPicturePath,
                 'first_name' => $request->first_name,
@@ -104,18 +96,15 @@ class ProfilesController extends Controller
             
             $message = 'Profile information updated successfully.';
         } else {
-            // Validate password data
             $request->validate([
                 'current_password' => 'required',
                 'password' => 'required|string|min:8|confirmed',
             ]);
             
-            // Check current password
             if (!Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors(['current_password' => 'The provided password does not match your current password.']);
             }
             
-            // Update password
             $user->update([
                 'password' => Hash::make($request->password),
             ]);
@@ -124,11 +113,10 @@ class ProfilesController extends Controller
         }
         
         if ($user->role === 'travler') {
-            return redirect()->route('clientprofile.show')->with('success', $message);
+            return redirect()->route('client.profile.show')->with('success', $message);
         } elseif ($user->role === 'guide') {
             return redirect()->route('guide.profile.show')->with('success', $message);
         }
         
-        return redirect()->route('profile.show')->with('success', $message);
     }
 }

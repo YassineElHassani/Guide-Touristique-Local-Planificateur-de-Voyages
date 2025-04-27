@@ -41,19 +41,19 @@
                 @guest
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('index') }}">Home</a>
+                            <a class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}" href="{{ route('index') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Destinations</a>
+                            <a class="nav-link {{ request()->routeIs('destinations.index') ? 'active' : '' }}" href="{{ route('destinations.index') }}">Destinations</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Tours</a>
+                            <a class="nav-link {{ request()->routeIs('events.index') ? 'active' : '' }}" href="{{ route('events.index') }}">Events</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
                         </li>
                     </ul>
                 @elseif (Auth::user()->role == 'admin')
@@ -68,25 +68,25 @@
                 @elseif (Auth::user()->role == 'travler')
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('client.home') }}">Home</a>
+                            <a class="nav-link {{ request()->routeIs('client.home') ? 'active' : '' }}" href="{{ route('client.home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
                         </li>
                     </ul>
                 @elseif (Auth::user()->role == 'guide')
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('guide.home') }}">Home</a>
+                            <a class="nav-link {{ request()->routeIs('guide.home') ? 'active' : '' }}" href="{{ route('guide.home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
                         </li>
                     </ul>
                     @endif
@@ -112,8 +112,10 @@
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                     @if (Auth::user()->role === 'admin')
                                         <li><a class="dropdown-item" href="{{ route('users.profile', Auth::id()) }}">My Profile</a></li>
-                                    @elseif (Auth::user()->role === 'guide' || Auth::user()->role == 'travler')
-                                        <li><a class="dropdown-item" href="{{ route('profile.show') }}">My Profile</a></li>
+                                    @elseif (Auth::user()->role === 'guide')
+                                        <li><a class="dropdown-item" href="{{ route('guide.profile.show') }}">My Profile</a></li>
+                                    @elseif (Auth::user()->role === 'travler')
+                                        <li><a class="dropdown-item" href="{{ route('client.profile.show') }}">My Profile</a></li>
                                     @endif
                                     <li>
                                         <hr class="dropdown-divider">
@@ -150,21 +152,19 @@
                     <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
                         <h5>Quick Links</h5>
                         <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Tours</a></li>
-                            <li><a href="#">Destinations</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="{{ route('index') }}">Home</a></li>
+                            <li><a href="{{ route('about') }}">About Us</a></li>
+                            <li><a href="{{ route('events.index') }}">Events</a></li>
+                            <li><a href="{{ route('destinations.index') }}">Destinations</a></li>
+                            <li><a href="{{ route('contact') }}">Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
                         <h5>Support</h5>
                         <ul>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">FAQs</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms of Service</a></li>
-                            <li><a href="#">Sitemap</a></li>
+                            <li><a href="{{ route('contact') }}">Help Center</a></li>
+                            <li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
+                            <li><a href="{{ route('terms') }}">Terms of Service</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-4 col-md-4">

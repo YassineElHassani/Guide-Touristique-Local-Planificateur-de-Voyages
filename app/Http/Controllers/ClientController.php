@@ -18,13 +18,10 @@ class ClientController extends Controller
     public function home() {
         $user = Auth::user();
         
-        // Get user's favorites
         $favorites = $user->favorites;
         
-        // Get user's reservations
         $reservations = reservations::where('user_id', $user->id)->orderBy('date', 'desc')->get();
         
-        // Get user's reviews
         $reviews = reviews::where('user_id', $user->id)->get();
         
         return view('client.home', compact('user', 'favorites', 'reservations', 'reviews'));
@@ -34,13 +31,10 @@ class ClientController extends Controller
     {
         $user = Auth::user();
         
-        // Get user's favorites
         $favorites = $user->favorites;
         
-        // Get user's reservations
         $reservations = reservations::where('user_id', $user->id)->orderBy('date', 'desc')->get();
         
-        // Get user's reviews
         $reviews = reviews::where('user_id', $user->id)->get();
         
         return view('client.home', compact('user', 'favorites', 'reservations', 'reviews'));
@@ -60,12 +54,10 @@ class ClientController extends Controller
 
     public function favorites(Request $request)
     {
-        // Get all user favorites with destination relationships
         $query = user_favorites::where('user_id', Auth::id())
             ->join('destinations', 'user_favorites.destination_id', '=', 'destinations.id')
             ->select('destinations.*', 'user_favorites.created_at as favorite_added_at');
         
-        // Apply search filter if provided
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -75,12 +67,10 @@ class ClientController extends Controller
             });
         }
         
-        // Apply category filter if provided
         if ($request->has('category') && !empty($request->category)) {
             $query->where('destinations.category', $request->category);
         }
         
-        // Apply sorting
         $sort = $request->query('sort', 'date_desc');
         switch ($sort) {
             case 'name_asc':
@@ -104,10 +94,8 @@ class ClientController extends Controller
                 break;
         }
         
-        // Paginate results
         $favorites = $query->paginate(9)->appends($request->query());
         
-        // Handle view parameter
         $view = $request->query('view', 'grid');
         
         if ($view === 'list') {
@@ -119,7 +107,6 @@ class ClientController extends Controller
     
     public function addToFavorites($id)
     {
-        // Check if already in favorites
         $existingFavorite = user_favorites::where('user_id', Auth::id())
             ->where('destination_id', $id)
             ->first();
@@ -141,7 +128,6 @@ class ClientController extends Controller
             ->where('destination_id', $id)
             ->delete();
         
-        // Check if request is AJAX
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
@@ -163,7 +149,6 @@ class ClientController extends Controller
     {
         $reservation = reservations::findOrFail($id);
         
-        // Check if the reservation belongs to the current user
         if ($reservation->user_id !== Auth::id()) {
             return redirect()->route('client.reservations.index')->with('error', 'You are not authorized to view this reservation.');
         }
@@ -174,7 +159,6 @@ class ClientController extends Controller
     public function cancelReservation(Request $request, $id)
     {
         try {
-            // Log request info for debugging
             info('Cancel reservation request', [
                 'id' => $id,
                 'is_ajax' => $request->ajax(),
@@ -185,7 +169,6 @@ class ClientController extends Controller
             
             $reservation = reservations::findOrFail($id);
             
-            // Check if the reservation belongs to the current user
             if ($reservation->user_id !== Auth::id()) {
                 if ($request->ajax() || $request->wantsJson()) {
                     return response()->json([
@@ -196,10 +179,8 @@ class ClientController extends Controller
                 return redirect()->route('client.reservations.index')->with('error', 'You are not authorized to cancel this reservation.');
             }
             
-            // Update reservation status
             $reservation->update(['status' => 'cancelled']);
             
-            // Check if request is AJAX
             if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
                 return response()->json([
                     'success' => true,
@@ -230,12 +211,10 @@ class ClientController extends Controller
     {
         $query = reviews::where('user_id', Auth::id());
         
-        // Apply filtering based on rating if provided
         if ($request->has('rating') && $request->rating != '') {
             $query->where('rating', $request->rating);
         }
         
-        // Apply search if provided
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -247,7 +226,6 @@ class ClientController extends Controller
             });
         }
         
-        // Apply sorting
         if ($request->has('sort')) {
             switch ($request->sort) {
                 case 'oldest':
@@ -268,7 +246,6 @@ class ClientController extends Controller
             $query->orderBy('created_at', 'desc');
         }
         
-        // Get the reviews with pagination
         $reviews = $query->with(['event', 'destination'])->paginate(10);
         
         return view('client.reviews.index', compact('reviews'));
@@ -279,7 +256,6 @@ class ClientController extends Controller
         $event = null;
         $destination = null;
         
-        // Check if we're reviewing an event or destination
         if ($request->has('event_id')) {
             $event = events::findOrFail($request->event_id);
         } elseif ($request->has('destination_id')) {
@@ -295,7 +271,6 @@ class ClientController extends Controller
     {
         $review = reviews::with(['event', 'destination', 'user'])->findOrFail($id);
         
-        // Check if the review belongs to the current user
         if ($review->user_id !== Auth::id()) {
             return redirect()->route('client.reviews')->with('error', 'You are not authorized to view this review.');
         }
@@ -307,7 +282,6 @@ class ClientController extends Controller
     {
         $review = reviews::findOrFail($id);
         
-        // Check if the review belongs to the current user
         if ($review->user_id !== Auth::id()) {
             return redirect()->route('client.reviews')->with('error', 'You are not authorized to edit this review.');
         }
@@ -319,7 +293,6 @@ class ClientController extends Controller
     {
         $review = reviews::findOrFail($id);
         
-        // Check if the review belongs to the current user
         if ($review->user_id !== Auth::id()) {
             return redirect()->route('client.reviews')->with('error', 'You are not authorized to update this review.');
         }
@@ -341,7 +314,6 @@ class ClientController extends Controller
     {
         $review = reviews::findOrFail($id);
         
-        // Check if the review belongs to the current user
         if ($review->user_id !== Auth::id()) {
             return redirect()->route('client.reviews')->with('error', 'You are not authorized to delete this review.');
         }

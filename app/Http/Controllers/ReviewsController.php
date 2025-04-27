@@ -24,7 +24,6 @@ class ReviewsController extends Controller
             'comment' => 'required|string',
         ]);
         
-        // Ensure at least one of destination_id or event_id is provided
         if (!$request->destination_id && !$request->event_id) {
             return back()->with('error', 'A destination or event must be specified.');
         }
@@ -54,7 +53,6 @@ class ReviewsController extends Controller
         
         $review = reviews::findOrFail($id);
         
-        // Check if the review belongs to the authenticated user
         if ($review->user_id !== Auth::id()) {
             return back()->with('error', 'You are not authorized to update this review.');
         }
@@ -86,7 +84,6 @@ class ReviewsController extends Controller
         
         $review = reviews::findOrFail($id);
         
-        // Check if the review belongs to the authenticated user or if user is admin
         if ($review->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
             return back()->with('error', 'You are not authorized to delete this review.');
         }

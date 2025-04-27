@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Validator;
 
 class EventsController extends Controller
 {
-    // Public routes
     public function index()
     {
         $events = events::orderBy('date', 'asc')->get();
@@ -26,7 +25,6 @@ class EventsController extends Controller
         $event = events::findOrFail($id);
         $reviews = reviews::where('event_id', $id)->get();
         
-        // Check if user has a reservation for this event
         $hasReservation = false;
         if (Auth::check()) {
             $hasReservation = reservations::where('user_id', Auth::id())
@@ -34,7 +32,6 @@ class EventsController extends Controller
                 ->exists();
         }
         
-        // Determine which view to use based on user role
         if (Auth::check()) {
             if (Auth::user()->role === 'travler') {
                 return view('client.events.show', compact('event', 'reviews', 'hasReservation'));
@@ -45,7 +42,6 @@ class EventsController extends Controller
             } 
         }
         
-        // Default public view
         return view('events.show', compact('event', 'reviews', 'hasReservation'));
     }
 
@@ -73,7 +69,6 @@ class EventsController extends Controller
         return view('events.search_results', compact('events', 'query', 'dateFilter'));
     }
 
-    // Admin methods
     public function adminShow($id)
     {
         try {
@@ -150,7 +145,6 @@ class EventsController extends Controller
                 'price' => $request->price,
             ];
 
-            // Handle image upload if present
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('events', 'public');
                 $data['image'] = $imagePath;
@@ -226,15 +220,12 @@ class EventsController extends Controller
                 'price' => $request->price,
             ];
 
-            // Handle image upload or removal if needed
             if ($request->has('remove_image') && $request->remove_image) {
-                // Delete old image if exists
                 if ($event->image) {
                     Storage::disk('public')->delete($event->image);
                 }
                 $data['image'] = null;
             } elseif ($request->hasFile('image')) {
-                // Delete old image if exists
                 if ($event->image) {
                     Storage::disk('public')->delete($event->image);
                 }
@@ -264,7 +255,6 @@ class EventsController extends Controller
         try {
             $event = events::findOrFail($id);
             
-            // Check if there are any reservations before deleting
             $reservationsCount = reservations::where('event_id', $id)->count();
             
             if ($reservationsCount > 0) {
@@ -279,7 +269,6 @@ class EventsController extends Controller
                 }
             }
             
-            // Delete image if exists
             if ($event->image) {
                 Storage::disk('public')->delete($event->image);
             }

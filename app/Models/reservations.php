@@ -23,7 +23,6 @@ class reservations extends Model
         'date' => 'date',
     ];
 
-    // Relationships
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -34,7 +33,6 @@ class reservations extends Model
         return $this->belongsTo(events::class);
     }
 
-    // Methods
     public function bookEvent()
     {
         return self::create([

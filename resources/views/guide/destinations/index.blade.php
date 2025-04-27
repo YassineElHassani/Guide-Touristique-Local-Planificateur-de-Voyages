@@ -1,6 +1,6 @@
 @extends('guide.dashboard')
 
-@section('dashboard-title', 'Manage Destinations')
+@section('dashboard-title', 'Destinations')
 @section('dashboard-breadcrumb', 'Destinations')
 
 @section('dashboard-actions')

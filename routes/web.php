@@ -34,9 +34,11 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/contact', [HomeController::class, 'contactSubmit'])->name('contact.submit');
-Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
+
+// Warning route
+Route::get('/warning', [HomeController::class, 'warning'])->name('warning');
 
 // Destination routes/
 Route::get('/destinations', [DestinationsController::class, 'index'])->name('destinations.index');
@@ -45,8 +47,8 @@ Route::get('/destinations/{id}', [DestinationsController::class, 'show'])->name(
 Route::get('/search/destinations', [DestinationsController::class, 'search'])->name('destinations.search');
 
 // Event routes
-Route::get('/events', [EventsController::class, 'index'])->name('events.index');
-Route::get('/events/{id}', [EventsController::class, 'show'])->name('events.show');
+Route::get('/events', [EventsController::class, 'indexVist'])->name('events.index');
+Route::get('/events/{id}', [EventsController::class, 'showVist'])->name('events.show');
 Route::get('/search/events', [EventsController::class, 'search'])->name('events.search');
 
 // Category routes
@@ -57,24 +59,16 @@ Route::get('/categories/{id}', [CategoriesController::class, 'show'])->name('cat
 Route::get('/weather', [WeatherForecastsController::class, 'getWeather'])->name('weather.get');
 Route::get('/weather/widget/{location}', [WeatherForecastsController::class, 'widget'])->name('weather.widget');
 
-// Profile routes
-Route::get('/profile', [ProfilesController::class, 'show'])->name('profile.show');
-Route::get('/profile/edit', [ProfilesController::class, 'edit'])->name('profile.edit');
-Route::put('/profile', [ProfilesController::class, 'update'])->name('profile.update');
-
 // Review routes
 Route::post('/reviews', [ReviewsController::class, 'store'])->name('reviews.store');
 Route::put('/reviews/{id}', [ReviewsController::class, 'update'])->name('reviews.update');
 Route::delete('/reviews/{id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 
 // Blog routes for visitors
-Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
+Route::get('/blogs', [BlogController::class, 'indexVist'])->name('blogs.index');
+Route::get('/blogs/{slug}', [BlogController::class, 'showVisit'])->name('blogs.show');
 Route::get('/blogs/category/{category}', [BlogController::class, 'byCategory'])->name('blogs.category');
 Route::get('/search/blogs', [BlogController::class, 'search'])->name('blogs.search');
-Route::post('/blogs/{slug}/comments', [BlogController::class, 'storeComment'])->name('blogs.comments.store');
-Route::delete('/comments/{id}', [BlogController::class, 'destroyComment'])->name('blogs.comments.destroy');
-Route::get('/my-blogs', [BlogController::class, 'myBlogs'])->name('blogs.my-blogs');
 
 // Client/Traveler routes
 Route::middleware(['client'])->prefix('client')->group(function () {
@@ -109,6 +103,9 @@ Route::middleware(['client'])->prefix('client')->group(function () {
     Route::put('/reservations/{id}/cancel', [ClientController::class, 'cancelReservation'])->name('client.reservations.cancel');
     Route::get('/events/{eventId}/book', [ReservationsController::class, 'create'])->name('client.reservations.create');
     Route::post('/events/{eventId}/book', [ReservationsController::class, 'store'])->name('client.reservations.store');
+
+    // Destination routes
+    Route::get('/destinations/{id}', [DestinationsController::class, 'show'])->name('client.destinations.show');
 
     // Event routes
     Route::get('/events', [ClientController::class, 'events'])->name('client.events.index');

@@ -312,7 +312,7 @@
                                 <h5 class="card-title">{{ $favorite->name }}</h5>
                                 <p class="card-text text-muted small">{{ $favorite->address }}</p>
                                 <p class="card-text">{{ \Illuminate\Support\Str::limit($favorite->description, 100) }}</p>
-                                <a href="{{ route('destinations.index', $favorite->id) }}"
+                                <a href="{{ route('client.destinations.show', $favorite->id) }}"
                                     class="btn btn-sm btn-outline-primary">View Details</a>
                             </div>
 

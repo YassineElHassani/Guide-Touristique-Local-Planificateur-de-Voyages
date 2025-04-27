@@ -151,48 +151,4 @@
             @endif
         </div>
     </section>
-    
-    <!-- Popular Searches -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h2 class="fw-bold">Popular Destinations</h2>
-                    <p class="text-muted">Explore our most popular destinations</p>
-                </div>
-            </div>
-            
-            <div class="row g-4">
-                @for($i = 1; $i <= 3; $i++)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="destination-card shadow-md">
-                            <img src="https://images.unsplash.com/photo-{{ 1520250497591 + $i*50 }}-112f2f40a3f4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800" alt="Popular Destination {{ $i }}">
-                            <span class="badge-featured">Popular</span>
-                            <div class="destination-card-content">
-                                <span class="d-block mb-2"><i class="fas fa-map-marker-alt me-2"></i>Category</span>
-                                <h3>Popular Destination {{ $i }}</h3>
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <div>
-                                        <i class="fas fa-star text-warning"></i>
-                                        <i class="fas fa-star text-warning"></i>
-                                        <i class="fas fa-star text-warning"></i>
-                                        <i class="fas fa-star text-warning"></i>
-                                        <i class="fas fa-star-half-alt text-warning"></i>
-                                        <span class="ms-2">4.8</span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-light">
-                                        Explore <i class="fas fa-arrow-right ms-1"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endfor
-            </div>
-            
-            <div class="text-center mt-4">
-                <a href="{{ route('destinations.index') }}" class="btn btn-outline-primary">View All Destinations</a>
-            </div>
-        </div>
-    </section>
 @endsection

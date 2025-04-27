@@ -85,10 +85,7 @@ class AdminController extends Controller
                 'destinationCategories'
             ));
         } catch (\Exception $e) {
-            // Log the error
             Log::error('Dashboard error: ' . $e->getMessage());
-
-            // Provide fallback data
             $stats = [
                 'users' => 0,
                 'guides' => 0,
@@ -99,8 +96,6 @@ class AdminController extends Controller
                 'blogs' => 0,
                 'categories' => 0,
             ];
-
-            // Initialize all variables needed in the view to prevent undefined variable errors
             $recentUsers = collect([]);
             $recentDestinations = collect([]);
             $recentEvents = collect([]);
@@ -121,7 +116,6 @@ class AdminController extends Controller
                 12 => ['users' => 0, 'reservations' => 0, 'revenue' => 0, 'events' => 0, 'destinations' => 0],
             ];
             
-            // Empty destination categories
             $destinationCategories = [];
 
             return view('admin.dashboard', compact(
@@ -140,15 +134,12 @@ class AdminController extends Controller
     public function userProfile($id)
     {
         $user = User::findOrFail($id);
-        $profile = $user; // Displaying user info directly from the users table
+        $profile = $user;
 
-        // Get user's reservations
         $reservations = reservations::where('user_id', $id)->get();
 
-        // Get user's reviews
         $reviews = reviews::where('user_id', $id)->get();
 
-        // Get user's blogs if they exist
         $blogs = Blog::where('user_id', $id)->get();
 
         return view('admin.users.profile', compact('user', 'profile', 'reservations', 'reviews', 'blogs'));
@@ -158,7 +149,6 @@ class AdminController extends Controller
     {
         $currentYear = Carbon::now()->year;
 
-        // Get monthly user registrations
         $monthlyUsers = DB::table('users')
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
             ->whereYear('created_at', $currentYear)
@@ -167,7 +157,6 @@ class AdminController extends Controller
             ->pluck('count', 'month')
             ->toArray();
 
-        // Get monthly reservations
         $monthlyReservations = DB::table('reservations')
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
             ->whereYear('created_at', $currentYear)
@@ -176,7 +165,6 @@ class AdminController extends Controller
             ->pluck('count', 'month')
             ->toArray();
 
-        // Get monthly revenue
         $monthlyRevenue = DB::table('reservations')
             ->join('events', 'reservations.event_id', '=', 'events.id')
             ->select(DB::raw('MONTH(reservations.created_at) as month'), DB::raw('SUM(events.price) as total'))
@@ -187,7 +175,6 @@ class AdminController extends Controller
             ->pluck('total', 'month')
             ->toArray();
             
-        // Get monthly events
         $monthlyEvents = DB::table('events')
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
             ->whereYear('created_at', $currentYear)
@@ -196,7 +183,6 @@ class AdminController extends Controller
             ->pluck('count', 'month')
             ->toArray();
             
-        // Get monthly destinations
         $monthlyDestinations = DB::table('destinations')
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
             ->whereYear('created_at', $currentYear)
@@ -205,7 +191,6 @@ class AdminController extends Controller
             ->pluck('count', 'month')
             ->toArray();
 
-        // Format data for all 12 months
         $formattedData = [];
         for ($i = 1; $i <= 12; $i++) {
             $formattedData[$i] = [
@@ -220,56 +205,31 @@ class AdminController extends Controller
         return $formattedData;
     }
 
-    /**
-     * Display a listing of users.
-     *
-     * @return \Illuminate\View\View
-     */
     public function users()
     {
         $users = User::paginate(15);
         return view('admin.users.index', compact('users'));
     }
 
-    /**
-     * Display the specified user.
-     *
-     * @param  int  $id
-     * @return \Illuminate\View\View
-     */
     public function showUser($id)
     {
         $user = User::findOrFail($id);
         $profile = $user->first();
 
-        // Get user's reservations
         $reservations = reservations::where('user_id', $id)->get();
 
-        // Get user's reviews
         $reviews = reviews::where('user_id', $id)->get();
 
-        // Get user's blogs if they exist
         $blogs = Blog::where('user_id', $id)->get();
 
         return view('admin.users.show', compact('user', 'profile', 'reservations', 'reviews', 'blogs'));
     }
 
-    /**
-     * Show the form for creating a new user.
-     *
-     * @return \Illuminate\View\View
-     */
     public function createUser()
     {
         return view('admin.users.create');
     }
 
-    /**
-     * Store a newly created user in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function storeUser(Request $request)
     {
         $request->validate([
@@ -294,25 +254,12 @@ class AdminController extends Controller
             ->with('success', 'User created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified user.
-     *
-     * @param  int  $id
-     * @return \Illuminate\View\View
-     */
     public function editUser($id)
     {
         $user = User::findOrFail($id);
         return view('admin.users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified user in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -330,14 +277,11 @@ class AdminController extends Controller
             'status' => 'in:active,inactive',
         ]);
 
-        // Handle picture upload
         if ($request->hasFile('picture')) {
-            // Delete old picture if it exists
             if ($user->picture && Storage::disk('public')->exists($user->picture)) {
                 Storage::disk('public')->delete($user->picture);
             }
 
-            // Store new picture
             $newPicturePath = $request->file('picture')->store('avatars', 'public');
         } else {
             $newPicturePath = $user->picture;
@@ -370,13 +314,6 @@ class AdminController extends Controller
             ->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Update user status.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function updateUserStatus(Request $request, $id)
     {
         $request->validate([
@@ -390,13 +327,6 @@ class AdminController extends Controller
             ->with('success', 'User status updated successfully.');
     }
 
-    /**
-     * Update user role.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function updateUserRole(Request $request, $id)
     {
         $request->validate([
@@ -410,17 +340,10 @@ class AdminController extends Controller
             ->with('success', 'User role updated successfully.');
     }
 
-    /**
-     * Remove the specified user from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
 
-        // Prevent deleting yourself
         if ($user->id === Auth::user()->id) {
             return redirect()->route('admin.users.index')
                 ->with('error', 'You cannot delete your own account.');
@@ -432,14 +355,8 @@ class AdminController extends Controller
             ->with('success', 'User deleted successfully.');
     }
 
-    /**
-     * Display analytics dashboard.
-     *
-     * @return \Illuminate\View\View
-     */
     public function analytics()
     {
-        // Monthly reservation counts for the past year
         $monthlyReservations = DB::table('reservations')
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
             ->whereYear('created_at', '=', date('Y'))
@@ -447,24 +364,21 @@ class AdminController extends Controller
             ->orderBy('month')
             ->get();
 
-        // Destinations by category
         $destinationsByCategory = DB::table('destinations')
             ->select('category', DB::raw('COUNT(*) as count'))
             ->groupBy('category')
             ->orderBy('count', 'desc')
             ->get();
 
-        // Top rated destinations
         $topRatedDestinations = DB::table('destinations')
             ->join('reviews', 'destinations.id', '=', 'reviews.destination_id')
             ->select('destinations.id', 'destinations.name', DB::raw('AVG(reviews.rating) as average_rating'), DB::raw('COUNT(reviews.id) as review_count'))
             ->groupBy('destinations.id', 'destinations.name')
-            ->having('review_count', '>=', 3) // Only include destinations with at least 3 reviews
+            ->having('review_count', '>=', 3)
             ->orderBy('average_rating', 'desc')
             ->take(5)
             ->get();
 
-        // User registration trend
         $userRegistrationTrend = DB::table('users')
             ->select(DB::raw('MONTH(created_at) as month'), DB::raw('YEAR(created_at) as year'), DB::raw('COUNT(*) as count'))
             ->where('created_at', '>=', Carbon::now()->subYear())
@@ -473,7 +387,6 @@ class AdminController extends Controller
             ->orderBy('month')
             ->get();
 
-        // Revenue by month
         $revenueByMonth = DB::table('reservations')
             ->join('events', 'reservations.event_id', '=', 'events.id')
             ->select(DB::raw('MONTH(reservations.created_at) as month'), DB::raw('YEAR(reservations.created_at) as year'), DB::raw('SUM(events.price) as total'))
@@ -484,7 +397,6 @@ class AdminController extends Controller
             ->orderBy('month')
             ->get();
 
-        // Most active users
         $mostActiveUsers = DB::table('users')
             ->leftJoin('reservations', 'users.id', '=', 'reservations.user_id')
             ->leftJoin('reviews', 'users.id', '=', 'reviews.user_id')
@@ -508,51 +420,7 @@ class AdminController extends Controller
             'mostActiveUsers'
         ));
     }
-
-    /**
-     * Display site settings.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function settings()
-    {
-        // You can extend this method to load site settings from database
-        return view('admin.settings');
-    }
-
-    /**
-     * Update site settings.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updateSettings(Request $request)
-    {
-        $request->validate([
-            'site_name' => 'required|string|max:255',
-            'site_description' => 'required|string|max:1000',
-            'contact_email' => 'required|email',
-            'contact_phone' => 'required|string|max:20',
-            'facebook_url' => 'nullable|url',
-            'twitter_url' => 'nullable|url',
-            'instagram_url' => 'nullable|url',
-            'google_analytics_id' => 'nullable|string|max:20',
-        ]);
-
-        // Here you would update the settings in the database
-        // This is placeholder code and would need actual implementation
-        // using a Settings model or config repository
-
-        return redirect()->route('admin.settings.index')
-            ->with('success', 'Settings updated successfully.');
-    }
-
-    /**
-     * Search functionality for admin panel
-     * 
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
+    
     public function search(Request $request)
     {
         $query = $request->get('query');
@@ -561,31 +429,26 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Please enter a search query.');
         }
 
-        // Search users
         $users = User::where('name', 'like', "%{$query}%")
             ->orWhere('email', 'like', "%{$query}%")
             ->take(5)
             ->get();
 
-        // Search destinations
         $destinations = destinations::where('name', 'like', "%{$query}%")
             ->orWhere('description', 'like', "%{$query}%")
             ->take(5)
             ->get();
 
-        // Search events
         $events = events::where('name', 'like', "%{$query}%")
             ->orWhere('description', 'like', "%{$query}%")
             ->take(5)
             ->get();
 
-        // Search blogs
         $blogs = Blog::where('title', 'like', "%{$query}%")
             ->orWhere('content', 'like', "%{$query}%")
             ->take(5)
             ->get();
 
-        // search Categories
         $categories = categories::where('name', 'like', "%{$query}%")
             ->orWhere('description', 'like', "%{$query}%")
             ->take(5)
@@ -594,75 +457,4 @@ class AdminController extends Controller
         return view('admin.search-results', compact('query', 'users', 'destinations', 'events', 'blogs', 'categories'));
     }
 
-    /**
-     * Show activity logs page
-     * 
-     * @return \Illuminate\View\View
-     */
-    public function activityLogs()
-    {
-        // This would depend on how you implement activity logging
-        // For example, if using a ActivityLog model:
-        // $logs = ActivityLog::orderBy('created_at', 'desc')->paginate(20);
-
-        // Placeholder for now
-        $logs = [];
-
-        return view('admin.activity-logs', compact('logs'));
-    }
-
-    /**
-     * Export data as CSV
-     * 
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
-    public function exportData(Request $request)
-    {
-        $type = $request->get('type', 'users');
-        $filename = $type . '_' . date('Y-m-d') . '.csv';
-
-        switch ($type) {
-            case 'users':
-                $headers = ['ID', 'Name', 'Email', 'Role', 'Status', 'Created At'];
-                $data = User::select('id', 'name', 'email', 'role', 'status', 'created_at')->get();
-                break;
-
-            case 'destinations':
-                $headers = ['ID', 'Name', 'Address', 'Category', 'Created At'];
-                $data = destinations::select('id', 'name', 'address', 'category', 'created_at')->get();
-                break;
-
-            case 'events':
-                $headers = ['ID', 'Name', 'Date', 'Location', 'Price', 'Created At'];
-                $data = events::select('id', 'name', 'date', 'location', 'price', 'created_at')->get();
-                break;
-
-            case 'reservations':
-                $headers = ['ID', 'User ID', 'Event ID', 'Status', 'Created At'];
-                $data = reservations::select('id', 'user_id', 'event_id', 'status', 'created_at')->get();
-                break;
-
-            default:
-                return redirect()->back()->with('error', 'Invalid export type specified.');
-        }
-
-        // Create and return CSV file 
-        // (This is simplified - in a real app you might use a package like Laravel Excel)
-        $callback = function () use ($data, $headers) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $headers);
-
-            foreach ($data as $row) {
-                fputcsv($file, $row->toArray());
-            }
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
-    }
 }

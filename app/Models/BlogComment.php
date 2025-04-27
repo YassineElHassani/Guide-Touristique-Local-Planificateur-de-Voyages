@@ -20,17 +20,11 @@ class BlogComment extends Model
         'content',
     ];
 
-    /**
-     * Get the blog that owns the comment.
-     */
     public function blog()
     {
         return $this->belongsTo(Blog::class);
     }
 
-    /**
-     * Get the user that wrote the comment.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
