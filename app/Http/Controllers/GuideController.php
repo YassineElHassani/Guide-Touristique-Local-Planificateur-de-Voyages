@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Middleware\GuideMiddleware;
+use App\Models\categories;
 
 class GuideController extends Controller
 {
@@ -19,21 +20,35 @@ class GuideController extends Controller
      */
     protected array $middleware = [GuideMiddleware::class];
     
+    public function home()
+    {
+        $user = Auth::user();
+        
+        // Get user's favorites
+        $favorites = $user->favorites;
+        
+        // Get user's reservations
+        $reservations = reservations::where('user_id', $user->id)->orderBy('date', 'desc')->get();
+        
+        // Get user's reviews
+        $reviews = reviews::where('user_id', $user->id)->get();
+        
+        return view('guide.home', compact('user', 'favorites', 'reservations', 'reviews'));
+    }
+
     /**
      * Show the guide dashboard.
      */
     public function dashboard()
     {
-        // For a real application, you would filter events by the current guide's ID
-        // Since we don't have a direct relation in the database, we'll show all events for now
+        // Since we can't filter events by guide yet, show all events
         $events = events::all();
         
-        // Calculate stats
         $stats = [
             'totalEvents' => $events->count(),
             'upcomingEvents' => $events->where('date', '>=', now())->count(),
-            'totalReservations' => reservations::count(), // In a real app, filter by guide's events
-            'totalRevenue' => $events->sum('price'), // Simplified - in a real app would sum actual bookings
+            'totalReservations' => reservations::count(),
+            'totalRevenue' => reservations::where('status', 'confirmed')->sum('total_price'),
         ];
         
         // Get recent reservations
@@ -44,13 +59,77 @@ class GuideController extends Controller
         return view('guide.dashboard', compact('stats', 'events', 'recentReservations'));
     }
     
+
+    public function categories(Request $request) 
+    {
+        // $user = Auth::user();
+        // $categories = categories::where('id', $user->id)->get();
+        $categories = categories::all();
+
+        return view('guide.categories.index', compact('categories'));
+    }
+    
+    /**
+     * Show the form for editing a category.
+     */
+    public function editCategory($id)
+    {
+        $user = Auth::user();
+        $category = categories::where('id', $user->id)->findOrFail($id);
+        return view('guide.categories.edit', compact('category'));
+    }
+    
+    /**
+     * Update the specified category.
+     */
+    public function updateCategory(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        
+        $user = Auth::user();
+        $category = categories::where('id', $user->id)->findOrFail($id);
+        $category->name = $request->name;
+        $category->save();
+        
+        return redirect()->route('guide.categories.index')
+            ->with('success', 'Category updated successfully');
+    }
+
     /**
      * Show the guide's events.
      */
-    public function events()
+    public function events(Request $request)
     {
-        // For a real application, you would filter events by the current guide's ID
-        $events = events::all();
+        // Initialize the query to filter events by the authenticated user's ID
+        $eventsQuery = events::query()->where('id', Auth::id());
+        
+        // Apply search filters
+        if ($request->has('search')) {
+            $search = $request->search;
+            $eventsQuery->where(function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply date filters
+        if ($request->has('date_from') && $request->date_from) {
+            $eventsQuery->where('date', '>=', $request->date_from);
+        }
+        
+        if ($request->has('date_to') && $request->date_to) {
+            $eventsQuery->where('date', '<=', $request->date_to);
+        }
+        
+        // Sort events
+        $eventsQuery->orderBy('date', 'desc');
+        
+        // Get paginated results
+        $events = $eventsQuery->paginate(10);
+        
         return view('guide.events.index', compact('events'));
     }
     
@@ -59,19 +138,53 @@ class GuideController extends Controller
      */
     public function reservations()
     {
-        // For a real application, you would filter reservations by the guide's events
-        $reservations = reservations::all();
+        // Get the authenticated user's events
+        $userEvents = events::where('id', Auth::id())->pluck('id');
+        
+        // Show only reservations made to the user's events
+        $reservations = reservations::whereIn('event_id', $userEvents)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
         return view('guide.reservations.index', compact('reservations'));
     }
     
     /**
-     * Show reviews for the guide's events.
+     * Show a specific reservation.
      */
-    public function reviews()
+    public function showReservation($id)
     {
-        // For a real application, you would filter reviews by the guide's events
-        $reviews = reviews::where('event_id', '!=', null)->get();
-        return view('guide.reviews.index', compact('reviews'));
+        $reservation = reservations::findOrFail($id);
+        return view('guide.reservations.show', compact('reservation'));
+    }
+    
+    /**
+     * Store a new reservation (for guide direct bookings).
+     */
+    public function storeReservation(Request $request)
+    {
+        $request->validate([
+            'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
+            'date' => 'required|date',
+            'guests' => 'required|integer|min:1',
+            'status' => 'required|in:pending,confirmed,cancelled',
+        ]);
+        
+        $event = events::findOrFail($request->event_id);
+        
+        // Create the reservation
+        $reservation = new reservations();
+        $reservation->event_id = $request->event_id;
+        $reservation->user_id = $request->user_id;
+        $reservation->date = $request->date;
+        $reservation->guests = $request->guests;
+        $reservation->total_price = $event->price * $request->guests;
+        $reservation->status = $request->status;
+        $reservation->save();
+        
+        return redirect()->route('guide.reservations.index')
+            ->with('success', 'Reservation created successfully');
     }
     
     /**
@@ -86,8 +199,24 @@ class GuideController extends Controller
         $reservation = reservations::findOrFail($id);
         $reservation->update(['status' => $request->status]);
         
-        return redirect()->route('guide.reservations')
+        return redirect()->back()
             ->with('success', 'Reservation status updated successfully.');
+    }
+    
+    /**
+     * Show reviews for events.
+     */
+    public function reviews()
+    {
+        // Get the authenticated user's events
+        $userEvents = events::where('id', Auth::id())->pluck('id');
+        
+        // Show only reviews made for the user's events
+        $reviews = reviews::whereIn('event_id', $userEvents)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
+        return view('guide.reviews.index', compact('reviews'));
     }
     
     /**

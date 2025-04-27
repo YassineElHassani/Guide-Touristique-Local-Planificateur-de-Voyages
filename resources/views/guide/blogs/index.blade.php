@@ -60,38 +60,33 @@
                     <div class="mb-4">
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Main</h6>
 
-                        <a href="{{ route('client.home') }}"
-                            class="sidebar-link {{ request()->routeIs('client.home') ? 'active' : '' }}">
+                        <a href="{{ route('guide.home') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.home') ? 'active' : '' }}">
                             <i class="fas fa-home"></i> Dashboard
                         </a>
 
-                        <a href="{{ route('client.blogs.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.blogs.index') ? 'active' : '' }}">
+                        <a href="{{ route('guide.blogs.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.blogs.index') ? 'active' : '' }}">
                             <i class="fas fa-blog"></i> All Blogs
                         </a>
 
-                        <a href="{{ route('client.blogs.my-blogs') }}"
-                            class="sidebar-link {{ request()->routeIs('client.blogs.my-blogs') ? 'active' : '' }}">
+                        <a href="{{ route('guide.blogs.my-blogs') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.blogs.my-blogs') ? 'active' : '' }}">
                             <i class="fas fa-user-edit"></i> My Blogs
                         </a>
 
-                        <a href="{{ route('client.events.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.events.*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.events.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.events.*') ? 'active' : '' }}">
                             <i class="fas fa-ticket-alt"></i> Events
                         </a>
 
-                        <a href="{{ route('client.reservations.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.reservations.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.reservations*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check"></i> Reservations
                         </a>
 
-                        <a href="{{ route('client.favorites') }}"
-                            class="sidebar-link {{ request()->routeIs('client.favorites*') ? 'active' : '' }}">
-                            <i class="fas fa-heart"></i> Favorites
-                        </a>
-
-                        <a href="{{ route('client.reviews') }}"
-                            class="sidebar-link {{ request()->routeIs('client.reviews*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.reviews') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.reviews*') ? 'active' : '' }}">
                             <i class="fas fa-star"></i> Reviews
                         </a>
                     </div>
@@ -102,7 +97,7 @@
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
 
                         <a href="{{ route('profile.show') }}"
-                            class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('guide.profile*') ? 'active' : '' }}">
                             <i class="fas fa-user"></i> Profile
                         </a>
 
@@ -117,12 +112,12 @@
                     <div class="mb-4">
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Categories</h6>
                         <div class="list-group">
-                            <a href="{{ route('client.blogs.index') }}"
-                                class="list-group-item list-group-item-action {{ request()->routeIs('client.blogs.index') && !request()->query('category') ? 'active' : '' }}">
+                            <a href="{{ route('guide.blogs.index') }}"
+                                class="list-group-item list-group-item-action {{ request()->routeIs('guide.blogs.index') && !request()->query('category') ? 'active' : '' }}">
                                 All Categories
                             </a>
                             @foreach ($categories as $category)
-                                <a href="{{ route('client.blogs.index', ['category' => $category]) }}"
+                                <a href="{{ route('guide.blogs.index', ['category' => $category]) }}"
                                     class="list-group-item list-group-item-action {{ request()->query('category') == $category ? 'active' : '' }}">
                                     {{ $category }}
                                 </a>
@@ -141,14 +136,14 @@
                             <h3 class="mb-1">Blogs</h3>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="{{ route('client.home') }}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('guide.home') }}">Dashboard</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Blogs</li>
                                 </ol>
                             </nav>
                         </div>
                         <div class="col-md-5 mt-3 mt-md-0">
                             <div class="d-flex justify-content-md-end">
-                                <form action="{{ route('client.blogs.index') }}" method="GET"
+                                <form action="{{ route('guide.blogs.index') }}" method="GET"
                                     class="d-flex me-2 flex-grow-1">
                                     <input type="text" name="search" class="form-control" placeholder="Search blogs..."
                                         value="{{ request('search') }}">
@@ -156,10 +151,10 @@
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </form>
-                                <a href="{{ route('client.blogs.my-blogs') }}" class="btn btn-secondary me-2">
+                                <a href="{{ route('guide.blogs.my-blogs') }}" class="btn btn-secondary me-2">
                                     <i class="fas fa-user-edit me-1"></i> My Blogs
                                 </a>
-                                <a href="{{ route('client.blogs.create') }}" class="btn btn-success">
+                                <a href="{{ route('guide.blogs.create') }}" class="btn btn-success">
                                     <i class="fas fa-plus me-1"></i> New
                                 </a>
                             </div>
@@ -191,7 +186,7 @@
                                                 <span class="badge bg-warning mb-2">Featured</span>
                                                 <h3>{{ $featuredBlog->title }}</h3>
                                                 <p>{{ Str::limit($featuredBlog->excerpt, 120) }}</p>
-                                                <a href="{{ route('client.blogs.show', $featuredBlog->slug) }}"
+                                                <a href="{{ route('guide.blogs.show', $featuredBlog->slug) }}"
                                                     class="btn btn-primary btn-sm">Read More</a>
                                             </div>
                                         </div>
@@ -243,7 +238,7 @@
                                     </div>
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title">
-                                            <a href="{{ route('client.blogs.show', $blog->slug) }}"
+                                            <a href="{{ route('guide.blogs.show', $blog->slug) }}"
                                                 class="text-decoration-none text-dark">
                                                 {{ Str::limit($blog->title, 50) }}
                                             </a>
@@ -261,7 +256,7 @@
                                         <p class="card-text flex-grow-1">{{ Str::limit($blog->excerpt, 100) }}</p>
 
                                         <div class="mt-auto d-flex justify-content-between align-items-center">
-                                            <a href="{{ route('client.blogs.show', $blog->slug) }}"
+                                            <a href="{{ route('guide.blogs.show', $blog->slug) }}"
                                                 class="btn btn-sm btn-primary">
                                                 Read More
                                             </a>
@@ -275,13 +270,13 @@
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li>
                                                             <a class="dropdown-item"
-                                                                href="{{ route('client.blogs.edit', $blog->slug) }}">
+                                                                href="{{ route('guide.blogs.edit', $blog->slug) }}">
                                                                 <i class="fas fa-edit me-1 text-success"></i> Edit
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <form
-                                                                action="{{ route('client.blogs.update-status', $blog->id) }}"
+                                                                action="{{ route('guide.blogs.update-status', $blog->id) }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('PATCH')
@@ -300,7 +295,7 @@
                                                         </li>
                                                         <li>
                                                             <form
-                                                                action="{{ route('client.blogs.destroy', $blog->slug) }}"
+                                                                action="{{ route('guide.blogs.destroy', $blog->slug) }}"
                                                                 method="POST"
                                                                 onsubmit="return confirm('Are you sure you want to delete this blog?');">
                                                                 @csrf
@@ -351,7 +346,7 @@
                                         No blog posts have been published yet.
                                     @endif
                                 </p>
-                                <a href="{{ route('client.blogs.create') }}" class="btn btn-primary mt-2">
+                                <a href="{{ route('guide.blogs.create') }}" class="btn btn-primary mt-2">
                                     <i class="fas fa-plus me-1"></i> Create a Blog Post
                                 </a>
                             </div>

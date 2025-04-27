@@ -1,6 +1,6 @@
 @extends('layouts.template')
 
-@section('title', 'Edit Blog: ' . $blog->title)
+@section('title', 'Create New Blog')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('/app/css/dashboard.css') }}">
@@ -14,8 +14,9 @@
         .preview-image {
             max-height: 200px;
             width: auto;
-            border-radius: 5px;
+            display: none;
             margin-top: 10px;
+            border-radius: 5px;
         }
     </style>
 @endpush
@@ -46,33 +47,28 @@
                     <div class="mb-4">
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Main</h6>
 
-                        <a href="{{ route('client.home') }}"
-                            class="sidebar-link {{ request()->routeIs('client.home') ? 'active' : '' }}">
+                        <a href="{{ route('guide.home') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.home') ? 'active' : '' }}">
                             <i class="fas fa-home"></i> Dashboard
                         </a>
 
-                        <a href="{{ route('client.blogs.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.blogs.*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.blogs.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.blogs.*') ? 'active' : '' }}">
                             <i class="fas fa-blog"></i> Blogs
                         </a>
 
-                        <a href="{{ route('client.events.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.events.*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.events.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.events.*') ? 'active' : '' }}">
                             <i class="fas fa-ticket-alt"></i> Events
                         </a>
 
-                        <a href="{{ route('client.reservations.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.reservations.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.reservations*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check"></i> Reservations
                         </a>
 
-                        <a href="{{ route('client.favorites') }}"
-                            class="sidebar-link {{ request()->routeIs('client.favorites*') ? 'active' : '' }}">
-                            <i class="fas fa-heart"></i> Favorites
-                        </a>
-
-                        <a href="{{ route('client.reviews') }}"
-                            class="sidebar-link {{ request()->routeIs('client.reviews*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.reviews') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.reviews*') ? 'active' : '' }}">
                             <i class="fas fa-star"></i> Reviews
                         </a>
                     </div>
@@ -83,7 +79,7 @@
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
 
                         <a href="{{ route('profile.show') }}"
-                            class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('guide.profile*') ? 'active' : '' }}">
                             <i class="fas fa-user"></i> Profile
                         </a>
 
@@ -94,51 +90,18 @@
 
                     <div class="sidebar-divider"></div>
 
-                    <!-- Blog Info -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-transparent">
-                            <h6 class="mb-0">Blog Information</h6>
-                        </div>
+                    <!-- Tips Card -->
+                    <div class="card bg-light border-0">
                         <div class="card-body">
-                            <div class="mb-3">
-                                <small class="text-muted d-block">Created</small>
-                                <span>{{ $blog->created_at->format('M d, Y') }}</span>
-                            </div>
-
-                            <div class="mb-3">
-                                <small class="text-muted d-block">Last Updated</small>
-                                <span>{{ $blog->updated_at->format('M d, Y') }}</span>
-                            </div>
-
-                            <div class="mb-3">
-                                <small class="text-muted d-block">Status</small>
-                                <span class="badge {{ $blog->published ? 'bg-success' : 'bg-warning' }}">
-                                    {{ $blog->published ? 'Published' : 'Draft' }}
-                                </span>
-                                @if ($blog->featured)
-                                    <span class="badge bg-warning ms-1">Featured</span>
-                                @endif
-                            </div>
-
-                            <div>
-                                <small class="text-muted d-block">Stats</small>
-                                <div class="d-flex justify-content-between mt-1">
-                                    <span><i class="fas fa-eye me-1"></i> {{ number_format($blog->views) }}</span>
-                                    <span><i class="fas fa-comments me-1"></i> {{ $blog->comments->count() }}</span>
-                                </div>
-                            </div>
+                            <h6 class="card-title"><i class="fas fa-lightbulb text-warning me-2"></i>Blog Writing Tips</h6>
+                            <ul class="small ps-3 mb-0">
+                                <li class="mb-2">Use a compelling headline that captures attention</li>
+                                <li class="mb-2">Include a relevant image to increase engagement</li>
+                                <li class="mb-2">Keep paragraphs short for better readability</li>
+                                <li class="mb-2">Use subheadings to organize your content</li>
+                                <li class="mb-2">End with a call-to-action or question</li>
+                            </ul>
                         </div>
-                    </div>
-
-                    <!-- Blog Actions -->
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-outline-primary">
-                            <i class="fas fa-eye me-1"></i> View Blog
-                        </a>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteBlogModal">
-                            <i class="fas fa-trash me-1"></i> Delete Blog
-                        </button>
                     </div>
                 </div>
             </div>
@@ -149,24 +112,24 @@
                 <div class="dashboard-header mb-4 p-4">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h3 class="mb-1">Edit Blog Post</h3>
+                            <h3 class="mb-1">Create New Blog Post</h3>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="{{ route('client.home') }}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="{{ route('client.blogs.index') }}">Blogs</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                                    <li class="breadcrumb-item"><a href="{{ route('guide.home') }}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('guide.blogs.index') }}">Blogs</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Create</li>
                                 </ol>
                             </nav>
                         </div>
                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                            <a href="{{ route('client.blogs.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('guide.blogs.index') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-1"></i> Back to Blogs
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Blog Edit Form -->
+                <!-- Blog Creation Form -->
                 <div class="card">
                     <div class="card-body">
                         @if ($errors->any())
@@ -179,16 +142,14 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('client.blogs.update', $blog->slug) }}" method="POST"
-                            enctype="multipart/form-data">
+                        <form action="{{ route('guide.blogs.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
 
                             <!-- Title -->
                             <div class="mb-4">
                                 <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="title" name="title"
-                                    value="{{ old('title', $blog->title) }}" required>
+                                    value="{{ old('title') }}" required>
                                 <small class="form-text text-muted">Choose a compelling title (max 255 characters)</small>
                             </div>
 
@@ -200,7 +161,7 @@
                                         <option value="">Select Category</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->name }}"
-                                                {{ old('category', $blog->category) == $category->name ? 'selected' : '' }}>
+                                                {{ old('category') == $category->name ? 'selected' : '' }}>
                                                 {{ $category->name }}
                                             </option>
                                         @endforeach
@@ -212,24 +173,16 @@
                                     <label for="image" class="form-label">Featured Image</label>
                                     <input type="file" class="form-control" id="image" name="image"
                                         accept="image/*" onchange="previewImage(this)">
-                                    <small class="form-text text-muted">Leave empty to keep current image (max 2MB)</small>
-
-                                    @if ($blog->image)
-                                        <div class="mt-2">
-                                            <img id="imagePreview" src="{{ asset('storage/' . $blog->image) }}"
-                                                alt="{{ $blog->title }}" class="preview-image">
-                                        </div>
-                                    @else
-                                        <img id="imagePreview" src="#" alt="Preview" class="preview-image"
-                                            style="display: none;">
-                                    @endif
+                                    <small class="form-text text-muted">Recommended size: 1200 x 800 pixels (max
+                                        2MB)</small>
+                                    <img id="imagePreview" src="#" alt="Preview" class="preview-image">
                                 </div>
                             </div>
 
                             <!-- Excerpt -->
                             <div class="mb-4">
                                 <label for="excerpt" class="form-label">Excerpt</label>
-                                <textarea class="form-control" id="excerpt" name="excerpt" rows="3">{{ old('excerpt', $blog->excerpt) }}</textarea>
+                                <textarea class="form-control" id="excerpt" name="excerpt" rows="3">{{ old('excerpt') }}</textarea>
                                 <small class="form-text text-muted">A brief summary of your blog post (max 500 characters).
                                     If left empty, it will be generated from your content.</small>
                             </div>
@@ -238,40 +191,16 @@
                             <div class="mb-4">
                                 <label for="content" class="form-label">Content <span
                                         class="text-danger">*</span></label>
-                                <textarea class="form-control summernote" id="content" name="content" required>{{ old('content', $blog->content) }}</textarea>
+                                <textarea class="form-control summernote" id="content" name="content" required>{{ old('content') }}</textarea>
                             </div>
 
                             <!-- Submit Buttons -->
                             <div class="d-flex justify-content-end gap-2">
                                 <button type="reset" class="btn btn-secondary">Reset</button>
-                                <button type="submit" class="btn btn-primary">Update Blog Post</button>
+                                <button type="submit" class="btn btn-primary">Create Blog Post</button>
                             </div>
                         </form>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Blog Modal -->
-    <div class="modal fade" id="deleteBlogModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Blog Post</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this blog post: <strong>{{ $blog->title }}</strong>?</p>
-                    <p class="text-danger">This action cannot be undone and will also delete all associated comments.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form action="{{ route('client.blogs.destroy', $blog->slug) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -309,6 +238,8 @@
                     preview.style.display = 'block';
                 }
                 reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
             }
         }
     </script>

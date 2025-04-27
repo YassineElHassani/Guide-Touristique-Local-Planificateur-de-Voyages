@@ -80,7 +80,7 @@
                 @elseif (Auth::user()->role == 'guide')
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('guide.dashboard') }}">Home</a>
+                            <a class="nav-link active" href="{{ route('guide.home') }}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">About</a>

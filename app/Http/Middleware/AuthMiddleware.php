@@ -25,8 +25,8 @@ class AuthMiddleware
 
             if ($role == 'travler' && $currentRoute !== 'client.home') {
                 return redirect()->route('client.home');
-            } elseif ($role == 'guide' && $currentRoute !== 'guide.dashboard') {
-                return redirect()->route('guide.dashboard');
+            } elseif ($role == 'guide' && $currentRoute !== 'guide.home') {
+                return redirect()->route('guide.home');
             } elseif ($role == 'admin' && $currentRoute !== 'admin.dashboard.index') {
                 return redirect()->route('admin.dashboard.index');
             }

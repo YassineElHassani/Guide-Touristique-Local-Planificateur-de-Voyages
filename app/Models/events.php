@@ -36,6 +36,11 @@ class events extends Model
         return $this->hasMany(reservations::class, 'event_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(categories::class);
+    }
+
     // Methods
     public function getDetails()
     {

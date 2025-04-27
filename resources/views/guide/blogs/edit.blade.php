@@ -46,33 +46,28 @@
                     <div class="mb-4">
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Main</h6>
 
-                        <a href="{{ route('client.home') }}"
-                            class="sidebar-link {{ request()->routeIs('client.home') ? 'active' : '' }}">
+                        <a href="{{ route('guide.home') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.home') ? 'active' : '' }}">
                             <i class="fas fa-home"></i> Dashboard
                         </a>
 
-                        <a href="{{ route('client.blogs.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.blogs.*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.blogs.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.blogs.*') ? 'active' : '' }}">
                             <i class="fas fa-blog"></i> Blogs
                         </a>
 
-                        <a href="{{ route('client.events.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.events.*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.events.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.events.*') ? 'active' : '' }}">
                             <i class="fas fa-ticket-alt"></i> Events
                         </a>
 
-                        <a href="{{ route('client.reservations.index') }}"
-                            class="sidebar-link {{ request()->routeIs('client.reservations*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.reservations.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.reservations*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-check"></i> Reservations
                         </a>
 
-                        <a href="{{ route('client.favorites') }}"
-                            class="sidebar-link {{ request()->routeIs('client.favorites*') ? 'active' : '' }}">
-                            <i class="fas fa-heart"></i> Favorites
-                        </a>
-
-                        <a href="{{ route('client.reviews') }}"
-                            class="sidebar-link {{ request()->routeIs('client.reviews*') ? 'active' : '' }}">
+                        <a href="{{ route('guide.reviews') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.reviews*') ? 'active' : '' }}">
                             <i class="fas fa-star"></i> Reviews
                         </a>
                     </div>
@@ -83,7 +78,7 @@
                         <h6 class="text-uppercase text-muted small fw-bold mb-3">Account</h6>
 
                         <a href="{{ route('profile.show') }}"
-                            class="sidebar-link {{ request()->routeIs('client.profile*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('guide.profile*') ? 'active' : '' }}">
                             <i class="fas fa-user"></i> Profile
                         </a>
 
@@ -132,7 +127,7 @@
 
                     <!-- Blog Actions -->
                     <div class="d-grid gap-2">
-                        <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-outline-primary">
+                        <a href="{{ route('guide.blogs.show', $blog->slug) }}" class="btn btn-outline-primary">
                             <i class="fas fa-eye me-1"></i> View Blog
                         </a>
                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -152,14 +147,14 @@
                             <h3 class="mb-1">Edit Blog Post</h3>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="{{ route('client.home') }}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="{{ route('client.blogs.index') }}">Blogs</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('guide.home') }}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('guide.blogs.index') }}">Blogs</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Edit</li>
                                 </ol>
                             </nav>
                         </div>
                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                            <a href="{{ route('client.blogs.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('guide.blogs.index') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-1"></i> Back to Blogs
                             </a>
                         </div>
@@ -179,7 +174,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('client.blogs.update', $blog->slug) }}" method="POST"
+                        <form action="{{ route('guide.blogs.update', $blog->slug) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -267,7 +262,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form action="{{ route('client.blogs.destroy', $blog->slug) }}" method="POST">
+                    <form action="{{ route('guide.blogs.destroy', $blog->slug) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>

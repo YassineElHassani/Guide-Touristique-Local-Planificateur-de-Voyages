@@ -511,8 +511,17 @@ class BlogController extends Controller
                 'content' => $request->content,
             ]);
 
-            return redirect()->route('admin.blogs.show', $blog->slug)
-                ->with('success', 'Comment added successfully.');
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.blogs.show', $blog->slug)
+                    ->with('success', 'Comment added successfully.');
+            } elseif (Auth::user()->role === 'travler') {
+                return redirect()->route('client.blogs.show', $blog->slug)
+                    ->with('success', 'Comment added successfully.');
+            } elseif (Auth::user()->role === 'guide') {
+                return redirect()->route('guide.blogs.show', $blog->slug)
+                    ->with('success', 'Comment added successfully.');
+            }
+
         } catch (\Exception $e) {
             Log::error('Error adding comment: ' . $e->getMessage());
             return redirect()->back()

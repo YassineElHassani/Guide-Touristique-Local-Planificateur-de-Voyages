@@ -125,7 +125,8 @@ Route::middleware(['client'])->prefix('client')->group(function () {
 
 // Guide routes
 Route::middleware(['guide'])->prefix('guide')->group(function () {
-    Route::get('/dashboard', [GuideController::class, 'dashboard'])->name('guide.dashboard');
+    // Route::get('/dashboard', [GuideController::class, 'dashboard'])->name('guide.dashboard');
+    Route::get('/home', [GuideController::class, 'home'])->name('guide.home');
 
     // Profile routes
     Route::get('/profile', [ProfilesController::class, 'show'])->name('guide.profile.show');
@@ -135,17 +136,34 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     // Blog routes
     Route::get('/blogs', [BlogController::class, 'index'])->name('guide.blogs.index');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('guide.blogs.create');
+    Route::get('/blogs/my-blogs', [BlogController::class, 'myBlogs'])->name('guide.blogs.my-blogs');
     Route::post('/blogs', [BlogController::class, 'store'])->name('guide.blogs.store');
     Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('guide.blogs.show');
     Route::get('/blogs/{id}/edit', [BlogController::class, 'edit'])->name('guide.blogs.edit');
     Route::put('/blogs/{id}', [BlogController::class, 'update'])->name('guide.blogs.update');
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('guide.blogs.destroy');
-    Route::get('/blogs/my-blogs', [BlogController::class, 'myBlogs'])->name('guide.blogs.my-blogs');
     Route::patch('/blogs/{id}/toggle-featured', [BlogController::class, 'toggleFeatured'])->name('guide.blogs.toggle-featured');
     Route::patch('/blogs/{id}/status', [BlogController::class, 'updateStatus'])->name('guide.blogs.update-status');
 
+    // Category management
+    Route::get('/categories', [GuideController::class, 'categories'])->name('guide.categories.index');
+    Route::post('/categories', [CategoriesController::class, 'store'])->name('guide.categories.store');
+    Route::get('/categories/{id}', [CategoriesController::class, 'show'])->name('guide.categories.show');
+    Route::get('/categories/{id}/edit', [CategoriesController::class, 'edit'])->name('guide.categories.edit');
+    Route::put('/categories/{id}', [CategoriesController::class, 'update'])->name('guide.categories.update');
+    Route::delete('/categories/{id}', [CategoriesController::class, 'destroy'])->name('guide.categories.destroy');
+
+    // Destination management
+    Route::get('/destinations', [DestinationsController::class, 'indexGuide'])->name('guide.destinations.index');
+    Route::get('/destinations/create', [DestinationsController::class, 'create'])->name('guide.destinations.create');
+    Route::post('/destinations', [DestinationsController::class, 'store'])->name('guide.destinations.store');
+    Route::get('/destinations/{id}', [DestinationsController::class, 'show'])->name('guide.destinations.show');
+    Route::get('/destinations/{id}/edit', [DestinationsController::class, 'edit'])->name('guide.destinations.edit');
+    Route::put('/destinations/{id}', [DestinationsController::class, 'update'])->name('guide.destinations.update');
+    Route::delete('/destinations/{id}', [DestinationsController::class, 'destroy'])->name('guide.destinations.destroy');
+
     // Events management
-    Route::get('/events', [GuideController::class, 'events'])->name('guide.events');
+    Route::get('/events', [GuideController::class, 'events'])->name('guide.events.index');
     Route::get('/events/create', [EventsController::class, 'create'])->name('guide.events.create');
     Route::post('/events', [EventsController::class, 'store'])->name('guide.events.store');
     Route::get('/events/{id}', [EventsController::class, 'show'])->name('guide.events.show');
@@ -154,7 +172,7 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     Route::delete('/events/{id}', [EventsController::class, 'destroy'])->name('guide.events.destroy');
 
     // Reservations management
-    Route::get('/reservations', [GuideController::class, 'reservations'])->name('guide.reservations');
+    Route::get('/reservations', [GuideController::class, 'reservations'])->name('guide.reservations.index');
     Route::get('/reservations/{id}', [GuideController::class, 'showReservation'])->name('guide.reservations.show');
     Route::post('/reservations', [GuideController::class, 'storeReservation'])->name('guide.reservations.store');
     Route::put('/reservations/{id}/status', [GuideController::class, 'updateReservationStatus'])->name('guide.reservations.update-status');

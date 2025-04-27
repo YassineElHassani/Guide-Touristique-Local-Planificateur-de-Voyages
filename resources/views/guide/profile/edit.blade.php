@@ -1,4 +1,4 @@
-@extends('guide.dashboard')
+@extends('client.dashboard')
 
 @section('dashboard-title', 'Edit Profile')
 @section('dashboard-breadcrumb', 'Edit Profile')
@@ -249,15 +249,15 @@
             
             <div class="card-body p-4">
                 <div class="d-grid gap-2">
-                    <a href="{{ route('guide.reservations.index') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('client.reservations.index') }}" class="btn btn-outline-primary">
                         <i class="fas fa-calendar-check me-2"></i> View Reservations
                     </a>
                     
-                    <a href="{{ route('guide.favorites') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('client.favorites') }}" class="btn btn-outline-primary">
                         <i class="fas fa-heart me-2"></i> View Favorites
                     </a>
                     
-                    <a href="{{ route('guide.reviews') }}" class="btn btn-outline-primary">
+                    <a href="{{ route('client.reviews') }}" class="btn btn-outline-primary">
                         <i class="fas fa-star me-2"></i> View Reviews
                     </a>
                     

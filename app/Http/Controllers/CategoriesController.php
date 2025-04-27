@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\categories;
 use App\Models\destinations;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoriesController extends Controller
 {
@@ -12,7 +13,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = categories::all();
-        return view('categories.index', compact('categories'));
+        return view('guide.categories.index', compact('categories'));
     }
 
     public function show($id)
@@ -22,7 +23,7 @@ class CategoriesController extends Controller
         return view('categories.show', compact('category', 'destinations'));
     }
 
-    // Admin routes
+
     public function adminIndex()
     {
         $categories = categories::all();
@@ -44,19 +45,27 @@ class CategoriesController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
+        } elseif (Auth::user()->role === 'guide') {
+            return redirect()->route('guide.categories.index')->with('success', 'Category created successfully.');
+        }
     }
 
     public function edit($id)
     {
         $category = categories::findOrFail($id);
-        return view('admin.categories.edit', compact('category'));
+        if (Auth::user()->role === 'admin') {
+            return view('admin.categories.edit', compact('category'));
+        } elseif (Auth::user()->role === 'guide') {
+            return view('guide.categories.edit', compact('category'));
+        }
     }
 
     public function update(Request $request, $id)
     {
         $category = categories::findOrFail($id);
-        
+
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $id,
         ]);
@@ -65,21 +74,30 @@ class CategoriesController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
+        } elseif (Auth::user()->role === 'guide') {
+            return redirect()->route('guide.categories.index')->with('success', 'Category updated successfully.');
+        }
     }
 
     public function destroy($id)
     {
         $category = categories::findOrFail($id);
-        
+
         // Check if there are destinations using this category
         $destinationsCount = destinations::where('category', $category->name)->count();
         if ($destinationsCount > 0) {
             return redirect()->route('admin.categories.index')->with('error', 'Cannot delete category. It is being used by ' . $destinationsCount . ' destinations.');
         }
-        
+
         $category->delete();
 
-        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
+        } elseif (Auth::user()->role === 'guide') {
+            return redirect()->route('guide.categories.index')->with('success', 'Category deleted successfully.');
+        }
+
     }
 }
