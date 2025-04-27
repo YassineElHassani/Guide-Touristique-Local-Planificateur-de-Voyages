@@ -1,4 +1,4 @@
-@extends('client.dashboard')
+@extends('guide.dashboard')
 
 @section('dashboard-title', 'My Profile')
 @section('dashboard-breadcrumb', 'Profile')
@@ -62,7 +62,7 @@
                         <a href="{{ route('profile.edit') }}" class="btn btn-primary">
                             <i class="fas fa-edit me-2"></i> Edit Profile
                         </a>
-                    <a href="{{ route('client.reservations.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('guide.reservations.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-calendar-check me-2"></i> View Reservations
                     </a>
                 </div>
@@ -154,7 +154,7 @@
                                             <i class="far fa-clock me-1"></i> {{ $reservation->created_at->diffForHumans() }}
                                         </p>
                                     </div>
-                                    <a href="{{ route('client.reservations.show', $reservation->id) }}" class="btn btn-sm btn-outline-primary ms-auto">
+                                    <a href="{{ route('guide.reservations.show', $reservation->id) }}" class="btn btn-sm btn-outline-primary ms-auto">
                                         View
                                     </a>
                                 </div>
@@ -165,7 +165,7 @@
                             <i class="fas fa-calendar-day fa-3x text-muted mb-3"></i>
                             <h5>No Reservations Yet</h5>
                             <p class="text-muted mb-3">Explore events and book your next adventure!</p>
-                            <a href="{{ route('client.events.index') }}" class="btn btn-primary">
+                            <a href="{{ route('guide.events.index') }}" class="btn btn-primary">
                                 <i class="fas fa-ticket-alt me-1"></i> Browse Events
                             </a>
                         </div>

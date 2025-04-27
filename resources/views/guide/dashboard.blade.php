@@ -44,7 +44,7 @@
                         </a>
 
                         <div class="sidebar-item">
-                            <a href="{{ route('admin.destinations.index') }}"
+                            <a href="{{ route('guide.destinations.index') }}"
                                 class="sidebar-link {{ request()->routeIs('guide.destinations*') ? 'active' : '' }}">
                                 <i class="fas fa-map-marker-alt"></i> Destinations
                             </a>
@@ -112,7 +112,7 @@
                             <h3 class="mb-1">@yield('dashboard-title', 'Dashboard')</h3>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('guide.home') }}">Home</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">@yield('dashboard-breadcrumb', 'Dashboard')</li>
                                 </ol>
                             </nav>

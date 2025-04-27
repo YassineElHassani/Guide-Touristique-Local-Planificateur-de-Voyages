@@ -158,12 +158,10 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
     Route::get('/destinations/create', [DestinationsController::class, 'create'])->name('guide.destinations.create');
     Route::post('/destinations', [DestinationsController::class, 'store'])->name('guide.destinations.store');
     Route::get('/destinations/{id}', [DestinationsController::class, 'show'])->name('guide.destinations.show');
-    Route::get('/destinations/{id}/edit', [DestinationsController::class, 'edit'])->name('guide.destinations.edit');
-    Route::put('/destinations/{id}', [DestinationsController::class, 'update'])->name('guide.destinations.update');
-    Route::delete('/destinations/{id}', [DestinationsController::class, 'destroy'])->name('guide.destinations.destroy');
 
     // Events management
     Route::get('/events', [GuideController::class, 'events'])->name('guide.events.index');
+    Route::get('/events/all', [GuideController::class, 'allEvents'])->name('guide.events.all');
     Route::get('/events/create', [EventsController::class, 'create'])->name('guide.events.create');
     Route::post('/events', [EventsController::class, 'store'])->name('guide.events.store');
     Route::get('/events/{id}', [EventsController::class, 'show'])->name('guide.events.show');

@@ -4,9 +4,14 @@
 @section('dashboard-breadcrumb', 'Events')
 
 @section('dashboard-actions')
-    <a href="{{ route('guide.events.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus me-1"></i> Create New Event
-    </a>
+    <div class="btn-group">
+        <a href="{{ route('guide.events.all') }}" class="btn btn-outline-primary">
+            <i class="fas fa-globe me-1"></i> View All Events
+        </a>
+        <a href="{{ route('guide.events.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Create New Event
+        </a>
+    </div>
 @endsection
 
 @section('dashboard-content')

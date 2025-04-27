@@ -4,231 +4,198 @@
 @section('dashboard-breadcrumb', 'Create Destination')
 
 @section('dashboard-actions')
-    <a href="{{ route('guide.destinations.index') }}" class="btn btn-outline-primary">
-        <i class="fas fa-arrow-left me-1"></i> Back to Destinations
-    </a>
+    <div class="btn-group">
+        <a href="{{ route('guide.destinations.index') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Destinations
+        </a>
+    </div>
 @endsection
 
 @section('dashboard-content')
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
-            <form action="{{ route('guide.destinations.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                
-                <div class="row g-4">
-                    <!-- Destination Details Column -->
-                    <div class="col-md-8">
-                        <h5 class="mb-3">Destination Details</h5>
-                        
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Destination Information</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('guide.destinations.store') }}" method="POST">
+                        @csrf
+
                         <div class="mb-3">
-                            <label for="name" class="form-label">Destination Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                id="name" name="name" value="{{ old('name') }}" required>
+                            <label for="name" class="form-label">Destination Name</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                name="name" value="{{ old('name') }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="mb-3">
-                            <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" 
-                                id="description" name="description" rows="5" required>{{ old('description') }}</textarea>
-                            @error('description')
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select @error('category') is-invalid @enderror" id="category"
+                                name="category" required>
+                                <option value="">Select a category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->name }}"
+                                        {{ old('category') == $category->name ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="location" class="form-label">Location <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('location') is-invalid @enderror" 
-                                    id="location" name="location" value="{{ old('location') }}" required>
-                                @error('location')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label for="category_id" class="form-label">Category</label>
-                                <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id">
-                                    <option value="">Select a category</option>
-                                    @foreach(\App\Models\categories::where('user_id', Auth::id())->get() as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        
+
                         <div class="mb-3">
-                            <label for="address" class="form-label">Full Address</label>
-                            <input type="text" class="form-control @error('address') is-invalid @enderror" 
-                                id="address" name="address" value="{{ old('address') }}">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control @error('address') is-invalid @enderror" id="address"
+                                name="address" value="{{ old('address') }}" required>
+                            <div class="form-text">Start typing an address and select from the dropdown</div>
                             @error('address')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="latitude" class="form-label">Latitude</label>
-                                <input type="text" class="form-control @error('latitude') is-invalid @enderror" 
-                                    id="latitude" name="latitude" value="{{ old('latitude') }}">
-                                @error('latitude')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label for="longitude" class="form-label">Longitude</label>
-                                <input type="text" class="form-control @error('longitude') is-invalid @enderror" 
-                                    id="longitude" name="longitude" value="{{ old('longitude') }}">
-                                @error('longitude')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        
+
                         <div class="mb-3">
-                            <label for="highlights" class="form-label">Highlights</label>
-                            <textarea class="form-control @error('highlights') is-invalid @enderror" 
-                                id="highlights" name="highlights" rows="3">{{ old('highlights') }}</textarea>
-                            <div class="form-text">List key attractions or features of this destination.</div>
-                            @error('highlights')
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                rows="5" required>{{ old('description') }}</textarea>
+                            @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="tips" class="form-label">Travel Tips</label>
-                            <textarea class="form-control @error('tips') is-invalid @enderror" 
-                                id="tips" name="tips" rows="3">{{ old('tips') }}</textarea>
-                            <div class="form-text">Provide helpful tips for visitors to this destination.</div>
-                            @error('tips')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+
+                        <input type="hidden" id="coordinates" name="coordinates" value="{{ old('coordinates') }}">
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Destination
+                            </button>
+                            <a href="{{ route('guide.destinations.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
                         </div>
-                    </div>
-                    
-                    <!-- Media and Settings Column -->
-                    <div class="col-md-4">
-                        <h5 class="mb-3">Media & Settings</h5>
-                        
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="image" class="form-label">Featured Image</label>
-                                    <input type="file" class="form-control @error('image') is-invalid @enderror" 
-                                        id="image" name="image" accept="image/*">
-                                    <div class="form-text">Recommended size: 1200x800px, max 2MB</div>
-                                    @error('image')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    
-                                    <div class="mt-3 text-center d-none" id="image-preview-container">
-                                        <img id="image-preview" src="#" alt="Destination Image Preview" class="img-fluid rounded">
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="gallery" class="form-label">Additional Images (Optional)</label>
-                                    <input type="file" class="form-control @error('gallery') is-invalid @enderror" 
-                                        id="gallery" name="gallery[]" accept="image/*" multiple>
-                                    <div class="form-text">You can select multiple images (max 5)</div>
-                                    @error('gallery')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h6 class="mb-3">Destination Settings</h6>
-                                
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" 
-                                        {{ old('is_featured') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="is_featured">Feature this destination</label>
-                                    <div class="form-text">Featured destinations appear on the homepage</div>
-                                </div>
-                                
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active" 
-                                        {{ old('is_active', true) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="is_active">Active</label>
-                                    <div class="form-text">Inactive destinations won't be visible to users</div>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status</label>
-                                    <select class="form-select" id="status" name="status">
-                                        <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
-                                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="mb-3">Additional Information</h6>
-                                
-                                <div class="mb-3">
-                                    <label for="best_time_to_visit" class="form-label">Best Time to Visit</label>
-                                    <input type="text" class="form-control" id="best_time_to_visit" name="best_time_to_visit" 
-                                        value="{{ old('best_time_to_visit') }}" placeholder="e.g. Spring, Summer">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="ideal_duration" class="form-label">Ideal Duration</label>
-                                    <input type="text" class="form-control" id="ideal_duration" name="ideal_duration" 
-                                        value="{{ old('ideal_duration') }}" placeholder="e.g. 2-3 days">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="tags" class="form-label">Tags</label>
-                                    <input type="text" class="form-control" id="tags" name="tags" 
-                                        value="{{ old('tags') }}" placeholder="e.g. beach, mountain, historic">
-                                    <div class="form-text">Separate tags with commas</div>
-                                </div>
-                            </div>
-                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Location on Map</h5>
+                </div>
+                <div class="card-body">
+                    <div id="map" style="height: 400px; width: 100%;"></div>
+                    <div class="mt-2 text-muted small">
+                        <p>To set the location: search for an address above or click directly on the map.</p>
+                        <p id="selected-location">Selected location: None</p>
                     </div>
                 </div>
-                
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-outline-secondary me-2" onclick="window.history.back()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Destination</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initMap" async defer></script>
 <script>
-    // Image preview functionality
-    document.getElementById('image').addEventListener('change', function(e) {
-        const previewContainer = document.getElementById('image-preview-container');
-        const preview = document.getElementById('image-preview');
-        const file = e.target.files[0];
+    let map, marker, geocoder, autocomplete;
+    
+    // Initialize the map
+    function initMap() {
+        // Default center (you can change this to be more specific to your region)
+        const defaultCenter = { lat: 0, lng: 0 };
         
-        if (file) {
-            const reader = new FileReader();
+        // Create map
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 2,
+            center: defaultCenter,
+        });
+        
+        // Create geocoder for reverse lookup
+        geocoder = new google.maps.Geocoder();
+        
+        // Initialize autocomplete for address input
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById("address"),
+            { types: ["geocode"] }
+        );
+        
+        // Listen for place selection
+        autocomplete.addListener("place_changed", function() {
+            const place = autocomplete.getPlace();
             
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                previewContainer.classList.remove('d-none');
+            if (!place.geometry) {
+                // User entered the name of a place that was not suggested
+                return;
             }
             
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-            previewContainer.classList.add('d-none');
+            // Set the coordinates
+            const location = place.geometry.location;
+            setLocationOnMap(location.lat(), location.lng(), place.formatted_address);
+        });
+        
+        // Allow clicking on the map to set location
+        map.addListener("click", function(event) {
+            geocoder.geocode({ location: event.latLng }, function(results, status) {
+                if (status === "OK" && results[0]) {
+                    document.getElementById("address").value = results[0].formatted_address;
+                    setLocationOnMap(event.latLng.lat(), event.latLng.lng(), results[0].formatted_address);
+                }
+            });
+        });
+        
+        // Check if we have initial coordinates to show
+        const initialCoords = document.getElementById("coordinates").value;
+        if (initialCoords) {
+            const [lat, lng] = initialCoords.split(",").map(Number);
+            setLocationOnMap(lat, lng);
         }
-    });
+    }
+    
+    // Set marker and update form
+    function setLocationOnMap(lat, lng, address = null) {
+        // Update map center
+        const latLng = new google.maps.LatLng(lat, lng);
+        map.setCenter(latLng);
+        map.setZoom(15);
+        
+        // Create or move the marker
+        if (marker) {
+            marker.setPosition(latLng);
+        } else {
+            marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                draggable: true
+            });
+            
+            // Allow dragging the marker
+            marker.addListener("dragend", function() {
+                const position = marker.getPosition();
+                geocoder.geocode({ location: position }, function(results, status) {
+                    if (status === "OK" && results[0]) {
+                        document.getElementById("address").value = results[0].formatted_address;
+                        document.getElementById("coordinates").value = position.lat() + "," + position.lng();
+                        document.getElementById("selected-location").innerHTML = 
+                            "Selected location: " + results[0].formatted_address;
+                    }
+                });
+            });
+        }
+        
+        // Update form fields
+        document.getElementById("coordinates").value = lat + "," + lng;
+        if (address) {
+            document.getElementById("address").value = address;
+        }
+        
+        // Update display
+        document.getElementById("selected-location").innerHTML = 
+            "Selected location: " + (address || "Latitude: " + lat + ", Longitude: " + lng);
+    }
 </script>
 @endpush

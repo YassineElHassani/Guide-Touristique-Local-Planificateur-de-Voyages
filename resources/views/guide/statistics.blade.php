@@ -10,13 +10,13 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
-                            <i class="fas fa-calendar-alt text-primary fa-2x"></i>
+                        <div class="bg-info bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-calendar-alt text-info fa-2x"></i>
                         </div>
                         <div>
                             <h6 class="text-muted mb-1">Total Events</h6>
                             @php
-                                $totalEvents = \App\Models\events::where('user_id', Auth::id())->count();
+                                $totalEvents = \App\Models\events::where('id', Auth::id())->count();
                             @endphp
                             <h3 class="mb-0">{{ $totalEvents }}</h3>
                         </div>
@@ -35,7 +35,7 @@
                         <div>
                             <h6 class="text-muted mb-1">Total Reservations</h6>
                             @php
-                                $eventIds = \App\Models\events::where('user_id', Auth::id())->pluck('id')->toArray();
+                                $eventIds = \App\Models\events::where('id', Auth::id())->pluck('id')->toArray();
                                 $totalReservations = \App\Models\reservations::whereIn('event_id', $eventIds)->count();
                             @endphp
                             <h3 class="mb-0">{{ $totalReservations }}</h3>
@@ -74,9 +74,18 @@
                         <div>
                             <h6 class="text-muted mb-1">Total Revenue</h6>
                             @php
-                                $totalRevenue = \App\Models\reservations::whereIn('event_id', $eventIds)
+                                // Calculate total revenue by joining reservations with events to get the price
+                                $confirmedReservations = \App\Models\reservations::whereIn('event_id', $eventIds)
                                     ->where('status', 'confirmed')
-                                    ->sum('total_price');
+                                    ->get();
+                                
+                                $totalRevenue = 0;
+                                foreach ($confirmedReservations as $reservation) {
+                                    $event = \App\Models\events::find($reservation->event_id);
+                                    if ($event) {
+                                        $totalRevenue += $event->price;
+                                    }
+                                }
                             @endphp
                             <h3 class="mb-0">${{ number_format($totalRevenue, 2) }}</h3>
                         </div>
@@ -94,7 +103,7 @@
                     <h5 class="mb-0">Monthly Reservations</h5>
                 </div>
                 <div class="card-body">
-                    <canvas id="monthlyReservationsChart" height="300"></canvas>
+                    <canvas id="monthlyReservationsChart" height="200"></canvas>
                 </div>
             </div>
         </div>
@@ -107,7 +116,7 @@
                 </div>
                 <div class="card-body">
                     @php
-                        $topEvents = \App\Models\events::where('user_id', Auth::id())
+                        $topEvents = \App\Models\events::where('id', Auth::id())
                             ->withCount(['reservations' => function($query) {
                                 $query->where('status', '!=', 'cancelled');
                             }])

@@ -3,29 +3,50 @@
 @section('dashboard-title', 'Welcome Back, ' . (Auth::user()->first_name ?? ''))
 
 @section('dashboard-actions')
-    <a href="{{ route('guide.events.index') }}" class="btn btn-primary">
-        <i class="fas fa-compass me-1"></i> Explore Events
+    <a href="{{ route('guide.events.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i> Create Event
     </a>
 @endsection
 
 @section('dashboard-content')
+    @php
+        // Get the authenticated user's events
+        $userEvents = \App\Models\events::where('id', Auth::id())->pluck('id');
+        
+        // Get reservations for the user's events
+        $eventReservations = \App\Models\reservations::whereIn('event_id', $userEvents)->get();
+        $confirmedReservations = $eventReservations->where('status', 'confirmed');
+        
+        // Get reviews for the user's events
+        $eventReviews = \App\Models\reviews::whereIn('event_id', $userEvents)->get();
+        
+        // Calculate total revenue
+        $totalRevenue = 0;
+        foreach ($confirmedReservations as $reservation) {
+            $event = \App\Models\events::find($reservation->event_id);
+            if ($event) {
+                $totalRevenue += $event->price;
+            }
+        }
+    @endphp
+
     <!-- Stats Cards Row -->
     <div class="row g-4 mb-4">
         <div class="col-md-3">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
-                            <i class="fas fa-calendar-check text-warning fa-2x"></i>
+                        <div class="bg-info bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-calendar-check text-info fa-2x"></i>
                         </div>
                         <div>
-                            <h6 class="text-muted mb-1">Reservations</h6>
-                            <h3 class="mb-0">{{ $reservations->count() }}</h3>
+                            <h6 class="text-muted mb-1">Total Reservations</h6>
+                            <h3 class="mb-0">{{ $eventReservations->count() }}</h3>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer bg-white border-0">
-                    <a href="{{ route('guide.reservations.index') }}" class="text-decoration-none small">View all <i
+                    <a href="{{ route('guide.reservations.index') }}" class="text-decoration-none small">View details <i
                             class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
@@ -39,13 +60,33 @@
                             <i class="fas fa-check-circle text-success fa-2x"></i>
                         </div>
                         <div>
-                            <h6 class="text-muted mb-1">Confirmed</h6>
-                            <h3 class="mb-0">{{ $reservations->where('status', 'confirmed')->count() }}</h3>
+                            <h6 class="text-muted mb-1">Confirmed Bookings</h6>
+                            <h3 class="mb-0">{{ $confirmedReservations->count() }}</h3>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer bg-white border-0">
-                    <a href="{{ route('guide.reservations.index') }}" class="text-decoration-none small">View all <i
+                    <a href="{{ route('guide.reservations.index', ['status' => 'confirmed']) }}"
+                        class="text-decoration-none small">View details <i class="fas fa-arrow-right ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-star text-warning fa-2x"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Reviews Received</h6>
+                            <h3 class="mb-0">{{ $eventReviews->count() }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0">
+                    <a href="{{ route('guide.reviews') }}" class="text-decoration-none small">View details <i
                             class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
@@ -55,210 +96,82 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="bg-info bg-opacity-10 p-3 rounded me-3">
-                            <i class="fas fa-star text-info fa-2x"></i>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-dollar-sign text-danger fa-2x"></i>
                         </div>
                         <div>
-                            <h6 class="text-muted mb-1">Reviews</h6>
-                            <h3 class="mb-0">{{ $reviews->count() }}</h3>
+                            <h6 class="text-muted mb-1">Total Revenue</h6>
+                            <h3 class="mb-0">${{ number_format($totalRevenue, 2) }}</h3>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer bg-white border-0">
-                    <a href="{{ route('guide.reviews') }}" class="text-decoration-none small">View all <i
+                    <a href="{{ route('guide.statistics') }}" class="text-decoration-none small">View statistics <i
                             class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
-        <!-- Upcoming Trips Section -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                <h5 class="mb-0">Your Upcoming Trips</h5>
-                <a href="{{ route('guide.reservations.index') }}" class="text-decoration-none small">View all</a>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Event</th>
-                                <th>Location</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($reservations->where('date', '>=', now())->sortBy('date')->take(3) as $reservation)
-                                <tr id="reservation-row-{{ $reservation->id }}">
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            @if ($reservation->event && $reservation->event->image)
-                                                <img src="{{ asset('storage/' . $reservation->event->image) }}"
-                                                    class="rounded me-2" width="50" height="50"
-                                                    alt="{{ $reservation->event->name }}">
-                                            @else
-                                                <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center"
-                                                    style="width: 50px; height: 50px;">
-                                                    <i class="fas fa-calendar-alt text-secondary"></i>
-                                                </div>
-                                            @endif
-                                            <div>
-                                                <h6 class="mb-0">{{ $reservation->event->name ?? 'Unknown Event' }}</h6>
-                                                <small class="text-muted">Price:
-                                                    ${{ number_format($reservation->event->price ?? 0, 2) }}</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>{{ $reservation->event->location ?? 'Unknown Location' }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($reservation->date)->format('M d, Y') }}</td>
-                                    <td>
-                                        @php
-                                            $statusClass = 'secondary';
-    
-                                            if ($reservation->status == 'pending') {
-                                                $statusClass = 'warning';
-                                            } elseif ($reservation->status == 'confirmed') {
-                                                $statusClass = 'success';
-                                            } elseif ($reservation->status == 'cancelled') {
-                                                $statusClass = 'danger';
-                                            }
-                                        @endphp
-                                        <span class="badge bg-{{ $statusClass }}">{{ ucfirst($reservation->status) }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('guide.reservations.show', $reservation->id) }}"
-                                            class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></a>
-                                        @if ($reservation->status != 'cancelled')
-                                            <form action="{{ route('guide.reservations.cancel', $reservation->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </form>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-5">
-                                        <div class="d-flex flex-column align-items-center">
-                                            <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
-                                            <h5>No Upcoming Trips</h5>
-                                            <p class="text-muted">You don't have any upcoming reservations.</p>
-                                            <a href="{{ route('guide.events.index') }}" class="btn btn-primary mt-2">
-                                                <i class="fas fa-search"></i> Explore Events
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <!-- Latest Blogs Section -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0">Latest Blog Posts</h5>
+            <a href="{{ route('guide.blogs.index') }}" class="text-decoration-none small">View all</a>
         </div>
-    
-        <!-- Recommendations and Weather Row -->
-        <div class="row g-4">
-            <!-- Recommended Tours -->
-            <div class="col-md-8">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0">Recommended Events</h5>
-                        <a href="{{ route('guide.events.index') }}" class="text-decoration-none small">View more</a>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-4">
-                            @php
-                                $recommendedEvents = \App\Models\events::where('date', '>=', now())
-                                    ->orderBy('date', 'asc')
-                                    ->take(2)
-                                    ->get();
-                            @endphp
-    
-                            @forelse($recommendedEvents as $event)
-                                <div class="col-md-6">
-                                    <div class="card border-0 shadow-sm">
-                                        @if ($event->image)
-                                            <img src="{{ asset('storage/' . $event->image) }}" class="card-img-top"
-                                                height="160" style="object-fit: cover;" alt="{{ $event->name }}">
-                                        @else
-                                            <div class="bg-light d-flex align-items-center justify-content-center"
-                                                style="height: 160px;">
-                                                <i class="fas fa-calendar-alt fa-3x text-secondary"></i>
-                                            </div>
-                                        @endif
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <span class="badge bg-primary rounded-pill">Event</span>
-                                                <span
-                                                    class="text-primary fw-bold">${{ number_format($event->price, 2) }}</span>
-                                            </div>
-                                            <h5 class="card-title mb-1">{{ $event->name }}</h5>
-                                            <p class="text-muted small mb-3"><i
-                                                    class="fas fa-map-marker-alt me-1"></i>{{ $event->location }}</p>
-                                            <p class="text-muted small mb-3"><i
-                                                    class="fas fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($event->date)->format('M d, Y') }}
-                                            </p>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <a href="{{ route('guide.events.show', $event->id) }}"
-                                                    class="btn btn-sm btn-outline-primary">View Details</a>
-                                            </div>
-                                        </div>
+        <div class="card-body p-0">
+            @php
+                $latestBlogs = \App\Models\Blog::with('user')
+                    ->published()
+                    ->orderBy('created_at', 'desc')
+                    ->take(4)
+                    ->get();
+            @endphp
+
+            <div class="row g-0">
+                @forelse($latestBlogs as $blog)
+                    <div class="col-md-6 p-3 border-bottom @if($loop->iteration % 2 == 0) border-start @endif @if($loop->iteration > 2) border-top @endif">
+                        <div class="d-flex h-100">
+                            <div class="flex-shrink-0">
+                                @if($blog->image)
+                                    <img src="{{ asset('storage/' . $blog->image) }}" class="rounded" width="100" height="100" style="object-fit: cover;" alt="{{ $blog->title }}">
+                                @else
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                                        <i class="fas fa-newspaper fa-2x text-secondary"></i>
                                     </div>
+                                @endif
+                            </div>
+                            <div class="flex-grow-1 ms-3 d-flex flex-column">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="badge bg-primary rounded-pill">{{ $blog->category }}</span>
+                                        <small class="text-muted">{{ $blog->created_at->diffForHumans() }}</small>
+                                    </div>
+                                    <h5 class="card-title mb-1">{{ Str::limit($blog->title, 40) }}</h5>
+                                    <p class="text-muted small mb-2">By {{ $blog->user->first_name }} {{ $blog->user->last_name }}</p>
                                 </div>
-                            @empty
-                                <div class="col-12 text-center py-4">
-                                    <i class="fas fa-calendar fa-3x text-muted mb-3"></i>
-                                    <h5>No Recommended Events</h5>
-                                    <p class="text-muted">We don't have any recommended events at this time.</p>
-                                    <a href="{{ route('client.events.index') }}" class="btn btn-primary mt-2">
-                                        <i class="fas fa-search"></i> Browse All Events
-                                    </a>
+                                <p class="card-text small text-muted mb-2">{{ Str::limit($blog->excerpt ?? strip_tags($blog->content), 80) }}</p>
+                                <div class="mt-auto">
+                                    <a href="{{ route('guide.blogs.show', $blog->id) }}" class="btn btn-sm btn-outline-primary">Read More</a>
                                 </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Weather Widget -->
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white py-3">
-                        <h5 class="mb-0">Weather Forecast</h5>
-                    </div>
-                    <div class="card-body">
-                        @php
-                            $defaultLocation = 'Paris';
-                            if ($reservations->where('date', '>=', now())->count() > 0) {
-                                $nextTrip = $reservations->where('date', '>=', now())->sortBy('date')->first();
-                                if ($nextTrip && $nextTrip->event) {
-                                    $defaultLocation = $nextTrip->event->location;
-                                }
-                            }
-                        @endphp
-    
-                        <div id="weather-container" data-location="{{ $defaultLocation }}">
-                            <div class="text-center py-4">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                                <p class="mt-2">Loading weather data...</p>
                             </div>
                         </div>
-    
-                        <div class="mt-4">
-                            <h6 class="mb-3">Check weather for your trip:</h6>
-                            <div class="input-group">
-                                <input type="text" id="location-input" class="form-control" placeholder="Enter location"
-                                    value="{{ $defaultLocation }}">
-                                <button class="btn btn-primary" type="button" id="check-weather-btn">
-                                    <i class="fas fa-search"></i>
+                    </div>
+                @empty
+                    <div class="col-12 p-5 text-center">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                            <h5>No Blog Posts Found</h5>
+                            <p class="text-muted">There are no published blog posts yet.</p>
+                            <a href="{{ route('guide.blogs.create') }}" class="btn btn-primary mt-2">
+                                <i class="fas fa-plus me-1"></i> Create a Blog Post
+                            </a>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
                                 </button>
                             </div>
                         </div>

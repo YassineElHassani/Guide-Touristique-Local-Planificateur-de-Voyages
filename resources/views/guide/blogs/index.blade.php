@@ -75,6 +75,18 @@
                             <i class="fas fa-user-edit"></i> My Blogs
                         </a>
 
+                        <div class="sidebar-item">
+                            <a href="{{ route('guide.destinations.index') }}"
+                                class="sidebar-link {{ request()->routeIs('guide.destinations*') ? 'active' : '' }}">
+                                <i class="fas fa-map-marker-alt"></i> Destinations
+                            </a>
+                        </div>
+
+                        <a href="{{ route('guide.categories.index') }}"
+                            class="sidebar-link {{ request()->routeIs('guide.categories.*') ? 'active' : '' }}">
+                            <i class="fas fa-tags"></i> Categories
+                        </a>
+
                         <a href="{{ route('guide.events.index') }}"
                             class="sidebar-link {{ request()->routeIs('guide.events.*') ? 'active' : '' }}">
                             <i class="fas fa-ticket-alt"></i> Events

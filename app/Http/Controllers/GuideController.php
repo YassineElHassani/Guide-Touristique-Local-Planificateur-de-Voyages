@@ -48,7 +48,7 @@ class GuideController extends Controller
             'totalEvents' => $events->count(),
             'upcomingEvents' => $events->where('date', '>=', now())->count(),
             'totalReservations' => reservations::count(),
-            'totalRevenue' => reservations::where('status', 'confirmed')->sum('total_price'),
+            'totalRevenue' => $this->calculateTotalRevenue(),
         ];
         
         // Get recent reservations
@@ -134,6 +134,42 @@ class GuideController extends Controller
     }
     
     /**
+     * Show all events from all guides.
+     */
+    public function allEvents(Request $request)
+    {
+        // Initialize the query to get all events
+        $eventsQuery = events::query();
+        
+        // Apply search filters
+        if ($request->has('search')) {
+            $search = $request->search;
+            $eventsQuery->where(function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply date filters
+        if ($request->has('date_from') && $request->date_from) {
+            $eventsQuery->where('date', '>=', $request->date_from);
+        }
+        
+        if ($request->has('date_to') && $request->date_to) {
+            $eventsQuery->where('date', '<=', $request->date_to);
+        }
+        
+        // Sort events
+        $eventsQuery->orderBy('date', 'desc');
+        
+        // Get paginated results
+        $events = $eventsQuery->paginate(10);
+        
+        return view('guide.events.all', compact('events'));
+    }
+    
+    /**
      * Show reservations for the guide's events.
      */
     public function reservations()
@@ -179,7 +215,8 @@ class GuideController extends Controller
         $reservation->user_id = $request->user_id;
         $reservation->date = $request->date;
         $reservation->guests = $request->guests;
-        $reservation->total_price = $event->price * $request->guests;
+        // Note: total_price column doesn't exist in the reservations table
+        // The price is stored in the events table
         $reservation->status = $request->status;
         $reservation->save();
         
@@ -220,31 +257,60 @@ class GuideController extends Controller
     }
     
     /**
+     * Calculate total revenue from confirmed reservations
+     */
+    private function calculateTotalRevenue()
+    {
+        // Get confirmed reservations
+        $confirmedReservations = reservations::where('status', 'confirmed')->get();
+        
+        // Calculate total revenue by multiplying event price by number of guests
+        $totalRevenue = 0;
+        foreach ($confirmedReservations as $reservation) {
+            $event = events::find($reservation->event_id);
+            if ($event) {
+                $totalRevenue += $event->price * $reservation->guests;
+            }
+        }
+        
+        return $totalRevenue;
+    }
+
+    /**
      * Show statistics and performance metrics.
      */
     public function statistics()
     {
-        // Monthly reservations for the past year
+        // Get the authenticated user's ID
+        $userId = Auth::id();
+        
+        // Get the events created by this guide (using id instead of user_id)
+        $userEvents = events::where('id', $userId)->pluck('id')->toArray();
+        
+        // Monthly reservations for the past year (only for the guide's events)
         $monthlyReservations = DB::table('reservations')
             ->join('events', 'reservations.event_id', '=', 'events.id')
             ->select(DB::raw('MONTH(reservations.created_at) as month'), DB::raw('COUNT(*) as count'))
+            ->whereIn('reservations.event_id', $userEvents)
             ->whereYear('reservations.created_at', '=', date('Y'))
             ->groupBy('month')
             ->orderBy('month')
             ->get();
             
-        // Event popularity (reservation count per event)
+        // Event popularity (reservation count per event - only for the guide's events)
         $eventPopularity = DB::table('events')
             ->leftJoin('reservations', 'events.id', '=', 'reservations.event_id')
             ->select('events.id', 'events.name', DB::raw('COUNT(reservations.id) as reservation_count'))
+            ->whereIn('events.id', $userEvents)
             ->groupBy('events.id', 'events.name')
             ->orderBy('reservation_count', 'desc')
             ->get();
             
-        // Average event rating
+        // Average event rating (only for the guide's events)
         $eventRatings = DB::table('events')
             ->leftJoin('reviews', 'events.id', '=', 'reviews.event_id')
             ->select('events.id', 'events.name', DB::raw('AVG(reviews.rating) as average_rating'), DB::raw('COUNT(reviews.id) as review_count'))
+            ->whereIn('events.id', $userEvents)
             ->groupBy('events.id', 'events.name')
             ->orderBy('average_rating', 'desc')
             ->get();
