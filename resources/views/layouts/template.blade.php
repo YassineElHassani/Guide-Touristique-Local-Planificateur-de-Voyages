@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title') - Explore & Discover</title>
+    <title>@yield('title') - GeoNoMad</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
         <div class="container">
             <a class="navbar-brand" href="{{ route('index') }}">
                 <i class="fas fa-compass me-2"></i>
-                Explore<span class="text-primary">&</span>Discover
+                Geo<span class="text-primary">No</span>Mad
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,7 +139,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 mb-4 mb-lg-0">
-                        <h5>Explore<span class="text-primary">&</span>Discover</h5>
+                        <h5>Geo<span class="text-primary">No</span>Mad</h5>
                         <p class="mb-4">Your trusted travel companion for exploring the world's most breathtaking
                             destinations with knowledgeable local guides.</p>
                         <div class="social-links">
@@ -180,7 +180,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom text-center">
-                    <p class="mb-0">&copy; {{ date('Y') }} Explore&Discover. All rights reserved.</p>
+                    <p class="mb-0">&copy; {{ date('Y') }} GeoNoMad. All rights reserved.</p>
                 </div>
             </div>
         </footer>

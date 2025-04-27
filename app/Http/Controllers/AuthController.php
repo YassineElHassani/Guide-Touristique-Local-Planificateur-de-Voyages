@@ -18,27 +18,33 @@ class AuthController extends Controller
         return view('welcome');
     }
 
-    public function login() {
+    public function login()
+    {
         return view('auth.login');
     }
 
-    public function register() {
+    public function register()
+    {
         return view('auth.signup');
     }
 
-    public function adminDashboard() {
+    public function adminDashboard()
+    {
         return view('admin.dashboard');
     }
 
-    public function guideDashboard() {
+    public function guideDashboard()
+    {
         return view('guide.dashboard');
     }
 
-    public function clientDashboard() {
+    public function clientDashboard()
+    {
         return view('client.home');
     }
 
-    public function signup(Request $request) {
+    public function signup(Request $request)
+    {
         $data = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -62,30 +68,51 @@ class AuthController extends Controller
             'status' => $request->status,
         ]);
 
-        if(!$user) {
+        if (!$user) {
             return redirect(route('register'))->with("error", "Registration failed, try again!");
         }
 
         return redirect(route('login'))->with("success", "You have registered Successfully, Login to access the platform.");
     }
 
-    public function signin(Request $request) {
+    public function signin(Request $request)
+    {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
         $messageCredentials = $request->only('email', 'password');
-        
-        
-        if(Auth::attempt($messageCredentials)) {
-            return redirect()->intended()->with("success", "You have logged in successfully!");
+
+
+        if (Auth::attempt($messageCredentials)) {
+            $user = Auth::user();
+            $role = $user->role;
+            $currentRoute = $request->route()->getName();
+
+            $redirectRoutes = [
+                'travler' => 'client.home',
+                'guide' => 'guide.home',
+                'admin' => 'admin.dashboard.index',
+            ];
+
+            if (isset($redirectRoutes[$role])) {
+                if ($user->status === 'inactive') {
+                    return redirect()->route('warning');
+                }
+
+                if ($currentRoute !== $redirectRoutes[$role]) {
+                    return redirect()->route($redirectRoutes[$role]);
+                }
+            }
         }
 
         return redirect(route('login'))->with("error", "Email or Password is invalid!");
+
     }
 
-    public function logout() {
+    public function logout()
+    {
         Session::flush();
         Auth::logout();
         return redirect(route('login'));

@@ -23,7 +23,7 @@ use App\Http\Controllers\BlogController;
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'signup'])->name('register.post');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'signin'])->name('login.post')->middleware(AuthMiddleware::class);
+Route::post('/login', [AuthController::class, 'signin'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
@@ -47,8 +47,8 @@ Route::get('/destinations/{id}', [DestinationsController::class, 'show'])->name(
 Route::get('/search/destinations', [DestinationsController::class, 'search'])->name('destinations.search');
 
 // Event routes
-Route::get('/events', [EventsController::class, 'indexVist'])->name('events.index');
-Route::get('/events/{id}', [EventsController::class, 'showVist'])->name('events.show');
+Route::get('/events', [EventsController::class, 'indexVisit'])->name('events.index');
+Route::get('/events/{id}', [EventsController::class, 'showVisit'])->name('events.show');
 Route::get('/search/events', [EventsController::class, 'search'])->name('events.search');
 
 // Category routes
@@ -65,13 +65,13 @@ Route::put('/reviews/{id}', [ReviewsController::class, 'update'])->name('reviews
 Route::delete('/reviews/{id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 
 // Blog routes for visitors
-Route::get('/blogs', [BlogController::class, 'indexVist'])->name('blogs.index');
+Route::get('/blogs', [BlogController::class, 'indexVisit'])->name('blogs.index');
 Route::get('/blogs/{slug}', [BlogController::class, 'showVisit'])->name('blogs.show');
 Route::get('/blogs/category/{category}', [BlogController::class, 'byCategory'])->name('blogs.category');
 Route::get('/search/blogs', [BlogController::class, 'search'])->name('blogs.search');
 
 // Client/Traveler routes
-Route::middleware(['client'])->prefix('client')->group(function () {
+Route::middleware(['client', AuthMiddleware::class])->prefix('client')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'dashboard'])->name('client.dashboard');
     Route::get('/home', [ClientController::class, 'home'])->name('client.home');
 
@@ -121,7 +121,7 @@ Route::middleware(['client'])->prefix('client')->group(function () {
 });
 
 // Guide routes
-Route::middleware(['guide'])->prefix('guide')->group(function () {
+Route::middleware(['guide', AuthMiddleware::class])->prefix('guide')->group(function () {
     // Route::get('/dashboard', [GuideController::class, 'dashboard'])->name('guide.dashboard');
     Route::get('/home', [GuideController::class, 'home'])->name('guide.home');
 
@@ -180,7 +180,7 @@ Route::middleware(['guide'])->prefix('guide')->group(function () {
 });
 
 // Admin routes
-Route::middleware(['admin', AdminMiddleware::class])->prefix('admin')->group(function () {
+Route::middleware(['admin', AuthMiddleware::class])->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard.index');
 

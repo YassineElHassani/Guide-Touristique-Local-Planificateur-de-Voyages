@@ -60,7 +60,7 @@ class BlogController extends Controller
         }
     }
 
-    public function indexVist() 
+    public function indexVisit() 
     {
         try {
             $blogs = Blog::published()

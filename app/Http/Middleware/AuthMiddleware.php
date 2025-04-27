@@ -1,15 +1,11 @@
 <?php
 
 namespace App\Http\Middleware;
+
 use Illuminate\Support\Facades\Auth;
-
-
 use Closure;
-use Error;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
-use function Laravel\Prompts\error;
 
 class AuthMiddleware
 {
@@ -19,24 +15,14 @@ class AuthMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        $response = $next($request);
-
-        if (Auth::check()) {
-            $role = Auth::user()->role;
-            $currentRoute = $request->route()->getName();
-
-            if ($role == 'travler' && $currentRoute !== 'client.home') {
-                return redirect()->route('client.home');
-            } elseif ($role == 'guide' && $currentRoute !== 'guide.home') {
-                return redirect()->route('guide.home');
-            } elseif ($role == 'admin' && $currentRoute !== 'admin.dashboard.index') {
-                return redirect()->route('admin.dashboard.index');
-            }
-        } else {
-            return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
-        }
-
-        return $response;
+{
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
+    } elseif (Auth::user()->status == 'inactive') {
+        return redirect()->route('warning');
     }
+
+    return $next($request);
+}
+
 }

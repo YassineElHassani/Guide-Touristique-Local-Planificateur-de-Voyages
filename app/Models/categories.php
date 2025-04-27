@@ -14,4 +14,12 @@ class categories extends Model
         'id',
         'name',
     ];
+    
+    /**
+     * Get the events that belong to this category.
+     */
+    public function events()
+    {
+        return $this->hasMany(events::class, 'category_id');
+    }
 }
