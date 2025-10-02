@@ -7,10 +7,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-Got you, Jinrox! 🚀 A **README.md** is the heart of your project on GitHub — it should introduce, explain, and guide users/developers.
-
-Here’s a **ready-to-use README** for your **Guide Touristique Local Planificateur de Voyages** project 👇
-
 ---
 
 # 🌍 Local Tourism Guide & Travel Planner
